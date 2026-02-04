@@ -1,4 +1,62 @@
-@import 'tailwindcss' source(none);
-@source '../**/*.{js,ts,jsx,tsx}';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import 'tw-animate-css';
+@layer base {
+    :root {
+        --background: 253 246 252;
+        /* #fdf6fc converted to approx rgb/hsl for tailwind if needed, but keeping hex for var usage */
+        --background: #fdf6fc;
+        --foreground: #2d1b3d;
+        --card: #ffffff;
+        --card-foreground: #2d1b3d;
+        --popover: #ffffff;
+        --popover-foreground: #2d1b3d;
+        --primary: #c77dff;
+        --primary-foreground: #ffffff;
+        --secondary: #ffd6ff;
+        --secondary-foreground: #5a3d6b;
+        --muted: #f9ebff;
+        --muted-foreground: #8b7a99;
+        --accent: #ffe5f7;
+        --accent-foreground: #5a3d6b;
+        --destructive: #ff6b9d;
+        --destructive-foreground: #ffffff;
+        --border: rgba(199, 125, 255, 0.15);
+        --input: transparent;
+        --ring: #c77dff;
+        --radius: 0.75rem;
+    }
+
+    .dark {
+        --background: #1a0f25;
+        --foreground: #f9ebff;
+        --card: #2d1b3d;
+        --card-foreground: #f9ebff;
+        --popover: #2d1b3d;
+        --popover-foreground: #f9ebff;
+        --primary: #c77dff;
+        --primary-foreground: #1a0f25;
+        --secondary: #5a3d6b;
+        --secondary-foreground: #ffd6ff;
+        --muted: #3d2654;
+        --muted-foreground: #b3a3c2;
+        --accent: #5a3d6b;
+        --accent-foreground: #ffd6ff;
+        --destructive: #ff6b9d;
+        --destructive-foreground: #ffffff;
+        --border: rgba(199, 125, 255, 0.2);
+        --input: rgba(199, 125, 255, 0.1);
+        --ring: #c77dff;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}

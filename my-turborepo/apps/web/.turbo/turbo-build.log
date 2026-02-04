@@ -3,24 +3,54 @@
 > web@0.1.0 build
 > next build
 
-[1G[0K[35m[1mAttention[22m[39m: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-[36mhttps://nextjs.org/telemetry[39m
-
-[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
+[1G[0K[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
 
 [37m[1m [22m[39m Creating an optimized production build ...
-[32m[1m✓[22m[39m Compiled successfully in 2.6s
-[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 4.5s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 4.5s    [32m[1m✓[22m[39m Finished TypeScript in 4.5s 
-[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 356.0ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 356.0ms 
-[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/1)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (0/1)  [36m[=   ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (1/1) in 264.8ms
-[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 14.0ms    [32m[1m✓[22m[39m Finalizing page optimization in 14.0ms 
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./apps/web/styles/tailwind.css:1:22
+Parsing CSS source code failed
+[0m[31m[1m>[22m[39m[90m 1 |[39m [33m@[39m[36mimport[39m [32m'tailwindcss'[39m source(none)[33m;[39m
+ [90m   |[39m                      [31m[1m^[22m[39m
+ [90m 2 |[39m [33m@[39msource [32m'../**/*.{js,ts,jsx,tsx}'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [33m@[39m[36mimport[39m [32m'tw-animate-css'[39m[33m;[39m[0m
+
+Unexpected token Function("source")
+
+Import trace:
+  Client Component Browser:
+    ./apps/web/styles/tailwind.css [Client Component Browser]
+    ./apps/web/app/layout.tsx [Server Component]
 
 
-[4mRoute (pages)[24m
-─ ○ /404
+./apps/web/styles/index.css:1:2
+[1m[31mModule not found[39m[22m: Can't resolve [32m'./fonts.css'[39m
+[0m[31m[1m>[22m[39m[90m 1 |[39m [33m@[39m[36mimport[39m [32m'./fonts.css'[39m[33m;[39m
+ [90m   |[39m  [31m[1m^[22m[39m
+ [90m 2 |[39m [33m@[39m[36mimport[39m [32m'./tailwind.css'[39m[33m;[39m
+ [90m 3 |[39m [33m@[39m[36mimport[39m [32m'./theme.css'[39m[33m;[39m
+ [90m 4 |[39m[0m
 
-○  (Static)  prerendered as static content
 
-[?25h[1G[0K⠙[1G[0K
+
+Import trace:
+  Client Component Browser:
+    ./apps/web/styles/index.css [Client Component Browser]
+    ./apps/web/app/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./apps/web/styles/tailwind.css:1:22)
+    at <unknown> (./apps/web/styles/index.css:1:2)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m web@0.1.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c next build
+[1G[0K⠙[1G[0K

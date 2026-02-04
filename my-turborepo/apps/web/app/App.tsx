@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 import { Tv, Users, BarChart3 } from 'lucide-react';
 import { AddAnimeForm } from '@/app/components/add-anime-form';

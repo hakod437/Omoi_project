@@ -28,6 +28,54 @@
         --radius: 0.75rem;
     }
 
+    /* Cyber Otaku Theme */
+    :root[data-theme="cyber"] {
+        --background: #0a0e27;
+        --foreground: #e0f7ff;
+        --card: #141b3d;
+        --card-foreground: #e0f7ff;
+        --popover: #141b3d;
+        --popover-foreground: #e0f7ff;
+        --primary: #00d9ff;
+        --primary-foreground: #0a0e27;
+        --secondary: #7b2cbf;
+        --secondary-foreground: #e0f7ff;
+        --muted: #1a2451;
+        --muted-foreground: #8ba4c7;
+        --accent: #240046;
+        --accent-foreground: #4cc9f0;
+        --destructive: #ff006e;
+        --destructive-foreground: #ffffff;
+        --border: rgba(0, 217, 255, 0.2);
+        --input: transparent;
+        --ring: #00d9ff;
+        --radius: 0.5rem;
+    }
+
+    /* Shonen Energy Theme */
+    :root[data-theme="shonen"] {
+        --background: #fffbf0;
+        --foreground: #3d1e0a;
+        --card: #ffffff;
+        --card-foreground: #3d1e0a;
+        --popover: #ffffff;
+        --popover-foreground: #3d1e0a;
+        --primary: #ff6b35;
+        --primary-foreground: #ffffff;
+        --secondary: #ffd60a;
+        --secondary-foreground: #3d1e0a;
+        --muted: #fff4e0;
+        --muted-foreground: #8b6f47;
+        --accent: #ffe8cc;
+        --accent-foreground: #3d1e0a;
+        --destructive: #d62828;
+        --destructive-foreground: #ffffff;
+        --border: rgba(255, 107, 53, 0.15);
+        --input: transparent;
+        --ring: #ff6b35;
+        --radius: 0.625rem;
+    }
+
     .dark {
         --background: #1a0f25;
         --foreground: #f9ebff;

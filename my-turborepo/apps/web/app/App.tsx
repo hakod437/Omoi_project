@@ -6,7 +6,8 @@ import { AnimeCard, AnimeWithUserData } from '@/app/components/anime-card';
 import { FriendsView, Friend } from '@/app/components/friends-view';
 import { ComparisonView } from '@/app/components/comparison-view';
 import type { Anime } from '@/app/components/anime-list';
-import { ThemeSelector, ThemeColor } from '@/app/components/theme-selector';
+import { ThemeColor, ThemeSelector } from '@/app/components/theme-selector';
+import { useTheme } from '@/app/components/theme-provider';
 import { JikanAnime } from '@/app/components/anime-search';
 import { Card } from '@/app/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/app/components/ui/tabs';
@@ -50,7 +51,7 @@ const MOCK_FRIENDS: Friend[] = [
 function App() {
   const [animes, setAnimes] = useState<AnimeWithUserData[]>([]);
   const [friends] = useState<Friend[]>(MOCK_FRIENDS);
-  const [currentTheme, setCurrentTheme] = useState<ThemeColor>('pastel');
+  const { theme, setTheme } = useTheme();
 
   // Charger les animes depuis localStorage
   useEffect(() => {
@@ -64,24 +65,13 @@ function App() {
     }
   }, []);
 
-  // Charger le thème depuis localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('animeTheme') as ThemeColor;
-    if (savedTheme) {
-      setCurrentTheme(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-  }, []);
-
   // Sauvegarder les animes dans localStorage
   useEffect(() => {
     localStorage.setItem('myAnimes', JSON.stringify(animes));
   }, [animes]);
 
-  const handleThemeChange = (theme: ThemeColor) => {
-    setCurrentTheme(theme);
-    localStorage.setItem('animeTheme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
+  const handleThemeChange = (newTheme: ThemeColor) => {
+    setTheme(newTheme);
   };
 
   const handleAddAnime = (
@@ -118,7 +108,7 @@ function App() {
               <Tv className="size-8 text-primary" />
               <h1 className="text-4xl font-bold">Mon Tracker Anime</h1>
             </div>
-            <ThemeSelector currentTheme={currentTheme} onThemeChange={handleThemeChange} />
+            <ThemeSelector currentTheme={theme} onThemeChange={handleThemeChange} />
           </div>
           <p className="text-muted-foreground">
             Suivez vos animes et comparez vos avis avec vos amis

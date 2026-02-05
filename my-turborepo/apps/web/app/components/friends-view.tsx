@@ -2,14 +2,9 @@ import { useState } from 'react';
 import { Users, Search } from 'lucide-react';
 import { Card } from '@/app/components/ui/card';
 import { Input } from '@/app/components/ui/input';
-import { AnimeList, Anime } from '@/app/components/anime-list';
+import { AnimeList } from '@/app/components/anime-list';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/app/components/ui/tabs';
-
-export interface Friend {
-  id: string;
-  name: string;
-  animes: Anime[];
-}
+import { Friend } from '@/types';
 
 interface FriendsViewProps {
   friends: Friend[];
@@ -21,8 +16,8 @@ export function FriendsView({ friends }: FriendsViewProps) {
 
   const filteredAnimes = selectedFriend
     ? selectedFriend.animes.filter((anime) =>
-        anime.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      anime.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   return (
@@ -76,7 +71,18 @@ export function FriendsView({ friends }: FriendsViewProps) {
               />
             </div>
 
-            <AnimeList animes={filteredAnimes} onDelete={() => {}} showActions={false} />
+            {/* AnimeList maintenant typé pour AnimeWithUserData, mais FriendAnime est compatible grâce au Partial<JikanAnime> */}
+            <AnimeList
+              animes={filteredAnimes.map(a => ({
+                ...a,
+                userRating: a.rating,
+                animationRating: a.animationRating,
+                userDescription: a.description,
+                userAnimeId: a.id
+              }))}
+              onDelete={() => { }}
+              showActions={false}
+            />
           </TabsContent>
         ))}
       </Tabs>

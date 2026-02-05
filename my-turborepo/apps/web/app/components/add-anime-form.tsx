@@ -6,19 +6,11 @@ import { Label } from '@/app/components/ui/label';
 import { Textarea } from '@/app/components/ui/textarea';
 import { Card } from '@/app/components/ui/card';
 import { AnimeSearch, JikanAnime } from '@/app/components/anime-search';
+import { RATING_LABELS } from '@/lib/constants';
 
 interface AddAnimeFormProps {
   onAdd: (anime: JikanAnime, rating: number, animationRating: number, description: string) => void;
 }
-
-const ratingEmojis = [
-  { emoji: '😢', value: 1, label: 'Très mauvais' },
-  { emoji: '😕', value: 2, label: 'Mauvais' },
-  { emoji: '😐', value: 3, label: 'Moyen' },
-  { emoji: '🙂', value: 4, label: 'Bon' },
-  { emoji: '😊', value: 5, label: 'Très bon' },
-  { emoji: '🤩', value: 6, label: 'Excellent' },
-];
 
 export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
   const [selectedAnime, setSelectedAnime] = useState<JikanAnime | null>(null);
@@ -77,16 +69,15 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
             <div>
               <Label>Note globale</Label>
               <div className="grid grid-cols-6 gap-2 mt-2">
-                {ratingEmojis.map((item) => (
+                {RATING_LABELS.map((item) => (
                   <button
                     key={item.value}
                     type="button"
                     onClick={() => setRating(item.value)}
-                    className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${
-                      rating === item.value
+                    className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${rating === item.value
                         ? 'border-primary bg-primary/10 scale-105'
                         : 'border-border hover:border-primary/50'
-                    }`}
+                      }`}
                     title={item.label}
                   >
                     <span className="text-2xl">{item.emoji}</span>
@@ -94,7 +85,7 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
                 ))}
               </div>
               <p className="text-sm text-muted-foreground mt-2 text-center">
-                {ratingEmojis.find((r) => r.value === rating)?.label}
+                {RATING_LABELS.find((r) => r.value === rating)?.label}
               </p>
             </div>
 
@@ -104,16 +95,15 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
                 Note de l'animation
               </Label>
               <div className="grid grid-cols-6 gap-2 mt-2">
-                {ratingEmojis.map((item) => (
+                {RATING_LABELS.map((item) => (
                   <button
                     key={item.value}
                     type="button"
                     onClick={() => setAnimationRating(item.value)}
-                    className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${
-                      animationRating === item.value
+                    className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${animationRating === item.value
                         ? 'border-primary bg-primary/10 scale-105'
                         : 'border-border hover:border-primary/50'
-                    }`}
+                      }`}
                     title={item.label}
                   >
                     <span className="text-2xl">{item.emoji}</span>
@@ -121,7 +111,7 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
                 ))}
               </div>
               <p className="text-sm text-muted-foreground mt-2 text-center">
-                {ratingEmojis.find((r) => r.value === animationRating)?.label}
+                {RATING_LABELS.find((r) => r.value === animationRating)?.label}
               </p>
             </div>
 

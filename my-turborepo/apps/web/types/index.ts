@@ -9,7 +9,7 @@ export interface AnimeWithUserData extends JikanAnime {
 
 export interface FriendAnime {
     id: string;
-    name: string;
+    title: string;
     rating: number; // Global rating
     animationRating: number;
     description: string;

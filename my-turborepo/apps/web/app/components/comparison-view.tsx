@@ -3,39 +3,37 @@ import { useState, useMemo } from 'react';
 import { Card } from '@/app/components/ui/card';
 import { Input } from '@/app/components/ui/input';
 import { Badge } from '@/app/components/ui/badge';
-import type { Anime } from '@/app/components/anime-list';
-import type { Friend } from '@/app/components/friends-view';
+import { RATING_EMOJIS } from '@/lib/constants';
+import { AnimeWithUserData, Friend } from '@/types';
 
 interface ComparisonViewProps {
-  myAnimes: Anime[];
+  myAnimes: AnimeWithUserData[];
   friends: Friend[];
   myName: string;
 }
-
-const ratingEmojis = ['😢', '😕', '😐', '🙂', '😊', '🤩'];
 
 export function ComparisonView({ myAnimes, friends, myName }: ComparisonViewProps) {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Créer une map de tous les animes uniques
   const allAnimes = useMemo(() => {
-    const animeMap = new Map<string, { name: string; ratings: { person: string; rating: number }[] }>();
+    const animeMap = new Map<string, { title: string; ratings: { person: string; rating: number }[] }>();
 
     // Ajouter mes animes
     myAnimes.forEach((anime) => {
-      const key = anime.name.toLowerCase();
+      const key = anime.title.toLowerCase();
       if (!animeMap.has(key)) {
-        animeMap.set(key, { name: anime.name, ratings: [] });
+        animeMap.set(key, { title: anime.title, ratings: [] });
       }
-      animeMap.get(key)!.ratings.push({ person: myName, rating: anime.rating });
+      animeMap.get(key)!.ratings.push({ person: myName, rating: anime.userRating });
     });
 
     // Ajouter les animes des amis
     friends.forEach((friend) => {
       friend.animes.forEach((anime) => {
-        const key = anime.name.toLowerCase();
+        const key = anime.title.toLowerCase();
         if (!animeMap.has(key)) {
-          animeMap.set(key, { name: anime.name, ratings: [] });
+          animeMap.set(key, { title: anime.title, ratings: [] });
         }
         animeMap.get(key)!.ratings.push({ person: friend.name, rating: anime.rating });
       });
@@ -47,14 +45,14 @@ export function ComparisonView({ myAnimes, friends, myName }: ComparisonViewProp
   }, [myAnimes, friends, myName]);
 
   const filteredAnimes = allAnimes.filter((anime) =>
-    anime.name.toLowerCase().includes(searchTerm.toLowerCase())
+    anime.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const calculateAgreement = (ratings: { person: string; rating: number }[]) => {
     const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
     const variance = ratings.reduce((sum, r) => sum + Math.pow(r.rating - avg, 2), 0) / ratings.length;
     const stdDev = Math.sqrt(variance);
-    
+
     if (stdDev < 0.5) return 'Accord total';
     if (stdDev < 1) return 'Bon accord';
     if (stdDev < 1.5) return 'Accord modéré';
@@ -89,13 +87,13 @@ export function ComparisonView({ myAnimes, friends, myName }: ComparisonViewProp
             <Card key={index} className="p-4">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="font-semibold text-lg">{anime.name}</h3>
+                  <h3 className="font-semibold text-lg">{anime.title}</h3>
                   <Badge variant="secondary" className="mt-1">
                     {agreement}
                   </Badge>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl">{ratingEmojis[Math.round(avgRating) - 1]}</div>
+                  <div className="text-2xl">{RATING_EMOJIS[Math.round(avgRating) - 1]}</div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Moyenne: {avgRating.toFixed(1)}/6
                   </p>
@@ -107,7 +105,7 @@ export function ComparisonView({ myAnimes, friends, myName }: ComparisonViewProp
                   <div key={idx} className="flex items-center justify-between text-sm">
                     <span className="font-medium">{rating.person}</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xl">{ratingEmojis[rating.rating - 1]}</span>
+                      <span className="text-xl">{RATING_EMOJIS[rating.rating - 1]}</span>
                       <span className="text-muted-foreground">{rating.rating}/6</span>
                     </div>
                   </div>

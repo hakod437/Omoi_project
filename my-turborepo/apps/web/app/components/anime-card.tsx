@@ -3,8 +3,10 @@ import { Button } from '@/app/components/ui/button';
 import { Card } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
 import { JikanAnime } from '@/app/components/anime-search';
+import { RATING_EMOJIS, STATUS_COLORS } from '@/lib/constants';
 
-export interface AnimeWithUserData extends JikanAnime {
+export interface AnimeWithUserData extends Partial<JikanAnime> {
+  title: string;
   userRating: number; // 1-6
   animationRating: number; // 1-6
   userDescription?: string;
@@ -17,42 +19,93 @@ interface AnimeCardProps {
   showActions?: boolean;
 }
 
-const ratingEmojis = ['😢', '😕', '😐', '🙂', '😊', '🤩'];
-
-const statusColors: Record<string, string> = {
-  'Currently Airing': 'bg-green-500/10 text-green-600 border-green-500/20',
-  'Finished Airing': 'bg-blue-500/10 text-blue-600 border-blue-500/20',
-  'Not yet aired': 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
+// Utilitaire global
+const formatDate = (dateString?: string) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' });
 };
 
-export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProps) {
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return null;
-    const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' });
-  };
+// --- ATOMES (Composants UI) ---
 
+const AnimeImage = ({ src, alt }: { src?: string; alt: string }) => {
+  if (!src) return null;
+  return (
+    <div className="flex-shrink-0">
+      <img src={src} alt={alt} className="w-full md:w-48 h-64 object-cover rounded-lg" />
+    </div>
+  );
+};
+
+// Interface explicite pour les badges (ne dépend pas de AnimeWithUserData)
+interface AnimeBadgesProps {
+  type?: string;
+  status?: string;
+  episodes?: number;
+  duration?: string;
+  season?: string;
+  year?: number;
+}
+
+const AnimeBadges = ({ type, status, episodes, duration, season, year }: AnimeBadgesProps) => {
+  const hasBadges = type || status || episodes || duration || (season && year);
+  if (!hasBadges) return null;
+
+  return (
+    <div className="flex flex-wrap gap-2 mb-3">
+      {type && (
+        <Badge variant="secondary" className="gap-1">
+          {type === 'TV' ? <Tv className="size-3" /> : <Film className="size-3" />}
+          {type}
+        </Badge>
+      )}
+      {status && (
+        <Badge className={STATUS_COLORS[status] || 'bg-muted'}>
+          {status}
+        </Badge>
+      )}
+      {episodes && (
+        <Badge variant="outline" className="gap-1">
+          <Play className="size-3" />
+          {episodes} ép.
+        </Badge>
+      )}
+      {duration && (
+        <Badge variant="outline" className="gap-1">
+          <Clock className="size-3" />
+          {duration}
+        </Badge>
+      )}
+      {season && year && (
+        <Badge variant="outline" className="gap-1">
+          <Calendar className="size-3" />
+          {season} {year}
+        </Badge>
+      )}
+    </div>
+  );
+};
+
+// --- COMPOSANT PARENT ---
+
+export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProps) {
+  // Calcul local (Scope: dépend de 'anime')
   const allGenres = [
     ...(anime.genres || []),
     ...(anime.themes || []),
     ...(anime.demographics || []),
   ];
 
+  const imageSrc = anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url;
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all">
       <div className="flex flex-col md:flex-row gap-4 p-4">
-        {/* Image */}
-        <div className="flex-shrink-0">
-          <img
-            src={anime.images.jpg.large_image_url || anime.images.jpg.image_url}
-            alt={anime.title}
-            className="w-full md:w-48 h-64 object-cover rounded-lg"
-          />
-        </div>
+        {/* Atome Image */}
+        <AnimeImage src={imageSrc} alt={anime.title} />
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
+          {/* Header (Titre + Delete) */}
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-xl mb-1 line-clamp-2">{anime.title}</h3>
@@ -79,43 +132,20 @@ export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProp
             )}
           </div>
 
-          {/* Metadata */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {anime.type && (
-              <Badge variant="secondary" className="gap-1">
-                {anime.type === 'TV' ? <Tv className="size-3" /> : <Film className="size-3" />}
-                {anime.type}
-              </Badge>
-            )}
-            {anime.status && (
-              <Badge className={statusColors[anime.status] || 'bg-muted'}>
-                {anime.status}
-              </Badge>
-            )}
-            {anime.episodes && (
-              <Badge variant="outline" className="gap-1">
-                <Play className="size-3" />
-                {anime.episodes} ép.
-              </Badge>
-            )}
-            {anime.duration && (
-              <Badge variant="outline" className="gap-1">
-                <Clock className="size-3" />
-                {anime.duration}
-              </Badge>
-            )}
-            {anime.season && anime.year && (
-              <Badge variant="outline" className="gap-1">
-                <Calendar className="size-3" />
-                {anime.season} {anime.year}
-              </Badge>
-            )}
-          </div>
+          {/* Atome Badges */}
+          <AnimeBadges
+            type={anime.type}
+            status={anime.status}
+            episodes={anime.episodes}
+            duration={anime.duration}
+            season={anime.season}
+            year={anime.year}
+          />
 
           {/* User Ratings */}
           <div className="flex items-center gap-4 mb-3 p-3 bg-primary/5 rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="text-3xl">{ratingEmojis[anime.userRating - 1]}</span>
+              <span className="text-3xl">{RATING_EMOJIS[anime.userRating - 1]}</span>
               <div>
                 <p className="text-xs text-muted-foreground">Note globale</p>
                 <p className="text-sm font-bold">{anime.userRating}/6</p>
@@ -144,48 +174,6 @@ export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProp
               <p className="text-sm italic">"{anime.userDescription}"</p>
             </div>
           )}
-
-          {/* Additional Info */}
-          <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-            {anime.studios && anime.studios.length > 0 && (
-              <div>
-                <span className="text-muted-foreground">Studio: </span>
-                <span className="font-medium">
-                  {anime.studios.map((s) => s.name).join(', ')}
-                </span>
-              </div>
-            )}
-            {anime.source && (
-              <div>
-                <span className="text-muted-foreground">Source: </span>
-                <span className="font-medium">{anime.source}</span>
-              </div>
-            )}
-            {anime.aired?.from && (
-              <div>
-                <span className="text-muted-foreground">Début: </span>
-                <span className="font-medium">{formatDate(anime.aired.from)}</span>
-              </div>
-            )}
-            {anime.aired?.to && (
-              <div>
-                <span className="text-muted-foreground">Fin: </span>
-                <span className="font-medium">{formatDate(anime.aired.to)}</span>
-              </div>
-            )}
-            {anime.popularity && (
-              <div>
-                <span className="text-muted-foreground">Popularité: </span>
-                <span className="font-medium">#{anime.popularity}</span>
-              </div>
-            )}
-            {anime.rank && (
-              <div>
-                <span className="text-muted-foreground">Classement: </span>
-                <span className="font-medium">#{anime.rank}</span>
-              </div>
-            )}
-          </div>
 
           {/* Genres */}
           {allGenres.length > 0 && (

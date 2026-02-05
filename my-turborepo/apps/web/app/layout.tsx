@@ -1,6 +1,6 @@
 import "../styles/tailwind.css";
 import React from "react";
-import { ThemeProvider } from "@/app/components/theme-provider";
+import { Providers } from "@/app/providers";
 
 export const metadata = {
     title: 'Mon Tracker Anime',
@@ -13,9 +13,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="fr">
+        <html lang="fr" suppressHydrationWarning>
             <body>
-                <ThemeProvider>{children}</ThemeProvider>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

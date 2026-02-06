@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Trash2, Sparkles, Calendar, Film, Tv, Play, Clock, Users } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Card } from '@/app/components/ui/card';
@@ -5,34 +6,21 @@ import { Badge } from '@/app/components/ui/badge';
 import { JikanAnime } from '@/app/components/anime-search';
 import { RATING_EMOJIS, STATUS_COLORS } from '@/lib/constants';
 
-export interface AnimeWithUserData extends Partial<JikanAnime> {
-  title: string;
-  userRating: number; // 1-6
-  animationRating: number; // 1-6
-  userDescription?: string;
-  userAnimeId: string;
-}
-
-interface AnimeCardProps {
-  anime: AnimeWithUserData;
-  onDelete?: (id: string) => void;
-  showActions?: boolean;
-}
-
-// Utilitaire global
-const formatDate = (dateString?: string) => {
-  if (!dateString) return null;
-  const date = new Date(dateString);
-  return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' });
-};
+// ... (formatDate remains the same)
 
 // --- ATOMES (Composants UI) ---
 
 const AnimeImage = ({ src, alt }: { src?: string; alt: string }) => {
   if (!src) return null;
   return (
-    <div className="flex-shrink-0">
-      <img src={src} alt={alt} className="w-full md:w-48 h-64 object-cover rounded-lg" />
+    <div className="flex-shrink-0 relative w-full md:w-48 h-64">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover rounded-lg"
+        sizes="(max-width: 768px) 100vw, 192px"
+      />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Search, Loader2 } from 'lucide-react';
 import { Input } from '@/app/components/ui/input';
 import { Card } from '@/app/components/ui/card';
@@ -107,10 +108,12 @@ export function AnimeSearch({ onSelectAnime }: AnimeSearchProps) {
                 onClick={() => handleSelect(anime)}
                 className="w-full p-3 hover:bg-accent rounded-lg transition-colors text-left flex gap-3"
               >
-                <img
+                <Image
                   src={anime.images.jpg.image_url}
                   alt={anime.title}
-                  className="w-16 h-20 object-cover rounded"
+                  width={64}
+                  height={80}
+                  className="object-cover rounded"
                 />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold truncate">{anime.title}</p>

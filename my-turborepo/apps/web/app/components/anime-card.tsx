@@ -41,35 +41,72 @@ interface AnimeBadgesProps {
   duration?: string;
   season?: string;
   year?: number;
+  studios?: Array<{ name: string }>;
+  source?: string;
+  rating?: string;
+  rank?: number;
+  popularity?: number;
+  aired?: { string?: string };
 }
 
-const AnimeBadges = ({ type, status, episodes, duration, season, year }: AnimeBadgesProps) => {
-  const hasBadges = type || status || episodes || duration || (season && year);
+const AnimeBadges = ({ type, status, episodes, duration, season, year, studios, source, rating, rank, popularity, aired }: AnimeBadgesProps) => {
+  const hasBadges = type || status || (episodes !== undefined && episodes !== null) || duration || (season && year) || (studios && studios.length > 0) || source || rank || popularity || aired;
   if (!hasBadges) return null;
 
   return (
     <div className="flex flex-wrap gap-2 mb-3">
+      {rank && (
+        <Badge className="bg-yellow-500 text-white border-none font-bold">
+          #{rank} Rank
+        </Badge>
+      )}
+      {popularity && (
+        <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+          #{popularity} Pop.
+        </Badge>
+      )}
       {type && (
         <Badge variant="secondary" className="gap-1">
           {type === 'TV' ? <Tv className="size-3" /> : <Film className="size-3" />}
           {type}
         </Badge>
       )}
+      {aired?.string && (
+        <Badge variant="outline" className="text-[10px] opacity-80">
+          Aired: {aired.string}
+        </Badge>
+      )}
+      {rating && (
+        <Badge variant="outline" className="text-[10px] opacity-60">
+          {rating}
+        </Badge>
+      )}
       {status && (
-        <Badge className={STATUS_COLORS[status] || 'bg-muted'}>
+        <Badge className={`${STATUS_COLORS[status] || 'bg-muted'} border`}>
           {status}
         </Badge>
       )}
-      {episodes && (
+      {studios && studios.length > 0 && (
+        <Badge variant="outline" className="gap-1 bg-primary/5">
+          <Users className="size-3" />
+          {studios.at(0)?.name}
+        </Badge>
+      )}
+      {source && (
+        <Badge variant="outline" className="text-[10px] uppercase opacity-70">
+          Source: {source}
+        </Badge>
+      )}
+      {(episodes !== undefined && episodes !== null) && (
         <Badge variant="outline" className="gap-1">
           <Play className="size-3" />
-          {episodes} ép.
+          {episodes === 0 ? 'En cours' : `${episodes} ép.`}
         </Badge>
       )}
       {duration && (
-        <Badge variant="outline" className="gap-1">
+        <Badge variant="outline" className="gap-1 text-xs">
           <Clock className="size-3" />
-          {duration}
+          {duration.replace(' per ep', '')}
         </Badge>
       )}
       {season && year && (
@@ -136,24 +173,41 @@ export function AnimeCard({ anime, onDelete, showActions = true, priority = fals
             duration={anime.duration}
             season={anime.season}
             year={anime.year}
+            studios={anime.studios}
+            source={anime.source}
+            rating={anime.rating}
+            rank={anime.rank}
+            popularity={anime.popularity}
+            aired={anime.aired}
           />
 
-          {/* User Ratings */}
-          <div className="flex items-center gap-4 mb-3 p-3 bg-primary/5 rounded-lg">
-            <div className="flex items-center gap-2">
+          {/* User Ratings & Stats */}
+          <div className="flex items-center gap-4 mb-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+            <div className="flex items-center gap-2 pr-4 border-r border-border/50">
               <span className="text-3xl">{RATING_EMOJIS[anime.userRating - 1]}</span>
               <div>
-                <p className="text-xs text-muted-foreground">Note globale</p>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground">Ma Note</p>
                 <p className="text-sm font-bold">{anime.userRating}/6</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 pr-4 border-r border-border/50">
               <Sparkles className="size-6 text-primary" />
               <div>
-                <p className="text-xs text-muted-foreground">Animation</p>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground">Animation</p>
                 <p className="text-sm font-bold">{anime.animationRating}/6</p>
               </div>
             </div>
+
+            {anime.score && (
+              <div className="flex items-center gap-2">
+                <div className="bg-yellow-500/10 text-yellow-600 px-1.5 py-0.5 rounded text-[10px] font-bold">MAL</div>
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground">Score</p>
+                  <p className="text-sm font-bold">{anime.score}</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Synopsis */}

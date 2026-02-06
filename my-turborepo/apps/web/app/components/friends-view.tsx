@@ -73,12 +73,12 @@ export function FriendsView({ friends }: FriendsViewProps) {
 
             {/* AnimeList maintenant typé pour AnimeWithUserData, mais FriendAnime est compatible grâce au Partial<JikanAnime> */}
             <AnimeList
-              animes={filteredAnimes.map(a => ({
-                ...a,
-                userRating: a.rating,
-                animationRating: a.animationRating,
-                userDescription: a.description,
-                userAnimeId: a.id
+              animes={filteredAnimes.map(({ rating, description, id, ...rest }) => ({
+                ...rest,
+                userRating: rating,
+                animationRating: rest.animationRating,
+                userDescription: description,
+                userAnimeId: id
               }))}
               onDelete={() => { }}
               showActions={false}

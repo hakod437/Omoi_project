@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import { Plus, Sparkles } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -39,10 +40,12 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
           </div>
           {selectedAnime && (
             <div className="mt-3 p-3 bg-primary/5 rounded-lg flex items-center gap-3">
-              <img
+              <Image
                 src={selectedAnime.images.jpg.image_url}
                 alt={selectedAnime.title}
-                className="w-12 h-16 object-cover rounded"
+                width={48}
+                height={64}
+                className="object-cover rounded"
               />
               <div className="flex-1 min-w-0">
                 <p className="font-semibold truncate">{selectedAnime.title}</p>
@@ -75,8 +78,8 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
                     type="button"
                     onClick={() => setRating(item.value)}
                     className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${rating === item.value
-                        ? 'border-primary bg-primary/10 scale-105'
-                        : 'border-border hover:border-primary/50'
+                      ? 'border-primary bg-primary/10 scale-105'
+                      : 'border-border hover:border-primary/50'
                       }`}
                     title={item.label}
                   >
@@ -101,8 +104,8 @@ export function AddAnimeForm({ onAdd }: AddAnimeFormProps) {
                     type="button"
                     onClick={() => setAnimationRating(item.value)}
                     className={`p-3 rounded-lg border-2 transition-all hover:scale-110 ${animationRating === item.value
-                        ? 'border-primary bg-primary/10 scale-105'
-                        : 'border-border hover:border-primary/50'
+                      ? 'border-primary bg-primary/10 scale-105'
+                      : 'border-border hover:border-primary/50'
                       }`}
                     title={item.label}
                   >

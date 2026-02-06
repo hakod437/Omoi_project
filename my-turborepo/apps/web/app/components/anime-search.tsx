@@ -24,6 +24,7 @@ export interface JikanAnime {
   aired?: {
     from?: string;
     to?: string;
+    string?: string;
   };
   season?: string;
   year?: number;

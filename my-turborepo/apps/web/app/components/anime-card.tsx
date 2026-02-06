@@ -3,14 +3,21 @@ import { Trash2, Sparkles, Calendar, Film, Tv, Play, Clock, Users } from 'lucide
 import { Button } from '@/app/components/ui/button';
 import { Card } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
-import { JikanAnime } from '@/app/components/anime-search';
 import { RATING_EMOJIS, STATUS_COLORS } from '@/lib/constants';
+import { AnimeWithUserData } from '@/types';
+
+interface AnimeCardProps {
+  anime: AnimeWithUserData;
+  onDelete?: (id: string) => void;
+  showActions?: boolean;
+  priority?: boolean;
+}
 
 // ... (formatDate remains the same)
 
 // --- ATOMES (Composants UI) ---
 
-const AnimeImage = ({ src, alt }: { src?: string; alt: string }) => {
+const AnimeImage = ({ src, alt, priority }: { src?: string; alt: string; priority?: boolean }) => {
   if (!src) return null;
   return (
     <div className="flex-shrink-0 relative w-full md:w-48 h-64">
@@ -18,6 +25,7 @@ const AnimeImage = ({ src, alt }: { src?: string; alt: string }) => {
         src={src}
         alt={alt}
         fill
+        priority={priority}
         className="object-cover rounded-lg"
         sizes="(max-width: 768px) 100vw, 192px"
       />
@@ -76,7 +84,7 @@ const AnimeBadges = ({ type, status, episodes, duration, season, year }: AnimeBa
 
 // --- COMPOSANT PARENT ---
 
-export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProps) {
+export function AnimeCard({ anime, onDelete, showActions = true, priority = false }: AnimeCardProps) {
   // Calcul local (Scope: dépend de 'anime')
   const allGenres = [
     ...(anime.genres || []),
@@ -90,7 +98,7 @@ export function AnimeCard({ anime, onDelete, showActions = true }: AnimeCardProp
     <Card className="overflow-hidden hover:shadow-lg transition-all">
       <div className="flex flex-col md:flex-row gap-4 p-4">
         {/* Atome Image */}
-        <AnimeImage src={imageSrc} alt={anime.title} />
+        <AnimeImage src={imageSrc} alt={anime.title} priority={priority} />
 
         <div className="flex-1 min-w-0">
           {/* Header (Titre + Delete) */}

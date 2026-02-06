@@ -27,11 +27,12 @@ export default function DashboardPage() {
             <div>
                 <h2 className="text-2xl font-bold mb-4">Ma liste ({animes.length})</h2>
                 <div className="space-y-4">
-                    {animes.map((anime) => (
+                    {animes.map((anime, index) => (
                         <AnimeCard
                             key={anime.userAnimeId}
                             anime={anime}
                             onDelete={deleteAnime}
+                            priority={index < 2}
                         />
                     ))}
                     {animes.length === 0 && (

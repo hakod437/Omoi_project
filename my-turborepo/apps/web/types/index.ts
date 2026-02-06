@@ -1,9 +1,10 @@
 import { JikanAnime } from '@/app/components/anime-search';
 
-export interface AnimeWithUserData extends JikanAnime {
+export interface AnimeWithUserData extends Partial<JikanAnime> {
+    title: string;
     userRating: number;
     animationRating: number;
-    userDescription: string;
+    userDescription?: string;
     userAnimeId: string;
 }
 

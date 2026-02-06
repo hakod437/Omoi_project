@@ -1,10 +1,20 @@
 import "../styles/tailwind.css";
 import React from "react";
+import { Inter } from "next/font/google";
 import { Providers } from "@/app/providers";
+import { Metadata } from 'next';
 
-export const metadata = {
-    title: 'Mon Tracker Anime',
-    description: 'Suivez vos animes et comparez vos avis',
+const inter = Inter({
+    subsets: ["latin"],
+    display: "swap",
+});
+
+export const metadata: Metadata = {
+    title: {
+        default: 'Omoi - Mon Tracker Anime',
+        template: '%s | Omoi'
+    },
+    description: 'Suivez vos animes, notez les animations et comparez vos avis avec vos amis. Une expérience fluide et rapide.',
 };
 
 export default function RootLayout({
@@ -13,8 +23,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="fr" suppressHydrationWarning>
-            <body>
+        <html lang="fr" suppressHydrationWarning className={inter.className}>
+            <body className="antialiased">
                 <Providers>{children}</Providers>
             </body>
         </html>

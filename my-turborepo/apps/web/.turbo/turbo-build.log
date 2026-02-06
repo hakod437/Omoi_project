@@ -6,21 +6,25 @@
 [1G[0K[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
 
 [37m[1m [22m[39m Creating an optimized production build ...
-[32m[1m✓[22m[39m Compiled successfully in 4.4s
-[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 4.4s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 4.4s    [32m[1m✓[22m[39m Finished TypeScript in 4.4s 
-[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 446.0ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 446.0ms 
-[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/7)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (0/7)  [36m[=   ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (7/7) in 364.5ms
-[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 6.7ms    [32m[1m✓[22m[39m Finalizing page optimization in 6.7ms 
+[32m[1m✓[22m[39m Compiled successfully in 6.0s
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[31mFailed to compile.
+[39m
+[36m./app/components/anime-card.tsx[39m:[33m79[39m:[33m68[39m
+[31m[1mType error[22m[39m: Cannot find name 'AnimeCardProps'.
 
-[4mRoute (app)[24m
-┌ ○ /
-├ ○ /_not-found
-├ ○ /auth
-├ ○ /dashboard
-├ ○ /dashboard/compare
-└ ○ /dashboard/friends
-
-
-○  (Static)  prerendered as static content
-
-[?25h[1G[0K⠙[1G[0K
+[0m [90m 77 |[39m [90m// --- COMPOSANT PARENT ---[39m
+ [90m 78 |[39m
+[31m[1m>[22m[39m[90m 79 |[39m [36mexport[39m [36mfunction[39m [33mAnimeCard[39m({ anime[33m,[39m onDelete[33m,[39m showActions [33m=[39m [36mtrue[39m }[33m:[39m [33mAnimeCardProps[39m) {
+ [90m    |[39m                                                                    [31m[1m^[22m[39m
+ [90m 80 |[39m   [90m// Calcul local (Scope: dépend de 'anime')[39m
+ [90m 81 |[39m   [36mconst[39m allGenres [33m=[39m [
+ [90m 82 |[39m     [33m...[39m(anime[33m.[39mgenres [33m||[39m [])[33m,[39m[0m
+[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[?25hNext.js build worker exited with code: 1 and signal: null
+[?25l [36m.[39m [?25h[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m web@0.1.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c next build
+[1G[0K⠙[1G[0K

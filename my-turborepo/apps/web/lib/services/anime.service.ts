@@ -126,15 +126,17 @@ export class AnimeService {
         await this.ensureAnimeCached(input.malId);
 
         // Add to user's list
-        const { data, error } = await this.supabase
-            .from('user_animes')
-            .insert({
-                user_id: this.userId!,
-                mal_id: input.malId,
-                user_rating: input.userRating,
-                animation_rating: input.animationRating,
-                user_description: input.userDescription,
-            })
+        const insertData: UserAnimeInsert = {
+            user_id: this.userId!,
+            mal_id: input.malId,
+            user_rating: input.userRating,
+            animation_rating: input.animationRating,
+            user_description: input.userDescription,
+        };
+
+        const { data, error } = await (this.supabase
+            .from('user_animes') as any)
+            .insert(insertData)
             .select()
             .single();
 
@@ -161,8 +163,8 @@ export class AnimeService {
             updateData.user_description = input.userDescription;
         }
 
-        const { data, error } = await this.supabase
-            .from('user_animes')
+        const { data, error } = await (this.supabase
+            .from('user_animes') as any)
             .update(updateData)
             .eq('id', userAnimeId)
             .eq('user_id', this.userId!)
@@ -221,8 +223,8 @@ export class AnimeService {
      */
     async getAnimeByMalId(malId: number): Promise<Anime | null> {
         // Check cache first
-        const { data: cached } = await this.supabase
-            .from('animes')
+        const { data: cached } = await (this.supabase
+            .from('animes') as any)
             .select('*')
             .eq('mal_id', malId)
             .single();
@@ -242,8 +244,8 @@ export class AnimeService {
      * Ensure an anime is cached (fetch if not exists or stale)
      */
     private async ensureAnimeCached(malId: number): Promise<Anime> {
-        const { data: cached } = await this.supabase
-            .from('animes')
+        const { data: cached } = await (this.supabase
+            .from('animes') as any)
             .select('*')
             .eq('mal_id', malId)
             .single();
@@ -297,8 +299,8 @@ export class AnimeService {
             cached_at: new Date().toISOString(),
         };
 
-        const { data, error } = await this.supabase
-            .from('animes')
+        const { data, error } = await (this.supabase
+            .from('animes') as any)
             .upsert(animeData)
             .select()
             .single();
@@ -320,18 +322,18 @@ export class AnimeService {
     }> {
         // Get both users' anime lists
         const [myList, theirList] = await Promise.all([
-            this.supabase
-                .from('user_anime_details')
+            (this.supabase
+                .from('user_anime_details') as any)
                 .select('*')
                 .eq('user_id', this.userId!),
-            this.supabase
-                .from('user_anime_details')
+            (this.supabase
+                .from('user_anime_details') as any)
                 .select('*')
                 .eq('user_id', otherUserId),
         ]);
 
-        const myAnimes = myList.data || [];
-        const theirAnimes = theirList.data || [];
+        const myAnimes = (myList.data || []) as UserAnimeDetails[];
+        const theirAnimes = (theirList.data || []) as UserAnimeDetails[];
 
         const myMalIds = new Set(myAnimes.map(a => a.mal_id));
         const theirMalIds = new Set(theirAnimes.map(a => a.mal_id));

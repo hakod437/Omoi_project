@@ -39,8 +39,8 @@ export class UserService {
     async getCurrentUser(): Promise<User | null> {
         if (!this.userId) return null;
 
-        const { data, error } = await this.supabase
-            .from('users')
+        const { data, error } = await (this.supabase
+            .from('users') as any)
             .select('*')
             .eq('id', this.userId)
             .single();
@@ -56,8 +56,8 @@ export class UserService {
      * Get a user by ID (respects RLS - only visible if friend)
      */
     async getUserById(userId: string): Promise<User | null> {
-        const { data, error } = await this.supabase
-            .from('users')
+        const { data, error } = await (this.supabase
+            .from('users') as any)
             .select('*')
             .eq('id', userId)
             .single();
@@ -77,8 +77,8 @@ export class UserService {
             return [];
         }
 
-        const { data, error } = await this.supabase
-            .from('users')
+        const { data, error } = await (this.supabase
+            .from('users') as any)
             .select('id, email, display_name, avatar_url')
             .or(`email.ilike.%${query}%,display_name.ilike.%${query}%`)
             .neq('id', this.userId!)
@@ -104,8 +104,8 @@ export class UserService {
             updateData.avatar_url = input.avatarUrl;
         }
 
-        const { data, error } = await this.supabase
-            .from('users')
+        const { data, error } = await (this.supabase
+            .from('users') as any)
             .update(updateData)
             .eq('id', this.userId!)
             .select()
@@ -125,8 +125,8 @@ export class UserService {
         const targetUserId = userId || this.userId!;
 
         // Get anime stats
-        const { data: animeStats } = await this.supabase
-            .from('user_animes')
+        const { data: animeStats } = await (this.supabase
+            .from('user_animes') as any)
             .select('user_rating, animation_rating')
             .eq('user_id', targetUserId);
 
@@ -134,16 +134,16 @@ export class UserService {
         const totalAnimes = animes.length;
 
         const averageRating = totalAnimes > 0
-            ? animes.reduce((sum, a) => sum + (a.user_rating || 0), 0) / totalAnimes
+            ? animes.reduce((sum: number, a: any) => sum + (a.user_rating || 0), 0) / totalAnimes
             : 0;
 
         const averageAnimationRating = totalAnimes > 0
-            ? animes.reduce((sum, a) => sum + (a.animation_rating || 0), 0) / totalAnimes
+            ? animes.reduce((sum: number, a: any) => sum + (a.animation_rating || 0), 0) / totalAnimes
             : 0;
 
         // Get friend count
-        const { count: friendCount } = await this.supabase
-            .from('friendships')
+        const { count: friendCount } = await (this.supabase
+            .from('friendships') as any)
             .select('*', { count: 'exact', head: true })
             .eq('status', 'accepted')
             .or(`requester_id.eq.${targetUserId},addressee_id.eq.${targetUserId}`);
@@ -162,8 +162,8 @@ export class UserService {
      * The auth.users record must be deleted separately.
      */
     async deleteAccount(): Promise<void> {
-        const { error } = await this.supabase
-            .from('users')
+        const { error } = await (this.supabase
+            .from('users') as any)
             .delete()
             .eq('id', this.userId!);
 

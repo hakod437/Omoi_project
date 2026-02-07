@@ -32,8 +32,8 @@ export class FriendService {
      * Get all friends (accepted friendships)
      */
     async getFriends(): Promise<FriendListItem[]> {
-        const { data, error } = await this.supabase
-            .from('friend_list')
+        const { data, error } = await (this.supabase
+            .from('friend_list') as any)
             .select('*')
             .eq('status', 'accepted');
 
@@ -51,23 +51,23 @@ export class FriendService {
         const friends = await this.getFriends();
 
         // Get current user's anime list for comparison
-        const { data: myAnimes } = await this.supabase
-            .from('user_animes')
+        const { data: myAnimes } = await (this.supabase
+            .from('user_animes') as any)
             .select('mal_id')
             .eq('user_id', this.userId!);
 
-        const myMalIds = new Set((myAnimes || []).map(a => a.mal_id));
+        const myMalIds = new Set((myAnimes || []).map((a: any) => a.mal_id));
 
         // Fetch stats for each friend
         const friendsWithStats = await Promise.all(
             friends.map(async (friend) => {
-                const { data: friendAnimes, count } = await this.supabase
-                    .from('user_animes')
+                const { data: friendAnimes, count } = await (this.supabase
+                    .from('user_animes') as any)
                     .select('mal_id', { count: 'exact' })
                     .eq('user_id', friend.friend_id);
 
-                const friendMalIds = (friendAnimes || []).map(a => a.mal_id);
-                const commonCount = friendMalIds.filter(id => myMalIds.has(id)).length;
+                const friendMalIds = (friendAnimes || []).map((a: any) => a.mal_id);
+                const commonCount = friendMalIds.filter((id: number) => myMalIds.has(id)).length;
 
                 return {
                     ...friend,
@@ -85,8 +85,8 @@ export class FriendService {
      */
     async getPendingRequests(): Promise<FriendListItem[]> {
         // Custom query since friend_list view shows all friendships
-        const { data, error } = await this.supabase
-            .from('friendships')
+        const { data, error } = await (this.supabase
+            .from('friendships') as any)
             .select(`
         id,
         status,
@@ -120,8 +120,8 @@ export class FriendService {
      * Get sent friend requests (outgoing)
      */
     async getSentRequests(): Promise<FriendListItem[]> {
-        const { data, error } = await this.supabase
-            .from('friendships')
+        const { data, error } = await (this.supabase
+            .from('friendships') as any)
             .select(`
         id,
         status,
@@ -156,8 +156,8 @@ export class FriendService {
      */
     async sendFriendRequest(addresseeId: string): Promise<Friendship> {
         // Check if friendship already exists
-        const { data: existing } = await this.supabase
-            .from('friendships')
+        const { data: existing } = await (this.supabase
+            .from('friendships') as any)
             .select('id, status')
             .or(
                 `and(requester_id.eq.${this.userId!},addressee_id.eq.${addresseeId}),` +
@@ -174,8 +174,8 @@ export class FriendService {
             }
         }
 
-        const { data, error } = await this.supabase
-            .from('friendships')
+        const { data, error } = await (this.supabase
+            .from('friendships') as any)
             .insert({
                 requester_id: this.userId!,
                 addressee_id: addresseeId,
@@ -195,8 +195,8 @@ export class FriendService {
      * Accept a friend request
      */
     async acceptRequest(friendshipId: string): Promise<Friendship> {
-        const { data, error } = await this.supabase
-            .from('friendships')
+        const { data, error } = await (this.supabase
+            .from('friendships') as any)
             .update({ status: 'accepted' })
             .eq('id', friendshipId)
             .eq('addressee_id', this.userId!) // Only addressee can accept
@@ -214,8 +214,8 @@ export class FriendService {
      * Reject a friend request
      */
     async rejectRequest(friendshipId: string): Promise<void> {
-        const { error } = await this.supabase
-            .from('friendships')
+        const { error } = await (this.supabase
+            .from('friendships') as any)
             .update({ status: 'rejected' })
             .eq('id', friendshipId)
             .eq('addressee_id', this.userId!);
@@ -229,8 +229,8 @@ export class FriendService {
      * Remove a friend (delete friendship)
      */
     async removeFriend(friendshipId: string): Promise<void> {
-        const { error } = await this.supabase
-            .from('friendships')
+        const { error } = await (this.supabase
+            .from('friendships') as any)
             .delete()
             .eq('id', friendshipId)
             .or(`requester_id.eq.${this.userId!},addressee_id.eq.${this.userId!}`);
@@ -244,8 +244,8 @@ export class FriendService {
      * Cancel a sent friend request
      */
     async cancelRequest(friendshipId: string): Promise<void> {
-        const { error } = await this.supabase
-            .from('friendships')
+        const { error } = await (this.supabase
+            .from('friendships') as any)
             .delete()
             .eq('id', friendshipId)
             .eq('requester_id', this.userId!)
@@ -264,8 +264,8 @@ export class FriendService {
         friendshipId: string | null;
         isRequester: boolean;
     }> {
-        const { data } = await this.supabase
-            .from('friendships')
+        const { data } = await (this.supabase
+            .from('friendships') as any)
             .select('id, status, requester_id')
             .or(
                 `and(requester_id.eq.${this.userId!},addressee_id.eq.${otherUserId}),` +

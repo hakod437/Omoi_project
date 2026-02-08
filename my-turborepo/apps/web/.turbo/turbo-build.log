@@ -1,23 +1,20 @@
 
+
 > web@0.1.0 build
 > next build
 
-▲ Next.js 16.1.6 (Turbopack)
+[1G[0K[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
 - Environments: .env.local
 
-⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-  Creating an optimized production build ...
-✓ Compiled successfully in 7.3s
-  Running TypeScript ...
-  Collecting page data using 11 workers ...
-  Generating static pages using 11 workers (0/15) ...
-  Generating static pages using 11 workers (3/15) 
-  Generating static pages using 11 workers (7/15) 
-  Generating static pages using 11 workers (11/15) 
-✓ Generating static pages using 11 workers (15/15) in 374.7ms
-  Finalizing page optimization ...
+[33m[1m⚠[22m[39m The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[37m[1m [22m[39m Creating an optimized production build ...
+[32m[1m✓[22m[39m Compiled successfully in 6.7s
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 5.4s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 5.4s    [32m[1m✓[22m[39m Finished TypeScript in 5.4s 
+[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 1187.1ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 1187.1ms 
+[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/15)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (8/15)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (8/15)  [36m[==  ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (15/15) in 439.2ms
+[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 29.5ms    [32m[1m✓[22m[39m Finalizing page optimization in 29.5ms 
 
-Route (app)
+[4mRoute (app)[24m
 ┌ ○ /
 ├ ○ /_not-found
 ├ ƒ /api/animes
@@ -41,3 +38,4 @@ Route (app)
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
 
+[?25h[1G[0K⠙[1G[0K

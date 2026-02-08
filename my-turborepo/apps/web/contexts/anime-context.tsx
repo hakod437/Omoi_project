@@ -1,8 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AnimeWithUserData } from "@/types";
-import { JikanAnime } from "@/app/components/anime-search";
+import { AnimeWithUserData, JikanAnime } from "@/types";
 
 interface AnimeContextType {
     animes: AnimeWithUserData[];

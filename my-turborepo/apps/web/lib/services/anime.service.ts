@@ -9,7 +9,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Anime, AnimeInsert, UserAnime, UserAnimeInsert, UserAnimeUpdate, UserAnimeDetails } from '@/types/database';
-import { JikanAnime } from '@/app/components/anime-search';
+import { JikanAnime } from '@/types';
 
 // Cache duration: 7 days
 const CACHE_DURATION_MS = 7 * 24 * 60 * 60 * 1000;

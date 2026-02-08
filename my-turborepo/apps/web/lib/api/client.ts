@@ -10,7 +10,7 @@
 import type { ApiResponse, PaginationParams } from '@/types/api';
 import type { UserAnimeDetails, User, FriendListItem } from '@/types/database';
 import type { UserStats, FriendWithStats } from '@/lib/services';
-import type { JikanAnime } from '@/app/components/anime-search';
+import type { JikanAnime } from '@/types';
 
 const API_BASE = '/api';
 

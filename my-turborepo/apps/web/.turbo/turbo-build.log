@@ -9,21 +9,14 @@
 [33m[1m⚠[22m[39m The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 [37m[1m [22m[39m Creating an optimized production build ...
 [32m[1m✓[22m[39m Compiled successfully in 4.4s
-[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 2.7s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 2.7s    [32m[1m✓[22m[39m Finished TypeScript in 2.7s 
-[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 657.4ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 657.4ms 
-[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/13)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (8/13)  [36m[=   ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (13/13) in 217.5ms
-[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 7.8ms    [32m[1m✓[22m[39m Finalizing page optimization in 7.8ms 
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 2.6s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 2.6s    [32m[1m✓[22m[39m Finished TypeScript in 2.6s 
+[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 497.5ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 497.5ms 
+[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/8)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (0/8)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (1/8)  [36m[==  ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (8/8) in 408.9ms
+[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 9.0ms    [32m[1m✓[22m[39m Finalizing page optimization in 9.0ms 
 
 [4mRoute (app)[24m
 ┌ ○ /
 ├ ○ /_not-found
-├ ƒ /api/animes
-├ ƒ /api/animes/[id]
-├ ƒ /api/animes/search
-├ ƒ /api/friends
-├ ƒ /api/friends/[id]
-├ ƒ /api/users/me
-├ ƒ /api/users/search
 ├ ○ /auth
 ├ ƒ /auth/callback
 ├ ○ /auth/login

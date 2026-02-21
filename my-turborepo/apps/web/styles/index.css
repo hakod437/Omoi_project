@@ -1,6 +1,18 @@
+/**
+ * MESH GRADIENT & GLOBAL STYLES
+ * 
+ * This file handles the sophisticated visual layering of the application.
+ * It combines Tailwind's utility classes with custom "Fluid" background logic.
+ */
+
 @import './theme.css';
 @import './tailwind.css';
 
+/* 
+ * 1. THE FLUID CONTAINER
+ * Acts as the "stage" for the background animation.
+ * Uses `fixed` positioning and a negative `z-index` to sit behind all content.
+ */
 .fluid-container {
     position: fixed;
     top: 0;
@@ -12,43 +24,56 @@
     z-index: -1;
 }
 
+/* 
+ * 2. THE BLOBS (Mesh Gradient Logic)
+ * Instead of a static CSS gradient, we use individual moving shapes.
+ * - Extremely high `blur` (140px) merges the colors into a seamless silk-like transition.
+ * - `opacity: 0.45` ensures the colors stay "soft" and elegant, not aggressive.
+ * - `will-change: transform` hints the browser to use GPU acceleration for smoothness.
+ */
 .blob {
     position: absolute;
-    width: 60vw;
-    /* Très larges pour couvrir l'écran */
-    height: 60vw;
+    width: 70vw;
+    height: 70vw;
     border-radius: 50%;
-    filter: blur(120px);
-    /* Flou extrême pour le fondu "Mesh" */
-    opacity: 0.8;
+    filter: blur(140px);
+    opacity: 0.45;
     will-change: transform;
     mix-blend-mode: normal;
-    /* Normal pour garder la pureté des couleurs du thème */
 }
 
-/* On utilise les couleurs EXACTES du thème pour un rendu fidèle */
+/* 
+ * 3. THEME BINDINGS
+ * Each blob is tied to a CSS variable from theme.css.
+ * When the theme changes, the blobs update their colors instantly.
+ */
 .color-1 {
     background: var(--blob-1);
     top: -10%;
     left: -10%;
-    animation: mesh-move-1 25s infinite alternate ease-in-out;
+    animation: mesh-move-1 12s infinite alternate ease-in-out;
 }
 
 .color-2 {
     background: var(--blob-2);
     bottom: -10%;
     right: -10%;
-    animation: mesh-move-2 30s infinite alternate ease-in-out;
+    animation: mesh-move-2 15s infinite alternate ease-in-out;
 }
 
 .color-3 {
     background: var(--blob-3);
     top: 20%;
     right: 20%;
-    animation: mesh-move-3 28s infinite alternate ease-in-out;
+    animation: mesh-move-3 14s infinite alternate ease-in-out;
 }
 
-/* Mouvements fluides et lents qui donnent cette impression de "mélange visqueux" sans texture */
+/* 
+ * 4. VISCOUS MOVEMENT MATH
+ * `ease-in-out` + `alternate` creates a non-linear, organic swaying motion.
+ * The different durations (12s, 14s, 15s) prevent the blobs from moving "in sync",
+ * ensuring the pattern never repeats exactly the same way (chaotic harmony).
+ */
 @keyframes mesh-move-1 {
     0% {
         transform: translate(0, 0) scale(1);
@@ -91,7 +116,10 @@
     }
 }
 
-/* Assure la transparence pour que le fond Mesh soit visible derrière le contenu */
+/* 
+ * 5. CONTENT TRANSPARENCY
+ * Critical: The body must be transparent so the background layer is actually visible.
+ */
 body {
     background-color: transparent !important;
 }

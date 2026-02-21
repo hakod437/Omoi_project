@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
-import { AuthTabs } from "../organisms/auth-tabs";
-import { FormField } from "../organisms/form-field";
+import { AuthTabs } from "../molecules/auth-tabs";
+import { FormField } from "../molecules/form-field";
 // import { getClient } from '@/lib/supabase/client';
 
 export default function AuthForm() {

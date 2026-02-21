@@ -1,6 +1,6 @@
 "use client";
 
-import { ThemeProvider } from "@/app/components/theme-provider";
+import { ThemeProvider } from "@/app/providers/theme-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { AnimeProvider } from "@/contexts/anime-context";
 

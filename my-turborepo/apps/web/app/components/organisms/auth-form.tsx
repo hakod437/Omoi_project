@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * ORGANISM: AuthForm
+ * 
+ * Role: Orchestrates the entire authentication experience.
+ * Why an Organism? 
+ * - It contains "Business Logic" (handleSubmit, validaiton).
+ * - It manages complex state (Auth mode, loading, form values).
+ * - It assembles several molecules (AuthTabs, FormFields).
+ */
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from 'sonner';
@@ -7,12 +17,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { AuthTabs } from "../molecules/auth-tabs";
 import { FormField } from "../molecules/form-field";
-// import { getClient } from '@/lib/supabase/client';
 
 export default function AuthForm() {
-    // const supabase = getClient();
-
     // 1. STATE MANAGEMENT
+    // We consolidate state here to keep molecules pure and reusable.
     const [activeTab, setActiveTab] = useState<'inscription' | 'connexion'>('inscription');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,6 +28,7 @@ export default function AuthForm() {
     const [isLoading, setIsLoading] = useState(false);
 
     // 2. THE GATEKEEPER (Validation Logic)
+    // Professional sanity checks before hitting any API.
     const validateForm = () => {
         const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         if (!isEmailValid) {
@@ -40,6 +49,10 @@ export default function AuthForm() {
         return true;
     };
 
+    /**
+     * handleSubmit: Orchestrates the auth flow.
+     * NOTE: Currently in SIMULATION MODE for frontend testing.
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -59,6 +72,7 @@ export default function AuthForm() {
 
     return (
         <>
+            {/* Header Switcher (Molecule) */}
             <AuthTabs activeTab={activeTab} setActiveTab={setActiveTab} isLoading={isLoading} />
 
             <Card className="overflow-hidden border-border/50 shadow-xl shadow-primary/5">
@@ -69,6 +83,7 @@ export default function AuthForm() {
                 </CardHeader>
 
                 <CardContent>
+                    {/* AnimatePresence handles the exit/entry animations during mode switching */}
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -126,6 +141,7 @@ export default function AuthForm() {
                                 >
                                     {isLoading ? (
                                         <span className="flex items-center gap-2">
+                                            {/* Custom inline spinner for the loading state */}
                                             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                             Chargement...
                                         </span>

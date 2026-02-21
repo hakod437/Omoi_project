@@ -9,13 +9,19 @@ interface AuthTabsProps {
 }
 
 /**
- * AuthTabs Organism
- * Handles the iOS-style sliding animation for tab switching.
+ * MOLECULE: AuthTabs
+ * 
+ * Role: A specialized navigation component for switching between auth modes.
+ * Design: High-fidelity iOS-style "Sliding Pill" animation.
+ * Why a Molecule?
+ * - It doesn't contain business logic (only UI state switching).
+ * - It's a composition of buttons and a shared layoutId (framer-motion).
  */
 export function AuthTabs({ activeTab, setActiveTab, isLoading }: AuthTabsProps) {
     return (
         <div className="relative flex p-1.5 bg-muted/50 backdrop-blur-sm rounded-full mb-8 border border-border/50 shadow-sm">
-            {/* BOUTON INSCRIPTION */}
+
+            {/* 1. INSCRIPTION TAB */}
             <button
                 onClick={() => setActiveTab('inscription')}
                 disabled={isLoading}
@@ -24,6 +30,7 @@ export function AuthTabs({ activeTab, setActiveTab, isLoading }: AuthTabsProps) 
             >
                 Inscription
                 {activeTab === 'inscription' && (
+                    /* The "Animated Pill" uses layoutId to morph between buttons */
                     <motion.div
                         layoutId="active-pill"
                         className="absolute inset-0 bg-white rounded-full shadow-md -z-10"
@@ -32,7 +39,7 @@ export function AuthTabs({ activeTab, setActiveTab, isLoading }: AuthTabsProps) 
                 )}
             </button>
 
-            {/* BOUTON CONNEXION */}
+            {/* 2. CONNEXION TAB */}
             <button
                 onClick={() => setActiveTab('connexion')}
                 disabled={isLoading}

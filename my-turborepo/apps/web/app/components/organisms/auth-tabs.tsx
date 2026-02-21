@@ -14,7 +14,7 @@ interface AuthTabsProps {
  */
 export function AuthTabs({ activeTab, setActiveTab, isLoading }: AuthTabsProps) {
     return (
-        <div className="relative flex p-1.5 bg-slate-200/50 backdrop-blur-sm rounded-full mb-8 border border-slate-200/50 shadow-sm">
+        <div className="relative flex p-1.5 bg-muted/50 backdrop-blur-sm rounded-full mb-8 border border-border/50 shadow-sm">
             {/* BOUTON INSCRIPTION */}
             <button
                 onClick={() => setActiveTab('inscription')}

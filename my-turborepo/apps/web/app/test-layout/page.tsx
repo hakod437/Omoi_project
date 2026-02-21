@@ -11,7 +11,7 @@ import AuthForm from '../components/organisms/auth-form';
  */
 export default function TestLayoutPage() {
     return (
-        <main className="min-h-screen bg-slate-50 py-12">
+        <main className="min-h-screen py-12">
             <LayoutContainer className="max-w-md">
                 <AuthForm />
 

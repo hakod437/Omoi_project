@@ -7,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { AuthTabs } from "../organisms/auth-tabs";
 import { FormField } from "../organisms/form-field";
-import { getClient } from '@/lib/supabase/client';
+// import { getClient } from '@/lib/supabase/client';
 
 export default function AuthForm() {
-    const supabase = getClient();
+    // const supabase = getClient();
 
     // 1. STATE MANAGEMENT
     const [activeTab, setActiveTab] = useState<'inscription' | 'connexion'>('inscription');
@@ -46,41 +46,24 @@ export default function AuthForm() {
 
         setIsLoading(true);
 
-        try {
-            if (activeTab === 'inscription') {
-                const { error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        emailRedirectTo: `${window.location.origin}/auth/callback`,
-                    },
-                });
-
-                if (error) throw error;
-                toast.success("Succès ! Vérifiez votre boîte mail.");
-            } else {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-
-                if (error) throw error;
-                toast.success("Bon retour !");
-            }
-        } catch (error: any) {
-            toast.error(error.message || "Une erreur est survenue.");
-        } finally {
+        // DISCONNECTED BACKEND: Simulating a 2-second API call
+        setTimeout(() => {
             setIsLoading(false);
-        }
+            if (activeTab === 'inscription') {
+                toast.success("Succès (Simulation) ! Vérifiez votre boîte mail.");
+            } else {
+                toast.success("Bon retour (Simulation) !");
+            }
+        }, 2000);
     };
 
     return (
         <>
             <AuthTabs activeTab={activeTab} setActiveTab={setActiveTab} isLoading={isLoading} />
 
-            <Card className="overflow-hidden border-slate-200/60 shadow-xl shadow-slate-200/50">
+            <Card className="overflow-hidden border-border/50 shadow-xl shadow-primary/5">
                 <CardHeader className="pb-4">
-                    <CardTitle className="text-center text-2xl font-bold text-slate-800">
+                    <CardTitle className="text-center text-2xl font-bold text-foreground">
                         {activeTab === 'inscription' ? 'Créer un compte' : 'Bon retour !'}
                     </CardTitle>
                 </CardHeader>

@@ -1,2 +1,97 @@
-@import './tailwind.css';
 @import './theme.css';
+@import './tailwind.css';
+
+.fluid-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background);
+    overflow: hidden;
+    z-index: -1;
+}
+
+.blob {
+    position: absolute;
+    width: 60vw;
+    /* Très larges pour couvrir l'écran */
+    height: 60vw;
+    border-radius: 50%;
+    filter: blur(120px);
+    /* Flou extrême pour le fondu "Mesh" */
+    opacity: 0.8;
+    will-change: transform;
+    mix-blend-mode: normal;
+    /* Normal pour garder la pureté des couleurs du thème */
+}
+
+/* On utilise les couleurs EXACTES du thème pour un rendu fidèle */
+.color-1 {
+    background: var(--blob-1);
+    top: -10%;
+    left: -10%;
+    animation: mesh-move-1 25s infinite alternate ease-in-out;
+}
+
+.color-2 {
+    background: var(--blob-2);
+    bottom: -10%;
+    right: -10%;
+    animation: mesh-move-2 30s infinite alternate ease-in-out;
+}
+
+.color-3 {
+    background: var(--blob-3);
+    top: 20%;
+    right: 20%;
+    animation: mesh-move-3 28s infinite alternate ease-in-out;
+}
+
+/* Mouvements fluides et lents qui donnent cette impression de "mélange visqueux" sans texture */
+@keyframes mesh-move-1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(20%, 30%) scale(1.2);
+    }
+
+    100% {
+        transform: translate(-10%, 10%) scale(1.1);
+    }
+}
+
+@keyframes mesh-move-2 {
+    0% {
+        transform: translate(0, 0) scale(1.1);
+    }
+
+    50% {
+        transform: translate(-30%, -20%) scale(0.9);
+    }
+
+    100% {
+        transform: translate(10%, -10%) scale(1.2);
+    }
+}
+
+@keyframes mesh-move-3 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-15%, 40%);
+    }
+
+    100% {
+        transform: translate(30%, -20%);
+    }
+}
+
+/* Assure la transparence pour que le fond Mesh soit visible derrière le contenu */
+body {
+    background-color: transparent !important;
+}

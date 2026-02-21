@@ -1,8 +1,9 @@
-import "../styles/tailwind.css";
+import "../styles/index.css";
 import React from "react";
 import { Inter } from "next/font/google";
 import { Providers } from "@/app/providers";
 import { Metadata } from 'next';
+import AuroraBackground from "./components/organisms/aurora-background";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -24,7 +25,8 @@ export default function RootLayout({
 }) {
     return (
         <html lang="fr" suppressHydrationWarning className={inter.className}>
-            <body className="antialiased">
+            <body className="antialiased font-sans">
+                <AuroraBackground />
                 <Providers>{children}</Providers>
             </body>
         </html>

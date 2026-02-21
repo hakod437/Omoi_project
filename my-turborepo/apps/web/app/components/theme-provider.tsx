@@ -12,7 +12,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<ThemeColor>("pastel");
+    const [theme, setTheme] = useState<ThemeColor>("cyber");
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("animeTheme") as ThemeColor;

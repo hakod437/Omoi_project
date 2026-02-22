@@ -13,11 +13,18 @@ export default function AuthPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [mode, setMode] = useState<"login" | "register">("login");
 
-    // Force the theme to "shonen" (Option 3) on mount as requested
+    // Force the theme to "jade" (Option 1) on mount as requested
     useEffect(() => {
-        setTheme("abyss");
-    }, [setTheme]);
+        console.log("🔄 Tentative de forçage du thème JADE sur la page Auth...");
 
+        // 1. On met à jour l'état global pour que les composants React soient au courant
+        setTheme("jade");
+
+        // 2. On force l'attribut sur le DOM au cas où le Provider est trop lent
+        document.documentElement.setAttribute("data-theme", "jade");
+
+        console.log("✅ Thème JADE injecté dans le DOM.");
+    }, [setTheme]);
     return (
         <div className="min-h-screen grid place-items-center bg-background p-4">
             <div className="w-full max-w-md space-y-8">

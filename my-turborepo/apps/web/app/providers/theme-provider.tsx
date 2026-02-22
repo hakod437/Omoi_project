@@ -13,7 +13,7 @@
 
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 // Types defining our supported design variants
 export type ThemeColor = "jade" | "pastel" | "abyss";
@@ -47,11 +47,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
      * 2. Persists choice for future sessions.
      * 3. Triggers the CSS variable swap by updating the DOM attribute.
      */
-    const handleSetTheme = (newTheme: ThemeColor) => {
+    const handleSetTheme = useCallback((newTheme: ThemeColor) => {
         setTheme(newTheme);
         localStorage.setItem("animeTheme", newTheme);
         document.documentElement.setAttribute("data-theme", newTheme);
-    };
+    }, []);
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme: handleSetTheme }}>

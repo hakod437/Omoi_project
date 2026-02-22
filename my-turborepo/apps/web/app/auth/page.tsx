@@ -15,7 +15,7 @@ export default function AuthPage() {
 
     // Force the theme to "shonen" (Option 3) on mount as requested
     useEffect(() => {
-        setTheme("shonen");
+        setTheme("abyss");
     }, [setTheme]);
 
     return (

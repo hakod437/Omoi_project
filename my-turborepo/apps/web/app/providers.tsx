@@ -13,7 +13,7 @@
 import { ThemeProvider } from "@/app/providers/theme-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { AnimeProvider } from "@/contexts/anime-context";
-
+import AuroraBackground from "./components/organisms/aurorabackgroud";
 import { Toaster } from "sonner";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -22,6 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <AuthProvider>
                 <AnimeProvider>
                     {children}
+                    <AuroraBackground />
 
                     {/* Global Notification Orchestrator */}
                     <Toaster richColors position="top-right" />

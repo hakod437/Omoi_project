@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       // ── Fonts ──────────────────────────────────────────────
-      fontFamily: {
-        kawaii: ['"Hachi Maru Pop"', 'cursive'],
-        ui:     ['Nunito', 'sans-serif'],
-        body:   ['"DM Sans"', 'sans-serif'],
-      },
+     fontFamily: {
+  title: ["var(--font-hachi)", "cursive"],
+  ui:    ["var(--font-nunito)", "sans-serif"],
+  sans:  ["var(--font-dm)", "sans-serif"],
+},
 
       // ── Couleurs mappées sur les variables CSS des thèmes ──
       colors: {

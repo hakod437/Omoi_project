@@ -62,13 +62,10 @@ export default function RootLayout({
         /* We inject all font variables here so they are available globally via Tailwind or CSS */
         <html lang="fr" suppressHydrationWarning className={`${hachi.variable} ${nunito.variable} ${dmSans.variable}`}>
             <body className="antialiased font-sans">
-                <div className="aurora">
-                    <div className="aurora-blob aurora-blob-1"></div>
-                    <div className="aurora-blob aurora-blob-2"></div>
-                    <div className="aurora-blob aurora-blob-3"></div>
+                {/* On enveloppe tout dans page-wrapper (défini dans ton CSS avec z-index: 2) */}
+                <div className="page-wrapper">
+                    <Providers>{children}</Providers>
                 </div>
-                {/* Core App Contexts (Theme, Auth, Data) */}
-                <Providers>{children}</Providers>
             </body>
         </html>
     );

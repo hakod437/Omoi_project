@@ -14,6 +14,7 @@ import React from "react";
 import { Providers } from "@/app/providers";
 import { Metadata } from 'next';
 import { Hachi_Maru_Pop, Nunito, DM_Sans } from "next/font/google";
+import AuroraBackground from "./components/organisms/aurorabackgroud";
 
 /**
  * TYPOGRAPHY CONFIGURATION (Multi-Font System)
@@ -61,9 +62,9 @@ export default function RootLayout({
     return (
         /* We inject all font variables here so they are available globally via Tailwind or CSS */
         <html lang="fr" suppressHydrationWarning className={`${hachi.variable} ${nunito.variable} ${dmSans.variable}`}>
-            <body className="antialiased font-sans">
-                {/* On enveloppe tout dans page-wrapper (défini dans ton CSS avec z-index: 2) */}
-                <div className="page-wrapper">
+            <body className="antialiased font-sans min-h-screen">
+                <AuroraBackground />
+                <div className="page-wrapper min-h-screen">
                     <Providers>{children}</Providers>
                 </div>
             </body>

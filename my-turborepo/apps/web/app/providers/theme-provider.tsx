@@ -16,7 +16,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 // Types defining our supported design variants
-export type ThemeColor = "jade" | "pastel" | "abyss";
+export type ThemeColor = "abyss" | "pastel" | "jade";
 
 interface ThemeContextType {
     theme: ThemeColor;

@@ -17,39 +17,35 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 /* -------------------------------------------------------------------------- */
-/* 1. THEME: WADA JADE (Default)                                              */
-/* Focus: Natural serenity, balance of deep greens and sand accents.          */
+/* 3. THEME: WADA ABYSS                                                      */
+/* Focus: Deep immersion, nocturnal blue tones (Sanzo Wada #67, #106, #119).  */
 /* -------------------------------------------------------------------------- */
 :root,
-[data-theme="jade"] {
-  --background: #0c1a18;
-  --foreground: #e8f5f0;
-
-  /* Semantic Tiers */
-  --card: #112f2c;
-  --card-hover: #163830;
-  --primary: #00b49b;
-  --primary-dark: #00978d;
-  --accent: #ebd3a2;
-  --muted: #1a3d38;
-  --muted-fg: #7aada5;
-
-  /* UI Surface Elements */
-  --border: rgba(0, 180, 155, 0.2);
-  --tag-bg: rgba(0, 180, 155, 0.12);
-  --tag-fg: #00b49b;
-
-  /* Glow FX: Used for neon/cyber effects or focus rings */
-  --glow: 0 0 30px rgba(0, 180, 155, 0.3);
-  --glow-accent: 0 0 30px rgba(235, 211, 162, 0.25);
-  --radius: 0.5rem;
-
+[data-theme="abyss"] {
+  --background: #080f18;
+  --foreground: #d6e8f2;
+  --card: #12354e;
+  --card-hover: #163d58;
+  --primary: #5a82b3;
+  --primary-dark: #007190;
+  --accent: #78cdd0;
+  --muted: #0f2336;
+  --muted-fg: #6a96b5;
+  --border: rgba(90, 130, 179, 0.2);
+  --tag-bg: rgba(90, 130, 179, 0.12);
+  --tag-fg: #78cdd0;
+  --glow: 0 0 30px rgba(90, 130, 179, 0.35);
+  --glow-accent: 0 0 30px rgba(120, 205, 208, 0.25);
+  --radius: 0.625rem;
+  
   /* Aurora Mesh Gradient Logic */
-  --blob-1: #00978d;
-  --blob-2: #ebd3a2;
-  --blob-3: #004f46;
-  --blob-opacity: 0.12;
+  --blob-1: #007190;
+  --blob-2: #78cdd0;
+  --blob-3: #1c4286;
+  --blob-opacity: 0.13;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -80,34 +76,6 @@
   --blob-opacity: 0.22;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. THEME: WADA ABYSS                                                      */
-/* Focus: Deep immersion, nocturnal blue tones (Sanzo Wada #67, #106, #119).  */
-/* -------------------------------------------------------------------------- */
-[data-theme="abyss"] {
-  --background: #080f18;
-  --foreground: #d6e8f2;
-  --card: #12354e;
-  --card-hover: #163d58;
-  --primary: #5a82b3;
-  --primary-dark: #007190;
-  --accent: #78cdd0;
-  --muted: #0f2336;
-  --muted-fg: #6a96b5;
-  --border: rgba(90, 130, 179, 0.2);
-  --tag-bg: rgba(90, 130, 179, 0.12);
-  --tag-fg: #78cdd0;
-  --glow: 0 0 30px rgba(90, 130, 179, 0.35);
-  --glow-accent: 0 0 30px rgba(120, 205, 208, 0.25);
-  --radius: 0.625rem;
-
-  /* Aurora Mesh Gradient Logic */
-  --blob-1: #007190;
-  --blob-2: #78cdd0;
-  --blob-3: #1c4286;
-  --blob-opacity: 0.13;
-}
-
 
 /* -------------------------------------------------------------------------- */
 /* 4. THEME: DARK MODE OVERRIDES                                             */
@@ -123,8 +91,44 @@
   --muted: #3d2654;
   --muted-fg: #b3a3c2;
   --border: rgba(199, 125, 255, 0.2);
-
+  
   --blob-1: #5a189a;
   --blob-2: #240046;
   --blob-3: #3c096c;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 1. THEME: WADA JADE (Default)                                              */
+/* Focus: Natural serenity, balance of deep greens and sand accents.          */
+/* -------------------------------------------------------------------------- */
+
+
+[data-theme="jade"] {
+  --background: #0c1a18;
+  --foreground: #e8f5f0;
+
+  /* Semantic Tiers */
+  --card: #112f2c;
+  --card-hover: #163830;
+  --primary: #00b49b;
+  --primary-dark: #00978d;
+  --accent: #ebd3a2;
+  --muted: #1a3d38;
+  --muted-fg: #7aada5;
+
+  /* UI Surface Elements */
+  --border: rgba(0, 180, 155, 0.2);
+  --tag-bg: rgba(0, 180, 155, 0.12);
+  --tag-fg: #00b49b;
+
+  /* Glow FX: Used for neon/cyber effects or focus rings */
+  --glow: 0 0 30px rgba(0, 180, 155, 0.3);
+  --glow-accent: 0 0 30px rgba(235, 211, 162, 0.25);
+  --radius: 0.5rem;
+
+  /* Aurora Mesh Gradient Logic */
+  --blob-1: #00978d;
+  --blob-2: #ebd3a2;
+  --blob-3: #004f46;
+  --blob-opacity: 0.12;
 }

@@ -15,28 +15,21 @@ export default function AuthPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [mode, setMode] = useState<"login" | "register">("login");
 
-    // Force the theme to "jade" (Option 1) on mount as requested
+    // Force the theme to "abyss" on mount for this specific page
     useEffect(() => {
-        console.log("🔄 Tentative de forçage du thème JADE sur la page Auth...");
-
-        // 1. On met à jour l'état global pour que les composants React soient au courant
         setTheme("abyss");
-
-        // 2. On force l'attribut sur le DOM au cas où le Provider est trop lent
         document.documentElement.setAttribute("data-theme", "abyss");
-
-        console.log("✅ Thème ABYSS injecté dans le DOM.");
     }, [setTheme]);
     return (
-         <main className="min-h-screen py-12">
-                     <LayoutContainer className="max-w-md">
-                         <AuthForm />
-         
-                         <p className="mt-8 text-xs text-center text-slate-400 font-light flex items-center justify-center gap-2">
-                             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                             Atomic Design Refactor Complete
-                         </p>
-                     </LayoutContainer>
+        <main className="min-h-screen py-12">
+            <LayoutContainer className="max-w-md">
+                <AuthForm />
+
+                <p className="mt-8 text-xs text-center text-slate-400 font-light flex items-center justify-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    Atomic Design Refactor Complete
+                </p>
+            </LayoutContainer>
         </main>
     );
 }

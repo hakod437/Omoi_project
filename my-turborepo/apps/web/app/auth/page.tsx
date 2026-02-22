@@ -27,7 +27,7 @@ export default function AuthPage() {
                         <Tv className="size-10 text-primary" />
                     </div>
                     <div className="space-y-2">
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2">
+                        <h1 className="text-4xl font-title text-foreground flex items-center justify-center gap-2">
                             Anime Tracker <span className="text-primary">✨</span>
                         </h1>
                         <p className="text-muted-foreground">

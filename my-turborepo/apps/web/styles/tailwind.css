@@ -107,4 +107,23 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    /* Global Typography Hierarchy */
+    button,
+    input,
+    optgroup,
+    select,
+    textarea,
+    label {
+        @apply font-ui;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-title;
+    }
 }

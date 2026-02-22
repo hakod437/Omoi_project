@@ -16,7 +16,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Types defining our supported design variants
-export type ThemeColor = "pastel" | "cyber" | "shonen";
+export type ThemeColor = "jade" | "pastel" | "abyss";
 
 interface ThemeContextType {
     theme: ThemeColor;
@@ -30,7 +30,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
  */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // We default to 'cyber' as the signature theme of the app
-    const [theme, setTheme] = useState<ThemeColor>("cyber");
+    const [theme, setTheme] = useState<ThemeColor>("abyss");
 
     // Rehydration: Load user preference on mount
     useEffect(() => {

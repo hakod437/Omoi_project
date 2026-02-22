@@ -8,36 +8,25 @@
 
 [33m[1m⚠[22m[39m The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 [37m[1m [22m[39m Creating an optimized production build ...
+[32m[1m✓[22m[39m Compiled successfully in 6.3s
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 3.1s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 3.1s    [32m[1m✓[22m[39m Finished TypeScript in 3.1s 
+[?25l[37m[1m [22m[39m Collecting page data using 11 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 11 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 11 workers in 585.1ms    [32m[1m✓[22m[39m Collecting page data using 11 workers in 585.1ms 
+[?25l[37m[1m [22m[39m Generating static pages using 11 workers (0/8)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (0/8)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 11 workers (1/8)  [36m[==  ][39m[2K[1G[?25h[32m[1m✓[22m[39m Generating static pages using 11 workers (8/8) in 447.4ms
+[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 24.7ms    [32m[1m✓[22m[39m Finalizing page optimization in 24.7ms 
 
-> Build error occurred
-Error: Turbopack build failed with 1 errors:
-./apps/web/styles/theme.css
-Error evaluating Node.js code
-CssSyntaxError: /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/styles/theme.css:114:1: `@layer base` is used but no matching `@tailwind base` directive is present.
-    at Input.error (apps/web/node_modules/postcss/lib/input.js:135:16) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:4651:22]
-    at AtRule.error (apps/web/node_modules/postcss/lib/node.js:146:32) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:928:38]
-    [at normalizeTailwindDirectives (/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/lib/normalizeTailwindDirectives.js:72:32)]
-    [at /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/processTailwindFeatures.js:29:98]
-    [at plugins (/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/plugin.js:38:69)]
-    at LazyResult.runOnRoot (apps/web/node_modules/postcss/lib/lazy-result.js:361:16) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6264:24]
-    at LazyResult.runAsync (apps/web/node_modules/postcss/lib/lazy-result.js:290:26) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6203:32]
-    at LazyResult.async (apps/web/node_modules/postcss/lib/lazy-result.js:192:30) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6135:36]
-    at LazyResult.then (apps/web/node_modules/postcss/lib/lazy-result.js:436:17) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6321:21]
-    [at process.processTicksAndRejections (node:internal/process/task_queues:95:5)]
-
-Import trace:
-  Client Component Browser:
-    ./apps/web/styles/theme.css [Client Component Browser]
-    ./apps/web/styles/index.css [Client Component Browser]
-    ./apps/web/app/layout.tsx [Server Component]
+[4mRoute (app)[24m
+┌ ○ /
+├ ○ /_not-found
+├ ○ /auth
+├ ƒ /auth/callback
+├ ○ /auth/login
+├ ○ /auth/register
+└ ○ /test-layout
 
 
-    at [3mignore-listed frames[23m
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m web@0.1.0
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c next build
-[1G[0K⠙[1G[0K
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[?25h[1G[0K⠙[1G[0K

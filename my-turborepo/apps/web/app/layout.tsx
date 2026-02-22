@@ -13,7 +13,6 @@ import "../styles/index.css";
 import React from "react";
 import { Providers } from "@/app/providers";
 import { Metadata } from 'next';
-import AuroraBackground from "./components/organisms/aurora-background";
 import { Hachi_Maru_Pop, Nunito, DM_Sans } from "next/font/google";
 
 /**
@@ -63,8 +62,6 @@ export default function RootLayout({
         /* We inject all font variables here so they are available globally via Tailwind or CSS */
         <html lang="fr" suppressHydrationWarning className={`${hachi.variable} ${nunito.variable} ${dmSans.variable}`}>
             <body className="antialiased font-sans">
-                {/* Global Background Layer */}
-                <AuroraBackground />
 
                 {/* Core App Contexts (Theme, Auth, Data) */}
                 <Providers>{children}</Providers>

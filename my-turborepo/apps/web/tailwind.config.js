@@ -6,6 +6,14 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                // 1. DM Sans is our primary font for standard text
+                sans: ["var(--font-dm)", "sans-serif"],
+                // 2. Nunito is for UI components (Buttons, Labels, Nav)
+                ui: ["var(--font-nunito)", "sans-serif"],
+                // 3. Hachi Maru Pop is for specialized items (Titles, Logo, Scores)
+                title: ["var(--font-hachi)", "cursive"],
+            },
             colors: {
                 border: "var(--border)",
                 input: "var(--input)",

@@ -11,15 +11,36 @@
 
 import "../styles/index.css";
 import React from "react";
-import { Inter } from "next/font/google";
 import { Providers } from "@/app/providers";
 import { Metadata } from 'next';
 import AuroraBackground from "./components/organisms/aurora-background";
+import { Hachi_Maru_Pop, Nunito, DM_Sans } from "next/font/google";
 
-// Primary typography using Inter for its high legibility in UI
-const inter = Inter({
+/**
+ * TYPOGRAPHY CONFIGURATION (Multi-Font System)
+ * We use three distinct fonts to create a clear visual hierarchy.
+ */
+
+// 1. Hachi Maru Pop: For Logo, Titles, and Scores (Kawaii/Handwritten aesthetic)
+const hachi = Hachi_Maru_Pop({
+    weight: '400',
     subsets: ["latin"],
     display: "swap",
+    variable: "--font-hachi",
+});
+
+// 2. Nunito: For UI elements like Labels, Buttons, and Navigation (Rounded/Soft)
+const nunito = Nunito({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-nunito",
+});
+
+// 3. DM Sans: For standard Body text and Descriptions (High readability)
+const dmSans = DM_Sans({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-dm",
 });
 
 export const metadata: Metadata = {
@@ -32,8 +53,6 @@ export const metadata: Metadata = {
 
 /**
  * RootLayout: The shell component that wraps every page.
- * We inject the AuroraBackground here so it stays mounted during page transitions,
- * maintaining the performance of the fluid animation.
  */
 export default function RootLayout({
     children,
@@ -41,7 +60,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="fr" suppressHydrationWarning className={inter.className}>
+        /* We inject all font variables here so they are available globally via Tailwind or CSS */
+        <html lang="fr" suppressHydrationWarning className={`${hachi.variable} ${nunito.variable} ${dmSans.variable}`}>
             <body className="antialiased font-sans">
                 {/* Global Background Layer */}
                 <AuroraBackground />

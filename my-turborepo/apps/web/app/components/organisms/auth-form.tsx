@@ -77,7 +77,7 @@ export default function AuthForm() {
 
             <Card className="overflow-hidden border-border/50 shadow-xl shadow-primary/5">
                 <CardHeader className="pb-4">
-                    <CardTitle className="text-center text-2xl font-bold text-foreground">
+                    <CardTitle className="text-center text-3xl font-title text-foreground tracking-wide">
                         {activeTab === 'inscription' ? 'Créer un compte' : 'Bon retour !'}
                     </CardTitle>
                 </CardHeader>

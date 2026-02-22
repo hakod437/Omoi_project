@@ -1,0 +1,54 @@
+
+> build
+> node node_modules/turbo/bin/turbo run build
+
+• turbo 2.8.2
+• Packages in scope: @repo/eslint-config, @repo/typescript-config, @repo/ui, docs, web
+• Running build in 5 packages
+• Remote caching disabled
+docs:build: cache miss, executing 89fbdfac0898db03
+web:build: cache miss, executing 23aa6afd20833654
+docs:build: 
+docs:build: > docs@0.1.0 build
+docs:build: > next build
+docs:build: 
+web:build: 
+web:build: > web@0.1.0 build
+web:build: > next build
+web:build: 
+docs:build: ▲ Next.js 16.1.6 (Turbopack)
+docs:build: 
+web:build: ▲ Next.js 16.1.6 (Turbopack)
+web:build: - Environments: .env.local
+web:build: 
+web:build: ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+docs:build:   Creating an optimized production build ...
+web:build:   Creating an optimized production build ...
+docs:build: ✓ Compiled successfully in 3.1s
+docs:build:   Running TypeScript ...
+docs:build:   Collecting page data using 11 workers ...
+web:build: 
+web:build: > Build error occurred
+web:build: Error: Turbopack build failed with 1 errors:
+web:build: ./apps/web/styles/index.css
+web:build: Error evaluating Node.js code
+web:build: CssSyntaxError: /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/styles/index.css:16:1: `@layer base` is used but no matching `@tailwind base` directive is present.
+web:build:     at Input.error (apps/web/node_modules/postcss/lib/input.js:135:16) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:4651:22]
+web:build:     at AtRule.error (apps/web/node_modules/postcss/lib/node.js:146:32) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:928:38]
+web:build:     [at normalizeTailwindDirectives (/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/lib/normalizeTailwindDirectives.js:72:32)]
+web:build:     [at /home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/processTailwindFeatures.js:29:98]
+web:build:     [at plugins (/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/node_modules/tailwindcss/lib/plugin.js:38:69)]
+web:build:     at LazyResult.runOnRoot (apps/web/node_modules/postcss/lib/lazy-result.js:361:16) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6264:24]
+web:build:     at LazyResult.runAsync (apps/web/node_modules/postcss/lib/lazy-result.js:290:26) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6203:32]
+web:build:     at LazyResult.async (apps/web/node_modules/postcss/lib/lazy-result.js:192:30) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6135:36]
+web:build:     at LazyResult.then (apps/web/node_modules/postcss/lib/lazy-result.js:436:17) [/home/hakuo/hakuo_projects/Omoi_project/my-turborepo/apps/web/.next/build/chunks/_c75fc69a._.js:6321:21]
+web:build:     [at process.processTicksAndRejections (node:internal/process/task_queues:95:5)]
+web:build: 
+web:build: Import trace:
+web:build:   Client Component Browser:
+web:build:     ./apps/web/styles/index.css [Client Component Browser]
+web:build:     ./apps/web/app/layout.tsx [Server Component]
+web:build: 
+web:build: 
+web:build:     at ignore-listed frames
+docs:build:   Generating static pages using 11 workers (0/4) ...

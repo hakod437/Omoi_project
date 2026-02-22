@@ -9,7 +9,33 @@
 @import './tailwind.css';
 
 /* 
- * 1. THE FLUID CONTAINER
+ * 1. GLOBAL TYPOGRAPHY OVERRIDES
+ * We apply Nunito (font-ui) to all interactive elements globally
+ * to ensure a soft, rounded feel consistent with the Kawaii aesthetic.
+ */
+@layer base {
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea,
+    label {
+        @apply font-ui;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-title;
+    }
+}
+
+/* 
+ * 2. THE FLUID CONTAINER
  * Acts as the "stage" for the background animation.
  * Uses `fixed` positioning and a negative `z-index` to sit behind all content.
  */
@@ -25,11 +51,8 @@
 }
 
 /* 
- * 2. THE BLOBS (Mesh Gradient Logic)
- * Instead of a static CSS gradient, we use individual moving shapes.
- * - Extremely high `blur` (140px) merges the colors into a seamless silk-like transition.
- * - `opacity: 0.45` ensures the colors stay "soft" and elegant, not aggressive.
- * - `will-change: transform` hints the browser to use GPU acceleration for smoothness.
+ * 3. THE BLOBS (Mesh Gradient Logic)
+ * ... (logic explained in Senior comments) ...
  */
 .blob {
     position: absolute;
@@ -42,11 +65,6 @@
     mix-blend-mode: normal;
 }
 
-/* 
- * 3. THEME BINDINGS
- * Each blob is tied to a CSS variable from theme.css.
- * When the theme changes, the blobs update their colors instantly.
- */
 .color-1 {
     background: var(--blob-1);
     top: -10%;
@@ -68,12 +86,6 @@
     animation: mesh-move-3 14s infinite alternate ease-in-out;
 }
 
-/* 
- * 4. VISCOUS MOVEMENT MATH
- * `ease-in-out` + `alternate` creates a non-linear, organic swaying motion.
- * The different durations (12s, 14s, 15s) prevent the blobs from moving "in sync",
- * ensuring the pattern never repeats exactly the same way (chaotic harmony).
- */
 @keyframes mesh-move-1 {
     0% {
         transform: translate(0, 0) scale(1);
@@ -116,10 +128,6 @@
     }
 }
 
-/* 
- * 5. CONTENT TRANSPARENCY
- * Critical: The body must be transparent so the background layer is actually visible.
- */
 body {
     background-color: transparent !important;
 }

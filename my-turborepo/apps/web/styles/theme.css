@@ -1,120 +1,255 @@
 /**
- * THEME SYSTEM ARCHITECTURE: PILLAR 1 (THE TIERS)
+ * THEME SYSTEM ARCHITECTURE: THE VISUAL ENGINE
  * 
- * This file defines the visual tokens (CSS Variables) for our theme system.
- * It uses the "Custom Properties" pattern to enable runtime theme switching.
+ * This file implements a multi-tiered design system using CSS Variables (Custom Properties).
+ * It enables instant, zero-rehydration theme switching across the entire application.
+ * 
+ * DESIGN INSPIRATION: 
+ * - Sanzo Wada (Japanese Color Theory)
+ * - Modern Glassmorphism & Cyberpunk aesthetics
  * 
  * STRUCTURE:
- * 1. :root -> Default tokens (Pastel theme).
- * 2. [data-theme="..."] -> Theme overrides.
- * 
- * HOW TO ADD A THEME:
- * 1. Create a new [data-theme="your-name"] block.
- * 2. Override the necessary variables (colors, radii, blobs).
+ * 1. :root -> Default / Jade Theme (Sanzo Wada #74, #94, #133)
+ * 2. [data-theme="..."] -> Specialized theme overrides
+ * 3. @layer base -> Global element styles & Noise overlays
+ * 4. @layer components -> High-performance Aurora background logic
  */
 
 @custom-variant dark (&:is(.dark *));
 
 /* -------------------------------------------------------------------------- */
-/* 1. PASTEL KAWAII THEME (Default / Foundation)                            */
+/* 1. THEME: WADA JADE (Default)                                              */
+/* Focus: Natural serenity, balance of deep greens and sand accents.          */
 /* -------------------------------------------------------------------------- */
 :root,
-:root[data-theme="pastel"] {
-  --font-size: 16px;
-  --background: #fdf6fc;
-  --foreground: #2d1b3d;
+[data-theme="jade"] {
+  --background: #0c1a18;
+  --foreground: #e8f5f0;
 
-  /* Semantic Colors: Used by Shadcn components */
-  --card: #ffffff;
-  --card-foreground: #2d1b3d;
-  --popover: #ffffff;
-  --popover-foreground: #2d1b3d;
-  --primary: #c77dff;
-  --primary-foreground: #ffffff;
-  --secondary: #ffd6ff;
-  --secondary-foreground: #5a3d6b;
-  --muted: #f9ebff;
-  --muted-foreground: #8b7a99;
-  --accent: #ffe5f7;
-  --accent-foreground: #5a3d6b;
-  --destructive: #ff6b9d;
-  --destructive-foreground: #ffffff;
-  --border: rgba(199, 125, 255, 0.15);
-  --input: transparent;
-  --input-background: #fef9ff;
+  /* Semantic Tiers */
+  --card: #112f2c;
+  --card-hover: #163830;
+  --primary: #00b49b;
+  --primary-dark: #00978d;
+  --accent: #ebd3a2;
+  --muted: #1a3d38;
+  --muted-fg: #7aada5;
 
-  /* Global UI Configuration */
-  --ring: #c77dff;
-  --radius: 0.75rem;
+  /* UI Surface Elements */
+  --border: rgba(0, 180, 155, 0.2);
+  --tag-bg: rgba(0, 180, 155, 0.12);
+  --tag-fg: #00b49b;
 
-  /* Aurora Background Blobs (Mesh Gradient) */
-  --blob-1: #c77dff;
-  /* Purple */
-  --blob-2: #ffd6ff;
-  /* Soft Pink */
-  --blob-3: #bde0fe;
-  /* Soft Blue */
-}
-
-/* -------------------------------------------------------------------------- */
-/* 2. CYBER OTAKU THEME (High Contrast / Neon)                              */
-/* -------------------------------------------------------------------------- */
-:root[data-theme="cyber"] {
-  --background: #0a0e27;
-  --foreground: #e0f7ff;
-  --card: #141b3d;
-  --card-foreground: #e0f7ff;
-  --primary: #00d9ff;
-  /* Cyan Neon */
-  --primary-foreground: #0a0e27;
-  --secondary: #7b2cbf;
-  --muted: #1a2451;
-  --muted-foreground: #8ba4c7;
-  --accent: #240046;
-  --destructive: #ff006e;
-  --border: rgba(0, 217, 255, 0.2);
-  --input-background: #1a2451;
-  --ring: #00d9ff;
+  /* Glow FX: Used for neon/cyber effects or focus rings */
+  --glow: 0 0 30px rgba(0, 180, 155, 0.3);
+  --glow-accent: 0 0 30px rgba(235, 211, 162, 0.25);
   --radius: 0.5rem;
 
-  /* Cyber Aurora Blobs */
-  --blob-1: #00d9ff;
-  /* Cyan */
-  --blob-2: #ff006e;
-  /* Magenta */
-  --blob-3: #7b2cbf;
-  /* Deep Purple */
+  /* Aurora Mesh Gradient Logic */
+  --blob-1: #00978d;
+  --blob-2: #ebd3a2;
+  --blob-3: #004f46;
+  --blob-opacity: 0.12;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 3. SHONEN ENERGY THEME (Vibrant / Warm)                                  */
+/* 2. THEME: PASTEL KAWAII                                                   */
+/* Focus: Softness, energy, and playful violet/pink contrasts.               */
 /* -------------------------------------------------------------------------- */
-:root[data-theme="shonen"] {
-  --background: #fffbf0;
-  --foreground: #3d1e0a;
+[data-theme="pastel"] {
+  --background: #fdf6fc;
+  --foreground: #2d1b3d;
   --card: #ffffff;
-  --primary: #ff6b35;
-  /* Orange Pulse */
-  --primary-foreground: #ffffff;
-  --secondary: #ffd60a;
-  /* Yellow Power */
-  --muted: #fff4e0;
-  --border: rgba(255, 107, 53, 0.15);
+  --card-hover: #fef5ff;
+  --primary: #c77dff;
+  --primary-dark: #9d4edd;
+  --accent: #ff6b9d;
+  --muted: #f9ebff;
+  --muted-fg: #8b7a99;
+  --border: rgba(199, 125, 255, 0.2);
+  --tag-bg: rgba(199, 125, 255, 0.12);
+  --tag-fg: #9d4edd;
+  --glow: 0 0 30px rgba(199, 125, 255, 0.25);
+  --glow-accent: 0 0 30px rgba(255, 107, 157, 0.25);
+  --radius: 0.75rem;
+
+  /* Aurora Mesh Gradient Logic */
+  --blob-1: #c77dff;
+  --blob-2: #ffd6ff;
+  --blob-3: #bde0fe;
+  --blob-opacity: 0.22;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. THEME: WADA ABYSS                                                      */
+/* Focus: Deep immersion, nocturnal blue tones (Sanzo Wada #67, #106, #119).  */
+/* -------------------------------------------------------------------------- */
+[data-theme="abyss"] {
+  --background: #080f18;
+  --foreground: #d6e8f2;
+  --card: #12354e;
+  --card-hover: #163d58;
+  --primary: #5a82b3;
+  --primary-dark: #007190;
+  --accent: #78cdd0;
+  --muted: #0f2336;
+  --muted-fg: #6a96b5;
+  --border: rgba(90, 130, 179, 0.2);
+  --tag-bg: rgba(90, 130, 179, 0.12);
+  --tag-fg: #78cdd0;
+  --glow: 0 0 30px rgba(90, 130, 179, 0.35);
+  --glow-accent: 0 0 30px rgba(120, 205, 208, 0.25);
   --radius: 0.625rem;
 
-  /* Shonen Aurora Blobs */
-  --blob-1: #ff6b35;
-  --blob-2: #ffd60a;
-  --blob-3: #f77f00;
+  /* Aurora Mesh Gradient Logic */
+  --blob-1: #007190;
+  --blob-2: #78cdd0;
+  --blob-3: #1c4286;
+  --blob-opacity: 0.13;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 4. DARK MODE (Global Color Inversion)                                    */
+/* GLOBAL BASE STYLES                                                         */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'DM Sans', sans-serif;
+    /* Smooth transition for theme switching */
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /**
+   * NOISE OVERLAY (Japanese Aesthetic)
+   * We use a procedural SVG to inject a subtle grain across the UI.
+   * This gives the digital flat colors a more organic, paper-like texture.
+   */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    mix-blend-mode: overlay;
+  }
+
+  /* Custom Slim Scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* COMPONENT: AURORA BACKGROUND                                               */
+/* Performance-optimized mesh gradient using CSS transforms only.             */
+/* -------------------------------------------------------------------------- */
+@layer components {
+  .aurora {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    /* Soft merging edge */
+    filter: blur(90px);
+    opacity: var(--blob-opacity, 0.12);
+    /* Organic swaying motion */
+    animation: aurora-float 12s ease-in-out infinite;
+    transition: background 0.5s ease;
+    will-change: transform;
+  }
+
+  /* Individual blob configurations with staggered animation delays */
+  .aurora-blob-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--blob-1);
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+  }
+
+  .aurora-blob-2 {
+    width: 400px;
+    height: 400px;
+    background: var(--blob-2);
+    top: 50%;
+    right: -80px;
+    animation-delay: -4s;
+  }
+
+  .aurora-blob-3 {
+    width: 500px;
+    height: 500px;
+    background: var(--blob-3);
+    bottom: -100px;
+    left: 30%;
+    animation-delay: -8s;
+  }
+
+  /**
+   * ORGANIC FLOAT ANIMATION
+   * Combines translation and scaling to simulate fluid mixing.
+   */
+  @keyframes aurora-float {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+      transform: translate(30px, -40px) scale(1.05);
+    }
+
+    66% {
+      transform: translate(-20px, 20px) scale(0.97);
+    }
+  }
+
+  /**
+   * PAGE WRAPPER
+   * Strategic Z-index layer to ensure content sits comfortably above the background
+   * yet beneath the interactive noise/overlay layer.
+   */
+  .page-wrapper {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. THEME: DARK MODE OVERRIDES                                             */
+/* Context-aware inversion of colors for low-light environments.              */
 /* -------------------------------------------------------------------------- */
 .dark {
   --background: #1a0f25;
   --foreground: #f9ebff;
-  /* ... simplified for brevity, similar to other themes but for dark mode specifically ... */
+  --card: #2d1b3d;
+  --card-hover: #3d2654;
+  --primary: #c77dff;
+  --primary-dark: #9d4edd;
+  --muted: #3d2654;
+  --muted-fg: #b3a3c2;
+  --border: rgba(199, 125, 255, 0.2);
+
   --blob-1: #5a189a;
   --blob-2: #240046;
   --blob-3: #3c096c;

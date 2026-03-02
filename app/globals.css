@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --font-kawaii: "Comic Sans MS", "Chalkboard SE", "Hachi Maru Pop", cursive;
+  --font-ui: "Nunito", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+
+:root {
+  /* Theme: Jade (Default) */
+  --background: #0c1a18;
+  --foreground: #ffffff;
+  --card: #112f2c;
+  --primary: #00b49b;
+  --accent: #ebd3a2;
+  --muted: #1a3d38;
+  --border: rgba(0, 180, 155, 0.2);
+
+  --blob-1: #00b49b;
+  --blob-2: #ebd3a2;
+  --blob-3: #1a3d38;
+}
+
+[data-theme="pastel"] {
+  --background: #fdf6fc;
+  --foreground: #1a0b2e;
+  --card: #ffffff;
+  --primary: #c77dff;
+  --accent: #ff6b9d;
+  --muted: #f9ebff;
+  --border: rgba(199, 125, 255, 0.2);
+
+  --blob-1: #c77dff;
+  --blob-2: #ff6b9d;
+  --blob-3: #78cdd0;
+}
+
+[data-theme="abyss"] {
+  --background: #080f18;
+  --foreground: #e2e8f0;
+  --card: #12354e;
+  --primary: #5a82b3;
+  --accent: #78cdd0;
+  --muted: #0f2336;
+  --border: rgba(90, 130, 179, 0.2);
+
+  --blob-1: #5a82b3;
+  --blob-2: #78cdd0;
+  --blob-3: #0f172a;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+.font-kawaii {
+  font-family: var(--font-kawaii);
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
+
+/* Aurora Background */
+.aurora-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--background);
+}
+
+.blob {
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 20s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  background: var(--blob-1);
+  top: -10%;
+  left: -10%;
+}
+
+.blob-2 {
+  background: var(--blob-2);
+  bottom: -10%;
+  right: -10%;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  background: var(--blob-3);
+  top: 40%;
+  left: 30%;
+  animation-delay: -10s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(10%, 10%) scale(1.1);
+  }
+}
+
+/* Atomic Base Components */
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px 0 var(--border);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 var(--border);
+}

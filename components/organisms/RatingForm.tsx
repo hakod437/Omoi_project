@@ -2,17 +2,12 @@
 
 import React, { useState, useEffect } from 'react'
 import type { Tier } from '@/types/anime'
-import { submitRatingAction } from '@/actions/rating.actions'
 import { TierSelector } from '../molecules/TierSelector'
 import { Button } from '../atoms/Base'
 import { calculateGlobalScore, getTierFromScore } from '@/lib/scoring'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 
 export const RatingForm = ({ animeId }: { animeId: string }) => {
-    const { data: session } = useSession()
-    const router = useRouter()
     const [animTier, setAnimTier] = useState<Tier | null>(null)
     const [scenTier, setScenTier] = useState<Tier | null>(null)
     const [musicTier, setMusicTier] = useState<Tier | null>(null)
@@ -30,32 +25,13 @@ export const RatingForm = ({ animeId }: { animeId: string }) => {
     const isComplete = animTier && scenTier && musicTier
 
     const handleSubmit = async () => {
-        if (!session) {
-            router.push('/login')
-            return
-        }
-
+        void animeId
+        void review
         if (!isComplete) return
 
         setIsSubmitting(true)
         try {
-            const result = await submitRatingAction({
-                animeId,
-                malId: parseInt(animeId),
-                title: document.title.split(' | ')[0],
-                animTier: animTier!,
-                scenTier: scenTier!,
-                musicTier: musicTier!,
-                review,
-                genres: [], // Genres should be handled by the service or passed here
-            })
-
-            if (!result.success) throw new Error(result.error)
-
-            router.refresh()
-        } catch (error: any) {
-            console.error(error)
-            alert(error.message || 'Failed to save rating.')
+            alert('Backend disabled (frontend-only mode).')
         } finally {
             setIsSubmitting(false)
         }

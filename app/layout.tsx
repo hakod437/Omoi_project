@@ -3,6 +3,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Navbar } from "@/components/organisms/Navbar";
+import { DevQuickNav } from "@/components/molecules/DevQuickNav";
+import { RouteAwareMain } from "@/components/molecules/RouteAwareMain";
 
 // Google Fonts are commented out to avoid build-time network timeouts in this environment.
 // Fallbacks are defined in globals.css.
@@ -47,9 +49,8 @@ export default function RootLayout({
               <div className="blob blob-3" />
             </div>
             <Navbar />
-            <main className="relative z-10 mx-auto max-w-7xl pt-8 px-4 sm:px-6 lg:px-8">
-              {children}
-            </main>
+            <DevQuickNav />
+            <RouteAwareMain>{children}</RouteAwareMain>
           </ThemeProvider>
         </AuthProvider>
       </body>

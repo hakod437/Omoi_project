@@ -2,7 +2,6 @@ import React from 'react'
 import { AnimeDetailTemplate } from '@/components/templates/AnimeDetailTemplate'
 
 import { AnimeService } from '@/services/anime.service'
-import { CommunityService } from '@/services/community.service'
 import { getTierFromScore } from '@/lib/scoring'
 
 export default async function AnimeDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -12,11 +11,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
     if (!result.success || !result.data) return <div>{result.error || 'Anime not found'}</div>
     const anime = result.data
 
-    // Get community data
-    const communityStatsResult = await CommunityService.getCommunityStats(id)
-    const reviewsResult = await CommunityService.getRecentReviews(id, 5)
-
-    const communityStats = communityStatsResult.success ? communityStatsResult.data : {
+    const communityStats = {
         totalReviews: 0,
         avgGlobalScore: 0,
         avgAnimationScore: 0,
@@ -25,21 +20,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
         tierDistribution: { S: { count: 0, percentage: 0 }, A: { count: 0, percentage: 0 }, B: { count: 0, percentage: 0 }, C: { count: 0, percentage: 0 }, D: { count: 0, percentage: 0 } }
     }
 
-    const reviews = reviewsResult.success ? (reviewsResult.data || []) : []
-
-    // Format reviews for display
-    const formattedReviews = reviews.map(review => ({
-        username: review.username,
-        avatar: review.avatar,
-        timeAgo: `il y a ${Math.floor((Date.now() - review.createdAt.getTime()) / (1000 * 60 * 60 * 24))} jours`,
-        tiers: {
-            animation: review.tiers.animation,
-            scenario: review.tiers.scenario,
-            music: review.tiers.music
-        },
-        content: review.content,
-        likes: review.likes
-    }))
+    const formattedReviews: any[] = []
 
     const airedText = (anime.aired?.string as string | undefined) || undefined
     const yearText = (anime.year as number | undefined) ? String(anime.year) : undefined

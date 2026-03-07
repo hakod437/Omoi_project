@@ -2,15 +2,12 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Search, User, BarChart3, TrendingUp, LogOut } from 'lucide-react'
+import { Search, User, BarChart3 } from 'lucide-react'
 import { Button } from '../atoms/Base'
-import { useSession, signOut } from 'next-auth/react'
 
 import { ThemeSwitcher } from '../molecules/ThemeSwitcher'
 
 export const Navbar = () => {
-    const { data: session } = useSession()
-
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -27,9 +24,8 @@ export const Navbar = () => {
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8">
-                    <NavLink href="/trending" icon={<TrendingUp size={18} />} label="Trending" />
                     <NavLink href="/compare" icon={<BarChart3 size={18} />} label="Compare" />
-                    {session && <NavLink href="/dashboard" icon={<User size={18} />} label="Dashboard" />}
+                    <NavLink href="/dashboard" icon={<User size={18} />} label="Dashboard" />
                 </div>
 
                 {/* CTAs */}
@@ -38,34 +34,11 @@ export const Navbar = () => {
                         <Search size={22} />
                     </button>
 
-                    {session ? (
-                        <div className="flex items-center gap-4">
-                            <div className="hidden sm:flex items-center gap-2">
-                                <div className="size-8 rounded-full bg-[var(--muted)] border border-[var(--border)] overflow-hidden">
-                                    {session.user?.image ? (
-                                        <img src={session.user.image} alt="User" className="size-full object-cover" />
-                                    ) : (
-                                        <div className="size-full flex items-center justify-center font-bold text-xs">
-                                            {session.user?.name?.[0] || 'U'}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => signOut()}
-                                className="p-2 text-[var(--foreground)]/60 hover:text-red-400 transition-colors"
-                                title="Sign Out"
-                            >
-                                <LogOut size={20} />
-                            </button>
-                        </div>
-                    ) : (
-                        <Link href="/login">
-                            <Button variant="outline" size="sm" className="hidden sm:block">
-                                Sign In
-                            </Button>
-                        </Link>
-                    )}
+                    <Link href="/login">
+                        <Button variant="outline" size="sm" className="hidden sm:block">
+                            Sign In
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </nav>

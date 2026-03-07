@@ -8,8 +8,8 @@ export class UserService {
             const users = await prisma.user.findMany({
                 where: {
                     OR: [
-                        { username: { contains: query, mode: 'insensitive' } },
-                        { displayName: { contains: query, mode: 'insensitive' } },
+                        { username: { contains: query } },
+                        { displayName: { contains: query } },
                     ],
                     NOT: excludeUserId ? { id: excludeUserId } : undefined
                 },
@@ -61,13 +61,15 @@ export class UserService {
 
             const compatibility = calculateCompatibility(tiersA, tiersB);
 
+            const commonAnimesSerialized = JSON.stringify(commonAnimes);
+
             // Upsert comparison
             const comparison = await prisma.comparison.upsert({
                 where: {
                     userAId_userBId: { userAId, userBId }
                 },
-                update: { compatibility, commonAnimes },
-                create: { userAId, userBId, compatibility, commonAnimes }
+                update: { compatibility, commonAnimes: commonAnimesSerialized },
+                create: { userAId, userBId, compatibility, commonAnimes: commonAnimesSerialized }
             });
 
             return {

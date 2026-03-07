@@ -35,7 +35,7 @@ export class RatingService {
                     malId: input.malId,
                     title: input.title,
                     imageUrl: input.imageUrl,
-                    genres: input.genres,
+                    genres: Array.isArray(input.genres) ? input.genres.join(',') : input.genres,
                 },
             });
 

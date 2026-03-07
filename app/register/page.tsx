@@ -53,6 +53,16 @@ export default function Register() {
                     </div>
 
                     <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-[var(--foreground)]/40 ml-1">Display Name</label>
+                        <input
+                            name="displayName"
+                            type="text"
+                            placeholder="e.g. Kirito"
+                            className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-transparent focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 transition-all font-medium"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-widest text-[var(--foreground)]/40 ml-1">Phone Number</label>
                         <input
                             name="phoneNumber"

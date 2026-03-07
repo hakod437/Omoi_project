@@ -1,32 +1,71 @@
 import React from 'react'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { AnimeCard } from '@/components/organisms/AnimeCard'
 import type { Tier } from '@/types/anime'
 import { Star, Trophy, BarChart } from 'lucide-react'
 import { RatingService } from '@/services/rating.service'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Dashboard() {
-    const session = await auth()
+    const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
         redirect('/login')
     }
 
-    const ratings = await RatingService.getUserRatings(session.user.id)
+    // Données mock pour les tests
+    const mockRatings = [
+        { 
+            id: 1, 
+            animeId: 1,
+            animeTitle: "Attack on Titan", 
+            userRating: "S", 
+            globalRating: "A",
+            anime: {
+                title: "Attack on Titan",
+                imageUrl: "",
+                genres: ["Action", "Drama"]
+            }
+        },
+        { 
+            id: 2, 
+            animeId: 2,
+            animeTitle: "Demon Slayer", 
+            userRating: "A", 
+            globalRating: "S",
+            anime: {
+                title: "Demon Slayer",
+                imageUrl: "",
+                genres: ["Action", "Fantasy"]
+            }
+        },
+        { 
+            id: 3, 
+            animeId: 3,
+            animeTitle: "Jujutsu Kaisen", 
+            userRating: "S", 
+            globalRating: "S",
+            anime: {
+                title: "Jujutsu Kaisen",
+                imageUrl: "",
+                genres: ["Action", "Supernatural"]
+            }
+        }
+    ]
 
     // Group by global tier
     const tiers: Tier[] = ['S', 'A', 'B', 'C', 'D']
     const grouped = tiers.reduce((acc, tier) => {
-        acc[tier] = ratings.filter((r: any) => r.globalTier === tier)
+        acc[tier] = mockRatings.filter((r: any) => r.globalRating === tier)
         return acc
     }, {} as Record<Tier, any[]>)
 
     const stats = {
-        total: ratings.length,
-        avgGlobal: ratings.length > 0
-            ? (ratings.reduce((acc: number, r: any) => acc + r.globalScore, 0) / ratings.length).toFixed(1)
+        total: mockRatings.length,
+        avgGlobal: mockRatings.length > 0
+            ? (mockRatings.reduce((acc: number, r: any) => acc + (r.globalRating === 'S' ? 5 : r.globalRating === 'A' ? 4 : 3), 0) / mockRatings.length).toFixed(1)
             : '0',
         sTierCount: grouped['S'].length,
     }

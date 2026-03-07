@@ -1,11 +1,18 @@
 'use client'
 
-import React from 'react'
+import React, { useState, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/components/atoms/Base'
 import { Disc as Discord, Mail } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function Login() {
+function LoginContent() {
+    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const registered = searchParams?.get('registered') === 'true'
+    
     return (
         <div className="flex min-h-[70vh] items-center justify-center py-12">
             <div className="w-full max-w-md space-y-8 p-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in duration-500">
@@ -16,14 +23,56 @@ export default function Login() {
                     <p className="text-[var(--foreground)]/60 font-medium">
                         Join the vault to rate your favorite peaks.
                     </p>
+                    {registered && (
+                        <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-500 text-sm font-bold">
+                            Account created successfully! Please log in.
+                        </div>
+                    )}
                 </div>
 
+                {error && (
+                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-bold animate-shake">
+                        {error}
+                    </div>
+                )}
+
                 <div className="space-y-4 pt-4">
-                    <form action={async (formData) => {
-                        const phoneNumber = formData.get("phoneNumber")
-                        const password = formData.get("password")
-                        await signIn("credentials", { phoneNumber, password, callbackUrl: "/" })
+                    <form onSubmit={async (e) => {
+                        e.preventDefault()
+                        setLoading(true)
+                        setError(null)
+                        
+                        const formData = new FormData(e.currentTarget)
+                        const phoneNumber = formData.get("phoneNumber") as string
+                        const password = formData.get("password") as string
+                        const displayName = formData.get("displayName") as string
+                        
+                        try {
+                            const result = await signIn("credentials", { 
+                                phoneNumber, 
+                                password, 
+                                displayName,
+                                callbackUrl: "/", 
+                                redirect: false 
+                            })
+                            
+                            if (result?.error) {
+                                setError("Invalid phone number or password")
+                            } else if (result?.ok) {
+                                router.push("/")
+                            }
+                        } catch (err) {
+                            setError("Login failed. Please try again.")
+                        } finally {
+                            setLoading(false)
+                        }
                     }} className="space-y-3">
+                        <input
+                            name="displayName"
+                            type="text"
+                            placeholder="Display Name (optional)"
+                            className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-transparent focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 transition-all font-medium"
+                        />
                         <input
                             name="phoneNumber"
                             type="text"
@@ -38,8 +87,12 @@ export default function Login() {
                             className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-transparent focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 transition-all font-medium"
                             required
                         />
-                        <Button type="submit" className="w-full py-4 tracking-wide font-bold shadow-lg shadow-[var(--primary)]/20">
-                            Log In
+                        <Button 
+                            type="submit" 
+                            disabled={loading}
+                            className="w-full py-4 tracking-wide font-bold shadow-lg shadow-[var(--primary)]/20"
+                        >
+                            {loading ? 'Logging In...' : 'Log In'}
                         </Button>
                     </form>
 
@@ -76,5 +129,20 @@ export default function Login() {
                 </p>
             </div>
         </div>
+    )
+}
+
+export default function Login() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-[70vh] items-center justify-center py-12">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)] mx-auto"></div>
+                    <p className="mt-4 text-[var(--foreground)]/60">Loading...</p>
+                </div>
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     )
 }

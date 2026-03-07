@@ -1,11 +1,9 @@
 import React from 'react'
-import Image from 'next/image'
-import { getAnimeById } from '@/lib/jikan'
-import { RatingForm } from '@/components/organisms/RatingForm'
-import { Badge } from '@/components/atoms/Base'
-import { Calendar, Monitor, Film, Star } from 'lucide-react'
+import { AnimeDetailTemplate } from '@/components/templates/AnimeDetailTemplate'
 
 import { AnimeService } from '@/services/anime.service'
+import { CommunityService } from '@/services/community.service'
+import { getTierFromScore } from '@/lib/scoring'
 
 export default async function AnimeDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -14,82 +12,85 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
     if (!result.success || !result.data) return <div>{result.error || 'Anime not found'}</div>
     const anime = result.data
 
+    // Get community data
+    const communityStatsResult = await CommunityService.getCommunityStats(id)
+    const reviewsResult = await CommunityService.getRecentReviews(id, 5)
+
+    const communityStats = communityStatsResult.success ? communityStatsResult.data : {
+        totalReviews: 0,
+        avgGlobalScore: 0,
+        avgAnimationScore: 0,
+        avgScenarioScore: 0,
+        avgMusicScore: 0,
+        tierDistribution: { S: { count: 0, percentage: 0 }, A: { count: 0, percentage: 0 }, B: { count: 0, percentage: 0 }, C: { count: 0, percentage: 0 }, D: { count: 0, percentage: 0 } }
+    }
+
+    const reviews = reviewsResult.success ? (reviewsResult.data || []) : []
+
+    // Format reviews for display
+    const formattedReviews = reviews.map(review => ({
+        username: review.username,
+        avatar: review.avatar,
+        timeAgo: `il y a ${Math.floor((Date.now() - review.createdAt.getTime()) / (1000 * 60 * 60 * 24))} jours`,
+        tiers: {
+            animation: review.tiers.animation,
+            scenario: review.tiers.scenario,
+            music: review.tiers.music
+        },
+        content: review.content,
+        likes: review.likes
+    }))
+
+    const airedText = (anime.aired?.string as string | undefined) || undefined
+    const yearText = (anime.year as number | undefined) ? String(anime.year) : undefined
+
+    const studio = anime.studios?.[0]?.name || 'Unknown'
+    const episodes = anime.episodes || 0
+    const communityGlobal = communityStats?.avgGlobalScore || 0
+    const globalTier = getTierFromScore(communityGlobal)
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 py-8">
-            {/* Left Column: Info & Synopsis */}
-            <div className="lg:col-span-2 space-y-8 animate-in fade-in slide-in-from-left-8 duration-700">
-                <div className="relative h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl">
-                    <Image
-                        src={anime.images.webp.large_image_url}
-                        alt={anime.title}
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-transparent" />
-
-                    <div className="absolute bottom-8 left-8 right-8 flex flex-wrap gap-2">
-                        {anime.genres.map((g: any) => (
-                            <Badge key={g.name} variant="primary" className="text-sm px-3 py-1 bg-[var(--background)]/60 backdrop-blur-md">
-                                {g.name}
-                            </Badge>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-kawaii text-[var(--foreground)] tracking-tight">
-                        {anime.title}
-                    </h1>
-                    <div className="flex flex-wrap gap-6 text-[var(--foreground)]/60 font-medium font-ui">
-                        <InfoItem icon={<Film size={18} />} label={anime.studios?.[0]?.name || 'Unknown'} />
-                        <InfoItem icon={<Monitor size={18} />} label={`${anime.episodes || '?'} Episodes`} />
-                        <InfoItem icon={<Calendar size={18} />} label={anime.year || anime.season || 'Unknown'} />
-                        <InfoItem icon={<Star className="text-yellow-400" size={18} />} label={`${anime.score || 'N/A'} MAL`} />
-                    </div>
-                </div>
-
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-kawaii text-[var(--primary)]">Synopsis</h2>
-                    <p className="text-lg leading-relaxed text-[var(--foreground)]/80 font-body">
-                        {anime.synopsis || "No synopsis available."}
-                    </p>
-                </div>
-            </div>
-
-            {/* Right Column: Rating Panel (Sticky) */}
-            <aside className="lg:sticky lg:top-24 h-fit animate-in fade-in slide-in-from-right-8 duration-700">
-                <RatingForm animeId={id} />
-
-                {/* Additional Stats / Community Info (Placeholder) */}
-                <div className="mt-8 p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)]/20 space-y-4">
-                    <h4 className="font-ui font-bold text-sm uppercase tracking-widest text-[var(--foreground)]/40">
-                        Community Stats
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                        <SmallStat label="Avg Anim" value="S" color="text-red-400" />
-                        <SmallStat label="Popularity" value={`#${anime.popularity}`} color="" />
-                    </div>
-                </div>
-            </aside>
-        </div>
-    )
-}
-
-function InfoItem({ icon, label }: { icon: React.ReactNode, label: string | number }) {
-    return (
-        <div className="flex items-center gap-2">
-            {icon}
-            <span>{label}</span>
-        </div>
-    )
-}
-
-function SmallStat({ label, value, color }: { label: string, value: string, color: string }) {
-    return (
-        <div>
-            <div className="text-xs uppercase font-bold opacity-40">{label}</div>
-            <div className={`text-xl font-kawaii ${color || 'text-[var(--foreground)]'}`}>{value}</div>
-        </div>
+        <AnimeDetailTemplate
+            animeId={id}
+            breadcrumbItems={[
+                { label: 'Accueil', href: '/' },
+                { label: 'Animes', href: '/explorer' },
+                { label: anime.title }
+            ]}
+            hero={{
+                title: anime.title,
+                subtitle: anime.titleEnglish || '',
+                imageUrl: anime.images.webp.large_image_url,
+                genres: anime.genres?.map((g: any) => g.name) || [],
+                studio,
+                episodes,
+                communityRating: communityGlobal,
+                totalReviews: communityStats?.totalReviews || 0,
+                animationScore: communityStats?.avgAnimationScore || 0,
+                globalTier
+            }}
+            synopsis={anime.synopsis || 'Aucun synopsis disponible.'}
+            information={{
+                studio,
+                episodes: episodes ? String(episodes) : undefined,
+                diffusion: airedText || yearText,
+                statut: anime.status || undefined,
+                source: anime.source || undefined,
+                genre: (anime.genres?.map((g: any) => g.name).slice(0, 2).join(' · ')) || undefined
+            }}
+            communityScores={{
+                animation: communityStats?.avgAnimationScore || 0,
+                scenario: communityStats?.avgScenarioScore || 0,
+                music: communityStats?.avgMusicScore || 0
+            }}
+            tierDistribution={[
+                { tier: 'S', percentage: communityStats?.tierDistribution.S.percentage || 0, count: communityStats?.tierDistribution.S.count || 0 },
+                { tier: 'A', percentage: communityStats?.tierDistribution.A.percentage || 0, count: communityStats?.tierDistribution.A.count || 0 },
+                { tier: 'B', percentage: communityStats?.tierDistribution.B.percentage || 0, count: communityStats?.tierDistribution.B.count || 0 },
+                { tier: 'C', percentage: communityStats?.tierDistribution.C.percentage || 0, count: communityStats?.tierDistribution.C.count || 0 },
+                { tier: 'D', percentage: communityStats?.tierDistribution.D.percentage || 0, count: communityStats?.tierDistribution.D.count || 0 }
+            ]}
+            reviews={formattedReviews}
+        />
     )
 }

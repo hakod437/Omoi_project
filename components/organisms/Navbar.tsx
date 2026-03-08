@@ -9,7 +9,11 @@ import { Button } from '../atoms/Base'
 import { ThemeSwitcher } from '../molecules/ThemeSwitcher'
 import { SearchBar } from './SearchBar'
 
+import { useSession, signOut } from 'next-auth/react'
+
 export const Navbar = () => {
+    const { data: session } = useSession()
+
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0A0A0B]/60 backdrop-blur-2xl">
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
@@ -30,7 +34,7 @@ export const Navbar = () => {
                 <div className="hidden md:flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/5 ml-12">
                     <NavLink href="/explorer" icon={<Search size={16} />} label="Explorer" />
                     <NavLink href="/compare" icon={<BarChart3 size={16} />} label="Sync" />
-                    <NavLink href="/dashboard" icon={<User size={16} />} label="Vault" />
+                    {session && <NavLink href="/dashboard" icon={<User size={16} />} label="Vault" />}
                 </div>
 
                 <div className="flex-1 hidden lg:flex max-w-xs mx-8">
@@ -43,16 +47,35 @@ export const Navbar = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Link href="/login">
-                            <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100">
-                                Login
-                            </Button>
-                        </Link>
-                        <Link href="/login">
-                            <Button className="bg-white/10 hover:bg-[var(--primary)] border-none text-[10px] font-black uppercase tracking-[0.2em] px-8 py-3 rounded-2xl shadow-none">
-                                Join
-                            </Button>
-                        </Link>
+                        {session ? (
+                            <div className="flex items-center gap-4">
+                                <div className="hidden sm:flex flex-col items-end">
+                                    <span className="text-[10px] font-black text-white uppercase tracking-tighter">{session.user?.name}</span>
+                                    <span className="text-[8px] font-bold text-white/40 uppercase tracking-widest">Vault Master</span>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => signOut()}
+                                    className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100 hover:text-red-400"
+                                >
+                                    Log Out
+                                </Button>
+                            </div>
+                        ) : (
+                            <>
+                                <Link href="/login">
+                                    <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100">
+                                        Login
+                                    </Button>
+                                </Link>
+                                <Link href="/login?mode=register">
+                                    <Button className="bg-white/10 hover:bg-[var(--primary)] border-none text-[10px] font-black uppercase tracking-[0.2em] px-8 py-3 rounded-2xl shadow-none">
+                                        Join
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

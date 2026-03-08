@@ -3,15 +3,21 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Loader2, Plus, Star } from 'lucide-react'
 import { searchAnime } from '@/lib/jikan'
-import { useDebounce } from '@/hooks/useDebounce' // I'll create this next
+import { useDebounce } from '@/hooks/useDebounce'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { addAnimeToListAction } from '@/actions/list.actions'
+import { useSession } from 'next-auth/react'
 
 export const SearchBar = () => {
+    const { data: session } = useSession()
+    const router = useRouter()
     const [query, setQuery] = useState('')
     const [results, setResults] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
+    const [addingId, setAddingId] = useState<number | null>(null)
     const debouncedQuery = useDebounce(query, 500)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -71,9 +77,14 @@ export const SearchBar = () => {
                         {results.map((anime) => (
                             <div
                                 key={anime.mal_id}
-                                className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors group border-b border-border/50 last:border-none"
+                                className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors group border-b border-border/50 last:border-none relative"
                             >
-                                <div className="relative size-12 shrink-0 rounded-md overflow-hidden bg-muted">
+                                <Link
+                                    href={`/anime/${anime.mal_id}`}
+                                    className="absolute inset-0 z-0"
+                                    onClick={() => setIsOpen(false)}
+                                />
+                                <div className="relative size-12 shrink-0 rounded-md overflow-hidden bg-muted z-10">
                                     <Image
                                         src={anime.images.jpg.image_url}
                                         alt={anime.title}
@@ -81,7 +92,7 @@ export const SearchBar = () => {
                                         className="object-cover"
                                     />
                                 </div>
-                                <div className="flex-1 min-w-0">
+                                <div className="flex-1 min-w-0 z-10 pointer-events-none">
                                     <h4 className="text-sm font-bold truncate group-hover:text-primary transition-colors">
                                         {anime.title}
                                     </h4>
@@ -97,10 +108,28 @@ export const SearchBar = () => {
                                     </div>
                                 </div>
                                 <button
-                                    className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all active:scale-90"
+                                    className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all active:scale-90 z-20"
                                     title="Add to list"
+                                    disabled={addingId === anime.mal_id}
+                                    onClick={async (e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        if (!session?.user?.id) {
+                                            router.push('/login')
+                                            return
+                                        }
+                                        setAddingId(anime.mal_id)
+                                        await addAnimeToListAction(session.user.id, {
+                                            malId: anime.mal_id,
+                                            title: anime.title,
+                                            imageUrl: anime.images.jpg.image_url,
+                                            genres: anime.genres?.map((g: any) => g.name).join(', ') || ''
+                                        })
+                                        setAddingId(null)
+                                        setIsOpen(false)
+                                    }}
                                 >
-                                    <Plus className="size-4" />
+                                    {addingId === anime.mal_id ? <Loader2 className="size-4 animate-spin" /> : <Plus className="size-4" />}
                                 </button>
                             </div>
                         ))}

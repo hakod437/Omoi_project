@@ -29,6 +29,19 @@ export async function getUserStatsAction(userId: string): Promise<ServiceRespons
         ])
 
         const totalAnimes = userList.length
+        const completedCount = userList.filter(item => item.status === 'COMPLETED').length
+
+        // Last 5 ratings with anime titles
+        const lastFiveRatings = ratings.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 5).map(r => {
+            const anime = userList.find(ul => ul.animeId === r.animeId)?.anime
+            return {
+                id: r.id,
+                animeId: r.animeId,
+                title: anime?.title || 'Unknown Anime',
+                globalTier: r.globalTier,
+                createdAt: r.createdAt
+            }
+        })
 
         // Tier Rows Construction
         const tiers: any = {
@@ -40,7 +53,7 @@ export async function getUserStatsAction(userId: string): Promise<ServiceRespons
         }
 
         userList.forEach(item => {
-            const rating = item.anime.ratings[0]
+            const rating = ratings.find(r => r.animeId === item.animeId)
             if (rating) {
                 const tier = rating.globalTier
                 if (tiers[tier]) {
@@ -81,6 +94,8 @@ export async function getUserStatsAction(userId: string): Promise<ServiceRespons
             success: true,
             data: {
                 totalAnimes,
+                completedCount,
+                lastFiveRatings,
                 tierSCount: tierCounts['S'] || 0,
                 avgAnimation: parseFloat(avgAnimation.toFixed(1)),
                 avgScenario: parseFloat(avgScenario.toFixed(1)),

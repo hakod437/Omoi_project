@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { Plus, ChevronDown, ChevronUp, Film, Music2, BookText } from 'lucide-react'
+import { Button } from '@/components/atoms/Base'
+import { motion } from 'framer-motion'
 
 import { Panel } from '@/components/molecules/Panel'
 import { StatCard } from '@/components/molecules/StatCard'
@@ -28,6 +30,13 @@ export interface DashboardTemplateProps {
     text: React.ReactNode
     right: React.ReactNode
   }>
+  lastRatings?: Array<{
+    id: string
+    animeId: string
+    title: string
+    globalTier: string
+    createdAt: Date
+  }>
 }
 
 export function DashboardTemplate({
@@ -39,7 +48,8 @@ export function DashboardTemplate({
   tastes,
   favoriteStudios,
   tierRows,
-  activity
+  activity,
+  lastRatings
 }: DashboardTemplateProps) {
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -135,7 +145,7 @@ export function DashboardTemplate({
           </Panel>
         </div>
 
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 p-6 backdrop-blur-xl">
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 p-6 backdrop-blur-xl mb-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
             <h2 className="font-kawaii text-4xl text-[var(--foreground)]">
               Mes <span className="text-[var(--primary)]">Tiers</span>
@@ -149,11 +159,10 @@ export function DashboardTemplate({
               ].map((filter) => (
                 <button
                   key={filter.label}
-                  className={`inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-xs font-bold tracking-widest transition-colors ${
-                    filter.label === 'TOUS'
-                      ? 'bg-[var(--primary)]/15 text-[var(--primary)]'
-                      : 'bg-[var(--card)]/40 text-[var(--foreground)]/70 hover:text-[var(--primary)]'
-                  }`}
+                  className={`inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-xs font-bold tracking-widest transition-colors ${filter.label === 'TOUS'
+                    ? 'bg-[var(--primary)]/15 text-[var(--primary)]'
+                    : 'bg-[var(--card)]/40 text-[var(--foreground)]/70 hover:text-[var(--primary)]'
+                    }`}
                 >
                   {filter.icon ? <span className="opacity-80">{filter.icon}</span> : null}
                   {filter.label}
@@ -162,88 +171,82 @@ export function DashboardTemplate({
             </div>
           </div>
 
-          <div className="space-y-4">
-            {tierRows.map((row) => (
-              <div
-                key={row.tier}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/20 px-4 py-4"
-              >
-                <div className="flex items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)]/60 font-kawaii text-2xl text-[var(--foreground)]">
-                      {row.tier}
-                    </div>
-                    <div>
-                      <div className="font-ui text-sm font-bold text-[var(--foreground)]">{row.title}</div>
-                      <div className="text-xs text-[var(--foreground)]/55">{row.subtitle}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-[var(--foreground)]/60">
-                    <span className="min-w-6 text-right font-ui text-sm font-bold">{row.count}</span>
-                    {row.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </div>
-                </div>
-
-                {row.expanded && row.animes.length > 0 ? (
-                  <div className="mt-4 overflow-x-auto">
-                    <div className="flex min-w-max gap-4 pr-2">
-                      {row.animes.map((a) => (
-                        <Link
-                          key={a.id}
-                          href={`/anime/${a.id}`}
-                          className="group relative h-40 w-56 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/50"
-                        >
-                          <div
-                            className={`absolute inset-0 bg-gradient-to-br ${a.gradient} opacity-90 transition-transform group-hover:scale-[1.03]`}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/90 via-[var(--background)]/20 to-transparent" />
-                          <div className="absolute left-3 top-3 flex gap-1">
-                            {a.dots.map((d, idx) => (
-                              <span
-                                key={`${a.id}-${d}-${idx}`}
-                                className="inline-flex size-5 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)]/40 text-[10px] font-bold text-[var(--foreground)]"
-                              >
-                                {d}
-                              </span>
-                            ))}
-                          </div>
-
-                          <div className="absolute bottom-0 left-0 right-0 p-4">
-                            <div className="font-ui text-sm font-bold text-[var(--foreground)]">{a.title}</div>
-                            <div className="mt-2 flex items-center gap-2 text-[var(--foreground)]/60">
-                              <span className="inline-flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--background)]/30 px-2 py-0.5 text-[10px] font-bold">
-                                S
-                              </span>
-                              <span className="inline-flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--background)]/30 px-2 py-0.5 text-[10px] font-bold">
-                                S
-                              </span>
-                              <span className="inline-flex items-center gap-1 rounded-md border border-[var(--border)] bg-[var(--background)]/30 px-2 py-0.5 text-[10px] font-bold">
-                                S
-                              </span>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-
-                      {row.remainingLabel ? (
-                        <button
-                          type="button"
-                          className="flex h-40 w-56 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[var(--border)] bg-[var(--card)]/20 text-[var(--foreground)]/60 transition-colors hover:text-[var(--primary)]"
-                        >
-                          <span className="text-3xl font-bold">+</span>
-                          <span className="text-xs font-bold tracking-widest">{row.remainingLabel}</span>
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : null}
+          {tierRows.every(row => row.count === 0) ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center space-y-6">
+              <div className="size-24 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white/20">
+                <Film size={40} />
               </div>
-            ))}
-          </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-kawaii text-white">Votre coffre est vide !</h3>
+                <p className="text-white/40 text-sm max-w-xs mx-auto">Commencez par explorer ou rechercher des animes pour créer votre premier tier list.</p>
+              </div>
+              <Link href="/explorer">
+                <Button className="bg-white/10 hover:bg-[var(--primary)] border-none text-[10px] font-black">Explorer le catalogue</Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {tierRows.map((row) => (
+                <div
+                  key={row.tier}
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/20 px-4 py-4"
+                >
+                  <div className="flex items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className="flex size-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)]/60 font-kawaii text-2xl text-[var(--foreground)]">
+                        {row.tier}
+                      </div>
+                      <div>
+                        <div className="font-ui text-sm font-bold text-[var(--foreground)]">{row.title}</div>
+                        <div className="text-xs text-[var(--foreground)]/55">{row.subtitle}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-[var(--foreground)]/60">
+                      <span className="min-w-6 text-right font-ui text-sm font-bold">{row.count}</span>
+                      {row.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </div>
+                  </div>
+
+                  {row.expanded && row.animes.length > 0 ? (
+                    <div className="mt-4 overflow-x-auto">
+                      <div className="flex min-w-max gap-4 pr-2">
+                        {row.animes.map((a) => (
+                          <Link
+                            key={a.id}
+                            href={`/anime/${a.id}`}
+                            className="group relative h-40 w-56 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]/50"
+                          >
+                            <div
+                              className={`absolute inset-0 bg-gradient-to-br ${a.gradient} opacity-90 transition-transform group-hover:scale-[1.03]`}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/90 via-[var(--background)]/20 to-transparent" />
+                            <div className="absolute left-3 top-3 flex gap-1">
+                              {a.dots.map((d, idx) => (
+                                <span
+                                  key={`${a.id}-${d}-${idx}`}
+                                  className="inline-flex size-5 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)]/40 text-[10px] font-bold text-[var(--foreground)]"
+                                >
+                                  {d}
+                                </span>
+                              ))}
+                            </div>
+
+                            <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <div className="font-ui text-sm font-bold text-[var(--foreground)]">{a.title}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 p-6 backdrop-blur-xl">
+        <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 p-6 backdrop-blur-xl mb-8">
           <h2 className="font-kawaii text-4xl text-[var(--foreground)]">
             Activité <span className="text-[var(--primary)]">récente</span>
           </h2>
@@ -265,6 +268,36 @@ export function DashboardTemplate({
             ))}
           </div>
         </div>
+
+        {lastRatings && lastRatings.length > 0 && (
+          <div className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--card)]/40 p-6 backdrop-blur-xl">
+            <h2 className="font-kawaii text-4xl text-[var(--foreground)]">
+              Dernières <span className="text-[var(--primary)]">notes</span>
+            </h2>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {lastRatings.map((rating) => (
+                <Link
+                  key={rating.id}
+                  href={`/anime/${rating.animeId}`}
+                  className="group p-4 rounded-2xl border border-white/5 bg-white/5 hover:border-[var(--primary)]/30 transition-all"
+                >
+                  <div className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2">
+                    {new Date(rating.createdAt).toLocaleDateString()}
+                  </div>
+                  <div className="font-bold text-sm text-white mb-2 line-clamp-1 group-hover:text-[var(--primary)]">
+                    {rating.title}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-white/40">TIER</span>
+                    <span className="font-kawaii text-2xl font-black text-transparent bg-clip-text" style={{ backgroundImage: `var(--tier-${rating.globalTier.toLowerCase()})` }}>
+                      {rating.globalTier}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

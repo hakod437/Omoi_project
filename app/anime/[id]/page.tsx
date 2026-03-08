@@ -1,9 +1,13 @@
 import React from 'react'
 import { AnimeDetailTemplate } from '@/components/templates/AnimeDetailTemplate'
 import { getTierFromScore } from '@/lib/scoring'
+import prisma from '@/lib/prisma'
+
+import { auth } from '@/lib/auth'
 
 export default async function AnimeDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
+    const session = await auth()
 
     const res = await fetch(`https://api.jikan.moe/v4/anime/${encodeURIComponent(id)}`, {
         cache: 'no-store'
@@ -14,6 +18,19 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
     const anime = payload?.data
 
     if (!anime) return <div>Anime not found</div>
+
+    let userStatus = undefined
+    if (session?.user?.id) {
+        const userList = await prisma.userList.findUnique({
+            where: {
+                userId_animeId: {
+                    userId: session.user.id,
+                    animeId: id
+                }
+            }
+        })
+        userStatus = userList?.status
+    }
 
     const communityStats = {
         totalReviews: 0,
@@ -76,6 +93,8 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
                 { tier: 'D', percentage: communityStats?.tierDistribution.D.percentage || 0, count: communityStats?.tierDistribution.D.count || 0 }
             ]}
             reviews={formattedReviews}
+            userId={session?.user?.id || undefined}
+            initialStatus={userStatus}
         />
     )
 }

@@ -46,8 +46,11 @@ export interface AnimeDetailTemplateProps {
     timeAgo: string
     tiers: { animation: string; scenario: string; music: string }
     content: string
+    lines: number
     likes: number
   }>
+  userId?: string
+  initialStatus?: any // Using any to avoid strict ListStatus import issues here if needed, or import it
 }
 
 export const AnimeDetailTemplate = ({
@@ -58,7 +61,9 @@ export const AnimeDetailTemplate = ({
   information,
   communityScores,
   tierDistribution,
-  reviews
+  reviews,
+  userId,
+  initialStatus
 }: AnimeDetailTemplateProps) => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
@@ -67,7 +72,12 @@ export const AnimeDetailTemplate = ({
       </div>
 
       <div className="w-full px-4 pt-4 sm:px-6 lg:px-8">
-        <HeroSection {...hero} />
+        <HeroSection
+          {...hero}
+          userId={userId}
+          initialStatus={initialStatus}
+          animeId={animeId}
+        />
       </div>
 
       <div className="w-full px-4 pb-12 sm:px-6 lg:px-8">

@@ -1,15 +1,36 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { registerWithPhoneAction, loginWithPhoneAction } from '@/actions/auth.actions'
 import { Button } from '@/components/atoms/Base'
 import { Phone, User, Lock, ArrowRight, Sparkles } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 export default function LoginPage() {
-    const [isLogin, setIsLogin] = useState(true)
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center text-white/20">Chargement...</div>}>
+            <LoginForm />
+        </Suspense>
+    )
+}
+
+function LoginForm() {
+    const searchParams = useSearchParams()
+    const mode = searchParams?.get('mode')
+    const [isLogin, setIsLogin] = useState(mode !== 'register')
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState<{ type: 'error' | 'success', text: string } | null>(null)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (mode === 'register') {
+            setIsLogin(false)
+        } else if (mode === 'login') {
+            setIsLogin(true)
+        }
+    }, [mode])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -23,7 +44,10 @@ export default function LoginPage() {
 
         if (res.success) {
             setMessage({ type: 'success', text: isLogin ? "Connexion réussie !" : "Compte créé ! Redirection..." })
-            // Redirection logic here if needed
+            setTimeout(() => {
+                router.push('/dashboard')
+                router.refresh()
+            }, 1000)
         } else {
             setMessage({ type: 'error', text: res.error || "Une erreur est survenue" })
         }

@@ -91,12 +91,35 @@ export async function compareUsersAction(userAId: string, userBId: string) {
         const avgDiff = ratedCommonCount > 0 ? scoreDiffSum / ratedCommonCount : 20
         const compatibility = Math.max(0, 100 - (avgDiff * 2.5))
 
+        // 4. Genre Alignment
+        const genreCountsA: Record<string, number> = {}
+        const genreCountsB: Record<string, number> = {}
+
+        listA.forEach(item => {
+            const genres = item.anime.genres.split(',').map(g => g.trim())
+            genres.forEach(g => genreCountsA[g] = (genreCountsA[g] || 0) + 1)
+        })
+        listB.forEach(item => {
+            const genres = item.anime.genres.split(',').map(g => g.trim())
+            genres.forEach(g => genreCountsB[g] = (genreCountsB[g] || 0) + 1)
+        })
+
+        const commonGenres = Object.keys(genreCountsA)
+            .filter(g => genreCountsB[g])
+            .map(g => ({
+                name: g,
+                alignment: Math.min(genreCountsA[g], genreCountsB[g])
+            }))
+            .sort((a, b) => b.alignment - a.alignment)
+            .slice(0, 5)
+
         return {
             success: true,
             data: {
                 compatibility,
                 commonCount: commonList.length,
-                commonAnimes: commonList.map((l: any) => l.anime)
+                commonAnimes: commonList.map((l: any) => l.anime),
+                commonGenres
             }
         }
 

@@ -5,6 +5,8 @@ import { Search, Users, Zap, Loader2, Heart, ArrowLeft, Info } from 'lucide-reac
 import { Button, Badge } from '@/components/atoms/Base'
 import { searchUsersAction, compareUsersAction } from '@/actions/social.actions'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { motion } from 'framer-motion'
 
 export default function Compare() {
     const [query, setQuery] = useState('')
@@ -29,12 +31,13 @@ export default function Compare() {
         }
     }
 
+    const { data: session } = useSession()
+
     const handleCompare = async (user: any) => {
         setIsComparing(true)
         setSelectedUser(user)
         try {
-            // userId would normally come from session
-            const currentUserId = "temp-user-id"
+            const currentUserId = session?.user?.id || "temp-user-id"
             const res = await compareUsersAction(currentUserId, user.id)
             if (res.success) {
                 setComparison(res.data)
@@ -48,72 +51,124 @@ export default function Compare() {
 
     if (comparison) {
         return (
-            <div className="max-w-4xl mx-auto py-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-5xl mx-auto py-12 px-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <button
                     onClick={() => { setComparison(null); setSelectedUser(null); }}
-                    className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-bold text-sm"
+                    className="flex items-center gap-2 text-white/40 hover:text-[var(--primary)] transition-all font-black text-[10px] uppercase tracking-[0.2em]"
                 >
-                    <ArrowLeft size={16} /> Back to Search
+                    <ArrowLeft size={16} /> Retour à la recherche
                 </button>
 
-                <div className="bg-card/40 border border-border rounded-3xl p-12 backdrop-blur-xl space-y-12 text-center relative overflow-hidden shadow-2xl">
-                    {/* Background Glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 blur-[100px] pointer-events-none" />
+                <div className="bg-[#0A0A0B]/60 border border-white/5 rounded-[2.5rem] p-12 backdrop-blur-2xl space-y-12 relative overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+                    {/* Background Decorative Blobs */}
+                    <div className="absolute -top-20 -right-20 size-64 bg-[var(--primary)]/10 blur-[100px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 size-64 bg-[var(--accent)]/10 blur-[100px] pointer-events-none" />
 
-                    <div className="space-y-6 relative">
-                        <div className="flex items-center justify-center gap-8 md:gap-16">
-                            <div className="relative group">
-                                <div className="size-24 rounded-full border-4 border-primary/20 p-1 group-hover:border-primary/50 transition-all">
-                                    <div className="size-full bg-muted rounded-full flex items-center justify-center font-bold text-2xl bg-gradient-to-br from-primary to-accent text-white">
-                                        Me
+                    <div className="relative flex flex-col items-center gap-8">
+                        <div className="flex items-center justify-center gap-6 md:gap-24">
+                            {/* User Me */}
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="size-28 rounded-[2rem] border border-white/10 p-1.5 bg-white/5 rotate-[-6deg] group hover:rotate-0 transition-transform duration-500">
+                                    <div className="size-full bg-gradient-to-br from-[var(--primary)] to-[var(--accent)] rounded-[1.5rem] flex items-center justify-center font-black text-2xl text-white shadow-[var(--glow)]">
+                                        VOUS
                                     </div>
                                 </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Moi</span>
                             </div>
 
-                            <div className="flex flex-col items-center">
-                                <div className="text-4xl md:text-6xl font-black text-primary font-kawaii mb-1 drop-shadow-lg">
-                                    {Math.round(comparison.compatibility)}%
+                            {/* Middle compatibility Circle */}
+                            <div className="relative size-40 md:size-56 flex items-center justify-center">
+                                <svg className="size-full -rotate-90">
+                                    <circle
+                                        cx="50%" cy="50%" r="48%"
+                                        stroke="rgba(255,255,255,0.03)"
+                                        strokeWidth="8"
+                                        fill="none"
+                                    />
+                                    <circle
+                                        cx="50%" cy="50%" r="48%"
+                                        stroke="var(--primary)"
+                                        strokeWidth="8"
+                                        fill="none"
+                                        strokeDasharray="301.59"
+                                        strokeDashoffset={301.59 * (1 - comparison.compatibility / 100)}
+                                        strokeLinecap="round"
+                                        className="transition-all duration-1000 ease-out"
+                                    />
+                                </svg>
+                                <div className="absolute flex flex-col items-center transform scale-90 md:scale-100">
+                                    <span className="text-5xl md:text-7xl font-black text-white font-kawaii drop-shadow-[0_0_20px_rgba(var(--primary-rgb),0.5)]">
+                                        {Math.round(comparison.compatibility)}<span className="text-2xl">%</span>
+                                    </span>
+                                    <span className="text-[10px] font-black text-[var(--primary)] uppercase tracking-[0.3em] mt-2">Affinité</span>
                                 </div>
-                                <Badge variant="primary">Match Rate</Badge>
                             </div>
 
-                            <div className="relative group">
-                                <div className="size-24 rounded-full border-4 border-primary/20 p-1 group-hover:border-primary/50 transition-all">
+                            {/* Target User */}
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="size-28 rounded-[2rem] border border-white/10 p-1.5 bg-white/5 rotate-[6deg] group hover:rotate-0 transition-transform duration-500">
                                     {selectedUser.avatar ? (
-                                        <Image src={selectedUser.avatar} alt={selectedUser.username} width={96} height={96} className="rounded-full" />
+                                        <Image src={selectedUser.avatar} alt={selectedUser.username} width={112} height={112} className="size-full rounded-[1.5rem] object-cover" />
                                     ) : (
-                                        <div className="size-full bg-muted rounded-full flex items-center justify-center font-bold text-2xl text-foreground/40">
+                                        <div className="size-full bg-white/5 rounded-[1.5rem] flex items-center justify-center font-black text-2xl text-white/20">
                                             {selectedUser.username[0].toUpperCase()}
                                         </div>
                                     )}
                                 </div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">@{selectedUser.username}</span>
                             </div>
                         </div>
 
-                        <div className="max-w-md mx-auto">
-                            <h2 className="text-2xl font-kawaii mb-2">
-                                {comparison.compatibility > 80 ? "Anime Soulmates! ✨" : comparison.compatibility > 50 ? "Same Vibes! 🤝" : "Different Tastes! 🌊"}
+                        <div className="text-center max-w-xl">
+                            <h2 className="text-3xl font-kawaii text-white mb-3">
+                                {comparison.compatibility > 80 ? "Âmes Sœurs d'Anime ! ✨" : comparison.compatibility > 50 ? "Même Vibe ! 🤝" : "Goûts Divergents ! 🌊"}
                             </h2>
-                            <p className="text-muted-foreground text-sm font-medium">
-                                You have {comparison.commonCount} anime in common. Here's how your tastes align.
+                            <p className="text-white/40 text-xs font-bold uppercase tracking-widest leading-relaxed">
+                                Vous partagez <span className="text-white">{comparison.commonCount}</span> animes dans vos coffres respectifs.
                             </p>
                         </div>
                     </div>
 
-                    {/* Common Anime List */}
-                    <div className="space-y-4 text-left">
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                            <Info size={16} /> Shared Vault Items
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {comparison.commonAnimes.map((anime: any) => (
-                                <div key={anime.id} className="flex items-center gap-3 p-3 rounded-xl bg-background/50 border border-border/50">
-                                    <div className="size-10 relative rounded-md overflow-hidden bg-muted">
-                                        <Image src={anime.imageUrl} alt={anime.title} fill className="object-cover" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        {/* Genre matching */}
+                        <div className="space-y-6">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--primary)] flex items-center gap-2">
+                                <Zap size={14} /> Alignement des genres
+                            </h3>
+                            <div className="space-y-4">
+                                {comparison.commonGenres?.map((genre: any) => (
+                                    <div key={genre.name} className="space-y-2">
+                                        <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-white/60">
+                                            <span>{genre.name}</span>
+                                            <span className="text-white">{genre.alignment > 5 ? 'Excellent' : 'Match'}</span>
+                                        </div>
+                                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                            <motion.div
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${Math.min(100, (genre.alignment / 10) * 100)}%` }}
+                                                className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
+                                            />
+                                        </div>
                                     </div>
-                                    <span className="text-sm font-bold truncate">{anime.title}</span>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Common Items */}
+                        <div className="space-y-6">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--accent)] flex items-center gap-2">
+                                <Heart size={14} /> Animes en commun
+                            </h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                {comparison.commonAnimes.slice(0, 4).map((anime: any) => (
+                                    <div key={anime.id} className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/5 overflow-hidden group hover:border-white/10 transition-all">
+                                        <div className="size-10 relative shrink-0 rounded-lg overflow-hidden border border-white/10">
+                                            <Image src={anime.imageUrl} alt={anime.title} fill className="object-cover group-hover:scale-110 transition-transform" />
+                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-tight text-white/70 truncate">{anime.title}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

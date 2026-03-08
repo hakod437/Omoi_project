@@ -5,6 +5,9 @@ import { ServiceResponse } from "@/types/service"
 
 export async function getUserStatsAction(userId: string): Promise<ServiceResponse<any>> {
     try {
+        console.log("[UserStats] Starting for userId:", userId)
+        const t0 = Date.now()
+
         const [userList, ratings, activities] = await Promise.all([
             prisma.userList.findMany({
                 where: { userId },
@@ -17,16 +20,18 @@ export async function getUserStatsAction(userId: string): Promise<ServiceRespons
                         }
                     }
                 }
-            }),
+            }).then(r => { console.log("[UserStats] userList query done in", Date.now() - t0, "ms, count:", r.length); return r }),
             prisma.rating.findMany({
                 where: { userId }
-            }),
+            }).then(r => { console.log("[UserStats] ratings query done in", Date.now() - t0, "ms, count:", r.length); return r }),
             prisma.activity.findMany({
                 where: { userId },
                 orderBy: { createdAt: 'desc' },
                 take: 5
-            })
+            }).then(r => { console.log("[UserStats] activities query done in", Date.now() - t0, "ms, count:", r.length); return r })
         ])
+
+        console.log("[UserStats] All queries done in", Date.now() - t0, "ms")
 
         const totalAnimes = userList.length
         const completedCount = userList.filter(item => item.status === 'COMPLETED').length

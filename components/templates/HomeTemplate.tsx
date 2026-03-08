@@ -87,7 +87,7 @@ export const HomeTemplate = ({ user }: { user?: any }) => {
                   Okaeri, <span className="text-primary italic">{user.name}</span>! 🌸
                 </h1>
                 <p className="text-muted-foreground text-lg font-medium">
-                  Your vault is waiting. Check out what your friends are watching right now.
+                  Your Omoi is waiting. Check out what your friends are watching right now.
                 </p>
               </header>
               <div className="p-8 rounded-3xl bg-card/40 border border-border backdrop-blur-xl shadow-2xl relative overflow-hidden group">

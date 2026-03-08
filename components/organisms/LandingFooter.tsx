@@ -5,26 +5,22 @@ export const LandingFooter = () => {
     <>
       <footer>
         <div className="footer-brand">
-          <div className="logo">AnimeVault</div>
+          <div className="logo">Omoi</div>
           <p className="footer-desc">
-            La plateforme communautaire pour noter, découvrir et comparer tes animes favoris. Fait avec passion par des
-            otakus, pour des otakus.
+            La plateforme communautaire pour noter, découvrir et comparer tes œuvres favorites.
           </p>
         </div>
         <div className="footer-col">
           <h4>Explorer</h4>
           <ul>
             <li>
-              <a href="#">Top Animes</a>
+              <a href="#">Top Œuvres</a>
             </li>
             <li>
               <a href="#">Nouveautés</a>
             </li>
             <li>
               <a href="#">Par genre</a>
-            </li>
-            <li>
-              <a href="#">Studios</a>
             </li>
           </ul>
         </div>
@@ -35,10 +31,7 @@ export const LandingFooter = () => {
               <a href="#">Profils</a>
             </li>
             <li>
-              <a href="#">Comparer</a>
-            </li>
-            <li>
-              <a href="#">Listes</a>
+              <a href="#">Sync</a>
             </li>
             <li>
               <a href="#">Discord</a>
@@ -55,15 +48,12 @@ export const LandingFooter = () => {
               <a href="#">API</a>
             </li>
             <li>
-              <a href="#">CGU</a>
-            </li>
-            <li>
               <a href="#">Contact</a>
             </li>
           </ul>
         </div>
       </footer>
-      <div className="footer-bottom">© 2025 AnimeVault — Fait avec ✦ pour la communauté anime</div>
+      <div className="footer-bottom">© 2026 Omoi — Fait avec passion pour la communauté</div>
     </>
   )
 }

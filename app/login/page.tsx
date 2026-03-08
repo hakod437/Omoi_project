@@ -7,6 +7,7 @@ import { Button } from '@/components/atoms/Base'
 import { Phone, User, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
+import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
     return (
@@ -38,18 +39,32 @@ function LoginForm() {
         setMessage(null)
 
         const formData = new FormData(e.currentTarget)
-        const action = isLogin ? loginWithPhoneAction : registerWithPhoneAction
+        const phoneNumber = formData.get('phoneNumber') as string
+        const password = formData.get('password') as string
 
-        const res = await action(formData)
+        if (!isLogin) {
+            // S'il s'agit d'une inscription, on crée d'abord le compte
+            const res = await registerWithPhoneAction(formData)
+            if (!res.success) {
+                setMessage({ type: 'error', text: res.error || "Erreur lors de l'inscription" })
+                setLoading(false)
+                return
+            }
+        }
 
-        if (res.success) {
-            setMessage({ type: 'success', text: isLogin ? "Connexion réussie !" : "Compte créé ! Redirection..." })
-            setTimeout(() => {
-                router.push('/dashboard')
-                router.refresh()
-            }, 1000)
+        // Connexion via NextAuth (pour login direct ou auto-login après register)
+        const result = await signIn('credentials', {
+            phoneNumber,
+            password,
+            redirect: false
+        })
+
+        if (result?.error) {
+            setMessage({ type: 'error', text: "Identifiants invalides" })
         } else {
-            setMessage({ type: 'error', text: res.error || "Une erreur est survenue" })
+            setMessage({ type: 'success', text: isLogin ? "Connexion réussie !" : "Compte créé ! Connexion en cours..." })
+            router.push('/dashboard')
+            router.refresh()
         }
         setLoading(false)
     }
@@ -75,10 +90,10 @@ function LoginForm() {
                             <Sparkles size={28} />
                         </motion.div>
                         <h1 className="text-4xl font-kawaii text-white tracking-tight">
-                            {isLogin ? 'Bon retour !' : 'Rejoindre Vault'}
+                            {isLogin ? 'Bon retour !' : 'Rejoindre Omoi'}
                         </h1>
                         <p className="text-white/40 font-medium text-sm">
-                            {isLogin ? 'Connectez-vous pour voir vos tiers' : 'Créez votre profil anime vault'}
+                            {isLogin ? 'Connectez-vous pour voir vos tiers' : 'Créez votre profil Omoi'}
                         </p>
                     </div>
 

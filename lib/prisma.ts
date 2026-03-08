@@ -8,7 +8,16 @@ if (typeof window === "undefined" && process.env.NODE_ENV !== "production") {
 }
 
 const connectionString = process.env.DATABASE_URL;
-const pool = new Pool({ connectionString });
+console.log("[Prisma] Initializing pool with DATABASE_URL:", connectionString?.substring(0, 30) + "...");
+const pool = new Pool({
+    connectionString,
+    // Prevent "Connection terminated unexpectedly" during long SSR renders
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10000,
+});
 const adapter = new PrismaPg(pool);
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };

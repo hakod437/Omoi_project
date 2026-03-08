@@ -20,7 +20,7 @@ export const LandingHero = ({
           className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-white/60 mb-8"
         >
           <div className="size-2 rounded-full bg-[var(--primary)] animate-pulse" />
-          Vault 2.0 — Now with Pro Scoring
+          Omoi 2.0 — Now with Pro Scoring
         </motion.div>
 
         <motion.h1
@@ -40,24 +40,10 @@ export const LandingHero = ({
           transition={{ delay: 0.2 }}
           className="hero-sub text-lg text-white/40 font-medium max-w-lg mb-12 leading-relaxed"
         >
-          La plateforme ultime pour les otakus. Note chaque anime avec précision, découvre des perles cachées, et synchronise tes listes avec tes amis.
+          La plateforme ultime pour ta passion. Note chaque œuvre avec précision, découvre des perles cachées, et synchronise tes listes avec Omoi.
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-          className="hero-actions flex gap-4"
-        >
-          <button className="btn-primary" type="button">
-            <Sparkles size={18} />
-            Commencer gratis
-          </button>
-          <button className="btn-secondary" type="button">
-            Voir la démo
-            <ArrowRight size={18} />
-          </button>
-        </motion.div>
+        {/* Hero actions removed as per user request */}
 
         <motion.div
           initial={{ opacity: 0 }}

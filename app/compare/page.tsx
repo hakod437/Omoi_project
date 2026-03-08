@@ -20,7 +20,7 @@ export default function Compare() {
         try {
             const res = await searchUsersAction(query)
             if (res.success) {
-                setResults(res.data)
+                setResults(res.data || [])
             }
         } catch (error) {
             console.error(error)

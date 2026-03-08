@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Tier } from '@/types/anime'
@@ -83,49 +86,57 @@ export const AnimeCard = ({
     avgMusicTier
 }: AnimeCardProps) => {
     return (
-        <div className="relative group/card overflow-visible">
+        <motion.div
+            whileHover={{ y: -8 }}
+            className="relative group/card overflow-visible"
+        >
             <QuickAddButton id={id} title={title} imageUrl={imageUrl} genres={genres} />
             <Link href={`/anime/${id}`} className="group block">
-                <div className="relative aspect-[2/3] w-full overflow-hidden rounded-2xl bg-[var(--card)] shadow-xl transition-all group-hover:scale-[1.02] group-hover:shadow-2xl">
+                <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[2rem] bg-white/5 border border-white/10 shadow-2xl transition-all group-hover:border-[var(--primary)]/30 group-hover:shadow-[var(--glass-shadow)]">
                     <Image
                         src={imageUrl}
                         alt={title}
                         fill
-                        className="object-cover transition-transform group-hover:scale-110"
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
 
-                    {/* Overlays */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--background)] via-[var(--background)]/80 to-transparent p-4">
-                        <h3 className="line-clamp-2 text-lg font-bold text-[var(--foreground)] font-ui">
+                    {/* Pro Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent opacity-80" />
+
+                    <div className="absolute inset-x-0 bottom-0 p-5 space-y-3">
+                        <h3 className="line-clamp-2 text-xl font-black text-white font-kawaii leading-tight">
                             {title}
                         </h3>
 
-                        <div className="mt-2 flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1.5">
                             {genres.slice(0, 2).map((g) => (
-                                <Badge key={g} variant="primary" className="bg-[var(--primary)]/10">
+                                <Badge key={g} variant="primary" className="bg-white/10 border-white/10 text-[10px] uppercase font-black tracking-widest px-2.5">
                                     {g}
                                 </Badge>
                             ))}
                         </div>
 
-                        {/* Tier Dots */}
-                        <div className="mt-3 flex items-center justify-between border-t border-[var(--border)] pt-2">
-                            <div className="flex gap-1.5">
+                        {/* Tier Dots & Global Score */}
+                        <div className="flex items-center justify-between pt-1 border-t border-white/5">
+                            <div className="flex gap-2">
                                 {avgAnimTier && <TierDot tier={avgAnimTier} size="sm" />}
                                 {avgScenTier && <TierDot tier={avgScenTier} size="sm" />}
                                 {avgMusicTier && <TierDot tier={avgMusicTier} size="sm" />}
                             </div>
 
                             {globalTier && (
-                                <span className="font-kawaii text-2xl font-bold text-[var(--accent)] drop-shadow-md">
-                                    {globalTier}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px] font-black text-white/30 tracking-tighter uppercase">Global</span>
+                                    <span className="font-kawaii text-2xl font-black text-transparent bg-clip-text" style={{ backgroundImage: `var(--tier-${globalTier.toLowerCase()})` }}>
+                                        {globalTier}
+                                    </span>
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
             </Link>
-        </div>
+        </motion.div>
     )
 }
 

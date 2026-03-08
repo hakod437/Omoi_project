@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import React from 'react'
 import type { Tier } from '@/types/anime'
 import { TierBadge } from '../atoms/Tier'
@@ -13,21 +14,25 @@ interface TierButtonProps {
 
 export const TierButton = ({ tier, selected, onClick, label }: TierButtonProps) => {
     return (
-        <button
+        <motion.button
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => onClick(tier)}
             className={`
-        flex flex-col items-center gap-2 p-3 rounded-xl transition-all
+        flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300
         ${selected
-                    ? 'bg-[var(--primary)]/20 border-2 border-[var(--primary)] scale-105 shadow-xl'
-                    : 'bg-[var(--card)] border-2 border-transparent hover:bg-[var(--muted)] opacity-70 hover:opacity-100'
+                    ? 'bg-white/10 border-2 border-[var(--primary)] shadow-[var(--glow)] z-10'
+                    : 'bg-white/5 border-2 border-transparent hover:bg-white/10 opacity-60 hover:opacity-100 backdrop-blur-md'
                 }
       `}
         >
-            <TierBadge tier={tier} />
-            <span className="text-xs font-bold text-[var(--foreground)] opacity-80 uppercase tracking-tighter">
+            <div className={`transition-transform duration-500 ${selected ? 'scale-110' : ''}`}>
+                <TierBadge tier={tier} />
+            </div>
+            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${selected ? 'text-[var(--primary)]' : 'text-white/40'}`}>
                 {label}
             </span>
-        </button>
+        </motion.button>
     )
 }
 

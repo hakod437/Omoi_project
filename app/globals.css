@@ -1,9 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  --font-kawaii: "Comic Sans MS", "Chalkboard SE", "Hachi Maru Pop", cursive;
-  --font-ui: "Nunito", system-ui, sans-serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-kawaii: "Outfit", "Hachi Maru Pop", cursive;
+  --font-ui: "Inter", "Nunito", system-ui, sans-serif;
+  --font-body: "Inter", "DM Sans", system-ui, sans-serif;
+
+  /* Premium Color Palette */
+  --primary: #FF3D71;
+  --primary-glow: rgba(255, 61, 113, 0.5);
+  --accent: #7D52FF;
+  --secondary: #00F2FF;
+
+  /* Glassmorphism Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(12px);
+
+  /* Tier Gradients */
+  --tier-s: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  --tier-a: linear-gradient(135deg, #FF3D71 0%, #FF80AC 100%);
+  --tier-b: linear-gradient(135deg, #7D52FF 0%, #B299FF 100%);
+  --tier-c: linear-gradient(135deg, #00F2FF 0%, #80FAFF 100%);
+  --tier-d: linear-gradient(135deg, #4A4A4A 0%, #2D2D2D 100%);
+
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+}
+
+:root {
+  --bg: #0A0A0B;
+  --foreground: #F8F9FA;
+  --card: rgba(23, 23, 26, 0.6);
+  --border: rgba(255, 255, 255, 0.08);
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-fg: #A0A0AB;
+
+  --glow: 0 0 20px var(--primary-glow);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+body {
+  background: var(--bg);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(125, 82, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(255, 61, 113, 0.1) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
 .wrapper {
@@ -114,58 +158,55 @@
 }
 
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-weight: 900;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 0.85rem 2rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  letter-spacing: 0.15em;
+  padding: 1.25rem 2.5rem;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: var(--glow);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px -10px var(--primary-glow);
   position: relative;
   overflow: hidden;
 }
 
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateX(-100%) skewX(-15deg);
-  transition: transform 0.4s ease;
-}
-
-.btn-primary:hover::before {
-  transform: translateX(200%) skewX(-15deg);
-}
-
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--glow), 0 8px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px -10px var(--primary-glow);
+  background: white;
+  color: var(--primary);
 }
 
 .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-weight: 800;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 0.85rem 2rem;
-  background: var(--muted);
-  color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  letter-spacing: 0.15em;
+  padding: 1.25rem 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
 
@@ -202,18 +243,21 @@
 }
 
 .anime-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) * 1.5);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
   position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .anime-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: var(--glow), 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-12px) scale(1.02);
+  border-color: var(--primary);
+  box-shadow: 0 30px 60px -12px rgba(255, 61, 113, 0.2), 0 0 20px rgba(255, 61, 113, 0.15);
 }
 
 .anime-card.featured {
@@ -427,15 +471,18 @@
 
 .search-bar {
   width: 100%;
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: 3rem;
-  padding: 1rem 4rem 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2rem;
+  padding: 1.25rem 4.5rem 1.25rem 2rem;
   font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--fg);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .search-bar::placeholder {
@@ -443,8 +490,10 @@
 }
 
 .search-bar:focus {
+  background: rgba(255, 255, 255, 0.06);
   border-color: var(--primary);
-  box-shadow: var(--glow), 0 0 0 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px -10px rgba(255, 61, 113, 0.2);
+  transform: scale(1.02);
 }
 
 .search-icon {

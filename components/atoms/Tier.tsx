@@ -2,11 +2,11 @@ import React from 'react'
 import type { Tier } from '@/types/anime'
 
 const TIER_COLORS: Record<Tier, string> = {
-    S: '#ff4757', // High impact red
-    A: '#ffa502', // Orange
-    B: '#2ed573', // Green
-    C: '#1e90ff', // Blue
-    D: '#747d8c', // Grey
+    S: 'var(--tier-s)',
+    A: 'var(--tier-a)',
+    B: 'var(--tier-b)',
+    C: 'var(--tier-c)',
+    D: 'var(--tier-d)',
 }
 
 export const TierDot = ({ tier, size = 'md' }: { tier: Tier, size?: 'sm' | 'md' | 'lg' }) => {
@@ -28,8 +28,8 @@ export const TierDot = ({ tier, size = 'md' }: { tier: Tier, size?: 'sm' | 'md' 
 export const TierBadge = ({ tier }: { tier: Tier }) => {
     return (
         <div
-            className="flex items-center justify-center w-8 h-8 rounded-lg font-kawaii text-white text-lg shadow-lg"
-            style={{ backgroundColor: TIER_COLORS[tier] }}
+            className="flex items-center justify-center w-8 h-8 rounded-lg font-kawaii text-white text-lg shadow-lg border border-white/20"
+            style={{ background: TIER_COLORS[tier] }}
         >
             {tier}
         </div>

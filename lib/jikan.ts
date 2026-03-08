@@ -64,3 +64,11 @@ export async function getTopAnime() {
     const data = await res.json()
     return data.data
 }
+
+export async function getSeasonalAnime() {
+    const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/seasons/now`)
+    if (!res.ok) throw new Error("Failed to fetch seasonal anime from Jikan")
+
+    const data = await res.json()
+    return data.data
+}

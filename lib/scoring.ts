@@ -36,16 +36,20 @@ export function getTierFromScore(score: number): Tier {
 }
 
 export function calculateCompatibility(userATiers: Tier[], userBTiers: Tier[]): number {
-    // Simple Jaccard-like similarity for tiers
-    // This is a placeholder for a more complex implementation if needed
     if (userATiers.length === 0 || userBTiers.length === 0) return 0
 
-    let matchCount = 0
+    let totalDiff = 0
     const minLength = Math.min(userATiers.length, userBTiers.length)
 
     for (let i = 0; i < minLength; i++) {
-        if (userATiers[i] === userBTiers[i]) matchCount++
+        const scoreA = TIER_VALUES[userATiers[i]]
+        const scoreB = TIER_VALUES[userBTiers[i]]
+        totalDiff += Math.abs(scoreA - scoreB)
     }
 
-    return Math.round((matchCount / minLength) * 100)
+    const avgDiff = totalDiff / minLength
+    // Max diff is 8 (S=10 vs D=2). 
+    // Compatibility: 100 - (avgDiff / 8 * 100)
+    const compatibility = 100 - (avgDiff / 8 * 100)
+    return Math.round(Math.max(0, compatibility))
 }

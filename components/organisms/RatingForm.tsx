@@ -6,6 +6,7 @@ import { TierSelector } from '../molecules/TierSelector'
 import { Button } from '../atoms/Base'
 import { calculateGlobalScore, getTierFromScore } from '@/lib/scoring'
 import { Loader2 } from 'lucide-react'
+import { submitRatingAction } from '@/actions/rating.actions'
 
 export const RatingForm = ({ animeId }: { animeId: string }) => {
     const [animTier, setAnimTier] = useState<Tier | null>(null)
@@ -25,17 +26,34 @@ export const RatingForm = ({ animeId }: { animeId: string }) => {
     const isComplete = animTier && scenTier && musicTier
 
     const handleSubmit = async () => {
-        void animeId
-        void review
-        if (!isComplete) return
+        if (!isComplete || !globalScore) return
 
         setIsSubmitting(true)
         try {
-            alert('Backend disabled (frontend-only mode).')
+            const result = await submitRatingAction({
+                userId: "temp-user-id", // Will be replaced by session
+                animeId,
+                animTier: animTier as Tier,
+                scenTier: scenTier as Tier,
+                musicTier: musicTier as Tier,
+                globalScore,
+                globalTier: getTierFromScore(globalScore) as Tier,
+                review
+            })
+
+            if (result.success) {
+                alert('Rating saved successfully! Check your activity feed.')
+            } else {
+                alert(`Error: ${result.error}`)
+            }
+        } catch (err) {
+            console.error(err)
+            alert('Something went wrong')
         } finally {
             setIsSubmitting(false)
         }
     }
+
 
     return (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-6 backdrop-blur-sm">

@@ -6,6 +6,7 @@ import { Search, User, BarChart3 } from 'lucide-react'
 import { Button } from '../atoms/Base'
 
 import { ThemeSwitcher } from '../molecules/ThemeSwitcher'
+import { SearchBar } from './SearchBar'
 
 export const Navbar = () => {
     return (
@@ -20,26 +21,38 @@ export const Navbar = () => {
                         AnimeVault
                     </span>
                 </Link>
-                <ThemeSwitcher />
-
                 {/* Desktop Links */}
-                <div className="hidden md:flex items-center gap-8">
-                    <NavLink href="/compare" icon={<BarChart3 size={18} />} label="Compare" />
-                    <NavLink href="/dashboard" icon={<User size={18} />} label="Dashboard" />
+                <div className="hidden md:flex items-center gap-6">
+                    <NavLink href="/explorer" icon={<Search size={18} />} label="Explorer" />
+                    <NavLink href="/compare" icon={<BarChart3 size={18} />} label="Sync" />
+                    <NavLink href="/dashboard" icon={<User size={18} />} label="Vault" />
+                </div>
+
+                {/* Search Bar - Only on large screens */}
+                <div className="hidden lg:flex flex-1 max-w-xs mx-8">
+                    <SearchBar />
                 </div>
 
                 {/* CTAs */}
-                <div className="flex items-center gap-4">
-                    <button className="p-2 text-[var(--foreground)]/60 hover:text-[var(--primary)] transition-colors">
-                        <Search size={22} />
-                    </button>
+                <div className="flex items-center gap-3">
+                    <div className="hidden sm:block">
+                        <ThemeSwitcher />
+                    </div>
 
-                    <Link href="/login">
-                        <Button variant="outline" size="sm" className="hidden sm:block">
-                            Sign In
-                        </Button>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        <Link href="/login">
+                            <Button variant="ghost" size="sm" className="text-xs uppercase tracking-widest">
+                                Login
+                            </Button>
+                        </Link>
+                        <Link href="/register">
+                            <Button variant="primary" size="sm" className="text-xs uppercase tracking-widest px-6 shadow-primary/20">
+                                Join
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
+
             </div>
         </nav>
     )

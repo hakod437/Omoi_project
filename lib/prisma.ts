@@ -1,10 +1,11 @@
-const prisma = new Proxy(
-    {},
-    {
-        get() {
-            throw new Error('Backend disabled (frontend-only mode): Prisma is not available')
-        },
-    }
-)
+import { PrismaClient } from "@prisma/client";
 
-export default prisma
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+export const prisma =
+    globalForPrisma.prisma ||
+    new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+export default prisma;

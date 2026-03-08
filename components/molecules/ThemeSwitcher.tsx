@@ -14,22 +14,21 @@ export const ThemeSwitcher = () => {
     ]
 
     return (
-        <div className="flex gap-2 p-1 bg-[var(--card)]/50 backdrop-blur-md border border-[var(--border)] rounded-full">
+        <div className="flex gap-1 p-1 bg-[var(--card)]/50 backdrop-blur-md border border-[var(--border)] rounded-full shadow-inner">
             {themes.map((t) => (
                 <button
                     key={t.id}
                     onClick={() => setTheme(t.id as any)}
                     className={`
-                        flex items-center gap-2 px-3 py-1.5 rounded-full transition-all text-sm font-bold font-ui
+                        p-2 rounded-full transition-all duration-300
                         ${theme === t.id
-                            ? 'bg-[var(--primary)] text-white shadow-lg scale-105'
-                            : 'hover:bg-[var(--muted)] text-[var(--foreground)]/60'
+                            ? 'bg-[var(--primary)] text-white shadow-md scale-105'
+                            : 'hover:bg-[var(--muted)] text-[var(--foreground)]/40 hover:text-[var(--foreground)]'
                         }
                     `}
+                    title={t.label}
                 >
                     {t.icon}
-                    <span className="hidden lg:inline">{t.label}</span>
-                    {theme === t.id && <Check size={12} className="ml-1" />}
                 </button>
             ))}
         </div>

@@ -39,7 +39,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
             animeId={id}
             breadcrumbItems={[
                 { label: 'Accueil', href: '/' },
-                { label: 'Animes', href: '/explorer' },
+                { label: 'Explorer', href: '/explorer' },
                 { label: anime.title }
             ]}
             hero={{

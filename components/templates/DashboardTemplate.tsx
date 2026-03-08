@@ -43,7 +43,7 @@ export function DashboardTemplate({
 }: DashboardTemplateProps) {
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between mb-8">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)]/40 px-4 py-1.5 text-xs font-bold tracking-widest text-[var(--primary)]">

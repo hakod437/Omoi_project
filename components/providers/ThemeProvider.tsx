@@ -2,7 +2,19 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-type Theme = 'jade' | 'pastel' | 'abyss'
+type Theme = 'cyber' | 'pastel' | 'shonen'
+
+const THEME_STORAGE_KEY = 'animevault-theme'
+
+function normalizeTheme(value: string | null): Theme | null {
+    if (!value) return null
+
+    if (value === 'jade') return 'cyber'
+    if (value === 'abyss') return 'shonen'
+
+    if (value === 'cyber' || value === 'pastel' || value === 'shonen') return value
+    return null
+}
 
 interface ThemeContextType {
     theme: Theme
@@ -12,19 +24,22 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-    const [theme, setThemeState] = useState<Theme>('jade')
+    const [theme, setThemeState] = useState<Theme>('cyber')
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('animevault-theme') as Theme
+        const savedTheme = normalizeTheme(localStorage.getItem(THEME_STORAGE_KEY))
         if (savedTheme) {
             setThemeState(savedTheme)
+            localStorage.setItem(THEME_STORAGE_KEY, savedTheme)
             document.documentElement.setAttribute('data-theme', savedTheme)
+        } else {
+            document.documentElement.setAttribute('data-theme', 'cyber')
         }
     }, [])
 
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme)
-        localStorage.setItem('animevault-theme', newTheme)
+        localStorage.setItem(THEME_STORAGE_KEY, newTheme)
         document.documentElement.setAttribute('data-theme', newTheme)
     }
 

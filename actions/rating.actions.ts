@@ -1,7 +1,14 @@
 'use server'
 
 import { ServiceResponse } from '@/types/service';
-import { RatingInput } from '@/services/rating.service';
+
+type RatingInput = {
+    animeId: string
+    animationScore: number
+    scenarioScore: number
+    musicScore: number
+    review?: string
+}
 
 export async function submitRatingAction(
     data: Omit<RatingInput, 'userId'>

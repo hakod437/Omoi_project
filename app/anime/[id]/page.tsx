@@ -1,15 +1,19 @@
 import React from 'react'
 import { AnimeDetailTemplate } from '@/components/templates/AnimeDetailTemplate'
-
-import { AnimeService } from '@/services/anime.service'
 import { getTierFromScore } from '@/lib/scoring'
 
 export default async function AnimeDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
-    const result = await AnimeService.getById(parseInt(id))
 
-    if (!result.success || !result.data) return <div>{result.error || 'Anime not found'}</div>
-    const anime = result.data
+    const res = await fetch(`https://api.jikan.moe/v4/anime/${encodeURIComponent(id)}`, {
+        cache: 'no-store'
+    })
+
+    if (!res.ok) return <div>Anime not found</div>
+    const payload = await res.json()
+    const anime = payload?.data
+
+    if (!anime) return <div>Anime not found</div>
 
     const communityStats = {
         totalReviews: 0,

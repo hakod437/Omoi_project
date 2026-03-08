@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 export function RouteAwareMain({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || '/'
 
-  const isFullBleed = pathname === '/dashboard' || pathname.startsWith('/anime/')
+  const isFullBleed = pathname === '/' || pathname === '/dashboard' || pathname.startsWith('/anime/')
 
   return (
     <main

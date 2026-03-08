@@ -8,9 +8,9 @@ export const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme()
 
     const themes = [
-        { id: 'jade', label: 'Jade', icon: <Sparkles className="text-[#00b49b]" size={16} /> },
+        { id: 'cyber', label: 'Cyber', icon: <Sparkles className="text-[#00b49b]" size={16} /> },
         { id: 'pastel', label: 'Pastel', icon: <Sun className="text-[#c77dff]" size={16} /> },
-        { id: 'abyss', label: 'Abyss', icon: <Moon className="text-[#5a82b3]" size={16} /> },
+        { id: 'shonen', label: 'Shonen', icon: <Moon className="text-[#5a82b3]" size={16} /> },
     ]
 
     return (

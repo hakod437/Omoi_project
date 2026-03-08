@@ -62,15 +62,15 @@ export const AnimeDetailTemplate = ({
 }: AnimeDetailTemplateProps) => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
-      <div className="container mx-auto px-4 pt-6">
+      <div className="w-full px-4 pt-6 sm:px-6 lg:px-8">
         <Breadcrumb items={breadcrumbItems} />
       </div>
 
-      <div className="container mx-auto px-4 pt-4">
+      <div className="w-full px-4 pt-4 sm:px-6 lg:px-8">
         <HeroSection {...hero} />
       </div>
 
-      <div className="container mx-auto px-4 pb-12">
+      <div className="w-full px-4 pb-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -1,20 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Lancement du Projet
 
-First, run the development server:
+Ce projet utilise **Prisma Dev** pour la base de données locale. Pour lancer l'application, vous devez ouvrir deux terminaux :
 
+### 1. Lancer le serveur de base de données (Proxy Prisma)
+Dans le premier terminal, exécutez :
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx prisma dev
+```
+*Laissez ce terminal ouvert.*
+
+### 2. Lancer le serveur de développement Next.js
+Dans le second terminal, exécutez :
+```bash
+npm run dev -- -p 3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Une fois les deux serveurs lancés, ouvrez [http://localhost:3001](http://localhost:3001) dans votre navigateur.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

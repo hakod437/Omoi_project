@@ -9,21 +9,22 @@ import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
 export default async function Dashboard() {
-    console.log("[Dashboard] SSR start", new Date().toISOString())
+    console.log("[📊 DASHBOARD] 🚀 Début du rendu SSR", new Date().toISOString())
 
     const session = await auth()
-    console.log("[Dashboard] auth() done, user:", session?.user?.id)
+    console.log("[📊 DASHBOARD] 🔐 Session récupérée:", session ? '✅' : '❌')
+    console.log("[📊 DASHBOARD] 👤 Utilisateur:", session?.user?.id, session?.user?.name)
 
     if (!session?.user?.id) {
-        console.log("[Dashboard] No session, redirecting to /login")
+        console.log("[📊 DASHBOARD] 🚫 Pas de session, redirection vers /login")
         redirect('/login')
     }
 
     const userId = session.user.id
-    console.log("[Dashboard] Fetching stats for userId:", userId)
+    console.log("[📊 DASHBOARD] 📈 Récupération des stats pour userId:", userId)
     const t0 = Date.now()
     const result = await getUserStatsAction(userId)
-    console.log("[Dashboard] getUserStatsAction done in", Date.now() - t0, "ms, success:", result.success)
+    console.log("[📊 DASHBOARD] ⏱️ getUserStatsAction terminé en", Date.now() - t0, "ms, success:", result.success)
 
     const stats = result.success ? result.data : {
         totalAnimes: 0,
@@ -34,6 +35,10 @@ export default async function Dashboard() {
         avgMusic: 0,
         lastFiveRatings: []
     }
+    
+    const statsSubtitle = `${stats.completedCount} animes complétés dans votre Omoi`
+
+    console.log("[📊 DASHBOARD] 📊 Stats finales:", stats)
 
     const criteriaAverages = [
         { name: 'Animation', value: stats.avgAnimation, color: 'from-green-400 to-teal-400' },
@@ -42,10 +47,11 @@ export default async function Dashboard() {
         { name: 'Global', value: parseFloat(((stats.avgAnimation + stats.avgMusic + stats.avgScenario) / 3).toFixed(1)) || 0, color: 'from-orange-400 to-red-400' }
     ]
 
+    console.log("[📊 DASHBOARD] 🎨 Template Dashboard prêt, rendu en cours...")
     return (
         <DashboardTemplate
             usernameLabel={session.user.name || "Omoi Master"}
-            statsSubtitle={`${stats.completedCount} animes complétés dans votre Omoi`}
+            statsSubtitle={statsSubtitle}
             addAnimeHref="/explorer"
             statsCards={[
                 { icon: <Tv size={24} />, value: `${stats.totalAnimes} ANIMES` },

@@ -13,6 +13,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from 'sonner';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { AuthTabs } from "../molecules/auth-tabs";
@@ -21,8 +23,9 @@ import { FormField } from "../molecules/form-field";
 export default function AuthForm() {
     // 1. STATE MANAGEMENT
     // We consolidate state here to keep molecules pure and reusable.
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<'inscription' | 'connexion'>('inscription');
-    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -30,9 +33,9 @@ export default function AuthForm() {
     // 2. THE GATEKEEPER (Validation Logic)
     // Professional sanity checks before hitting any API.
     const validateForm = () => {
-        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        if (!isEmailValid) {
-            toast.error("Veuillez entrer un email valide.");
+        const isPhoneValid = /^\d{10,15}$/.test(phoneNumber.replace(/\s/g, ''));
+        if (!isPhoneValid) {
+            toast.error("Veuillez entrer un numéro de téléphone valide.");
             return false;
         }
 
@@ -50,24 +53,62 @@ export default function AuthForm() {
     };
 
     /**
-     * handleSubmit: Orchestrates the auth flow.
-     * NOTE: Currently in SIMULATION MODE for frontend testing.
+     * handleSubmit: Orchestrates the auth flow with NextAuth.js
+     * NOTE: Now uses NextAuth.js signIn for proper session management
      */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateForm()) return;
+        
+        console.log('🚀 [AUTH] Submit started', {
+            activeTab,
+            phoneNumber: phoneNumber ? phoneNumber.substring(0, 3) + '***' : 'empty',
+            passwordLength: password.length
+        });
+        
+        if (!validateForm()) {
+            console.log('❌ [AUTH] Validation failed');
+            return;
+        }
 
+        console.log('✅ [AUTH] Validation passed');
         setIsLoading(true);
 
-        // DISCONNECTED BACKEND: Simulating a 2-second API call
-        setTimeout(() => {
-            setIsLoading(false);
-            if (activeTab === 'inscription') {
-                toast.success("Succès (Simulation) ! Vérifiez votre boîte mail.");
+        try {
+            console.log('🔐 [AUTH] Calling NextAuth.js signIn...');
+
+            // Use NextAuth.js signIn for credentials
+            const result = await signIn('credentials', {
+                phoneNumber,
+                password,
+                redirect: false, // Don't redirect automatically
+            });
+
+            console.log('� [AUTH] NextAuth.js result:', result);
+
+            if (result?.error) {
+                console.log('❌ [AUTH] NextAuth.js error:', result.error);
+                toast.error("Numéro de téléphone ou mot de passe incorrect");
+            } else if (result?.ok) {
+                console.log('✅ [AUTH] NextAuth.js success');
+                toast.success(`Bienvenue ! Redirection vers le dashboard...`);
+
+                // Manual redirect after successful login
+                setTimeout(() => {
+                    console.log('🎯 [AUTH] Redirecting to /dashboard');
+                    router.push('/dashboard');
+                }, 1500);
             } else {
-                toast.success("Bon retour (Simulation) !");
+                console.log('⚠️ [AUTH] Unexpected NextAuth.js result:', result);
+                toast.error("Une erreur inattendue s'est produite");
             }
-        }, 2000);
+            
+        } catch (error) {
+            console.error('💥 [AUTH] NextAuth.js error:', error);
+            toast.error("Erreur de connexion au serveur");
+        } finally {
+            console.log('⏹️ [AUTH] Setting loading to false');
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -94,13 +135,13 @@ export default function AuthForm() {
                         >
                             <form className="space-y-5 py-2" onSubmit={handleSubmit}>
                                 <FormField
-                                    label="Adresse Email"
-                                    id="email"
-                                    type="email"
-                                    placeholder="nom@exemple.com"
+                                    label="Numéro de téléphone"
+                                    id="phoneNumber"
+                                    type="tel"
+                                    placeholder="0612345678"
                                     className="rounded-xl h-11"
-                                    value={email}
-                                    onChange={(e: any) => setEmail(e.target.value)}
+                                    value={phoneNumber}
+                                    onChange={(e: any) => setPhoneNumber(e.target.value)}
                                     disabled={isLoading}
                                 />
 

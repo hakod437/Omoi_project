@@ -1,7 +1,11 @@
 const JIKAN_BASE_URL = "https://api.jikan.moe/v4"
 
+// Cache simple en mémoire pour éviter les appels répétés
+const cache = new Map<string, { data: any; timestamp: number }>()
+const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
+
 async function fetchJsonWithTimeout(url: string, init?: RequestInit & { timeoutMs?: number }) {
-    const timeoutMs = init?.timeoutMs ?? 8000
+    const timeoutMs = init?.timeoutMs ?? 5000 // Réduit à 5s
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
@@ -10,6 +14,7 @@ async function fetchJsonWithTimeout(url: string, init?: RequestInit & { timeoutM
             ...init,
             signal: controller.signal,
             headers: {
+                'User-Agent': 'AnimeVault/1.0',
                 ...(init?.headers || {}),
             },
         })
@@ -19,7 +24,7 @@ async function fetchJsonWithTimeout(url: string, init?: RequestInit & { timeoutM
     }
 }
 
-async function fetchJsonWithRetry(url: string, init?: RequestInit & { timeoutMs?: number }, retries = 2) {
+async function fetchJsonWithRetry(url: string, init?: RequestInit & { timeoutMs?: number }, retries = 1) { // Réduit retries
     let lastError: unknown = null
     for (let attempt = 0; attempt <= retries; attempt++) {
         try {
@@ -28,7 +33,7 @@ async function fetchJsonWithRetry(url: string, init?: RequestInit & { timeoutMs?
         } catch (err) {
             lastError = err
             if (attempt === retries) break
-            const delayMs = 250 * Math.pow(2, attempt)
+            const delayMs = 1000 * Math.pow(2, attempt) // Délai plus long
             await new Promise((r) => setTimeout(r, delayMs))
         }
     }
@@ -58,17 +63,59 @@ export async function getAnimeById(id: number) {
 }
 
 export async function getTopAnime() {
-    const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/top/anime`)
-    if (!res.ok) throw new Error("Failed to fetch top anime from Jikan")
+    const cacheKey = 'top_anime'
+    const cached = cache.get(cacheKey)
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        console.log('[📡 JIKAN] ✅ Cache hit pour top_anime')
+        return cached.data
+    }
 
-    const data = await res.json()
-    return data.data
+    try {
+        console.log('[📡 JIKAN] 🔄 Fetch fresh top_anime')
+        const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/top/anime`)
+        if (!res.ok) throw new Error("Failed to fetch top anime from Jikan")
+
+        const data = await res.json()
+        cache.set(cacheKey, { data: data.data, timestamp: Date.now() })
+        return data.data
+    } catch (error) {
+        console.error('[📡 JIKAN] ❌ Erreur getTopAnime:', error)
+        // Retourner les données en cache si disponibles, même expirées
+        if (cached) {
+            console.log('[📡 JIKAN] 🔄 Fallback vers cache expiré')
+            return cached.data
+        }
+        // Fallback vide
+        return []
+    }
 }
 
 export async function getSeasonalAnime() {
-    const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/seasons/now`)
-    if (!res.ok) throw new Error("Failed to fetch seasonal anime from Jikan")
+    const cacheKey = 'seasonal_anime'
+    const cached = cache.get(cacheKey)
+    
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        console.log('[📡 JIKAN] ✅ Cache hit pour seasonal_anime')
+        return cached.data
+    }
 
-    const data = await res.json()
-    return data.data
+    try {
+        console.log('[📡 JIKAN] 🔄 Fetch fresh seasonal_anime')
+        const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/seasons/now`)
+        if (!res.ok) throw new Error("Failed to fetch seasonal anime from Jikan")
+
+        const data = await res.json()
+        cache.set(cacheKey, { data: data.data, timestamp: Date.now() })
+        return data.data
+    } catch (error) {
+        console.error('[📡 JIKAN] ❌ Erreur getSeasonalAnime:', error)
+        // Retourner les données en cache si disponibles, même expirées
+        if (cached) {
+            console.log('[📡 JIKAN] 🔄 Fallback vers cache expiré')
+            return cached.data
+        }
+        // Fallback vide
+        return []
+    }
 }

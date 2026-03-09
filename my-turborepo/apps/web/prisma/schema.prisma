@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  username    String?
+  displayName String?
+  avatar      String?
+  bio         String?
+  phoneNumber String?  @unique
+  emailVerified DateTime?
+  password    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  @@map("users")
+}
+
+model Anime {
+  malId         Int      @id
+  title         String
+  titleEnglish  String?
+  titleJapanese String?
+  synopsis      String?
+  type          String?
+  status        String?
+  episodes      Int?
+  duration      String?
+  score         Decimal? @db.Decimal(4, 2)
+  rank          Int?
+  popularity    Int?
+  season        String?
+  year          Int?
+  source        String?
+  rating        String?
+  images        Json?
+  genres        Json     @default("[]")
+  themes        Json     @default("[]")
+  demographics  Json     @default("[]")
+  studios       Json     @default("[]")
+  aired         Json?
+  cachedAt      DateTime @default(now())
+
+  ratings UserAnime[]
+  @@map("animes")
+}
+
+model UserAnime {
+  id            String   @id @default(uuid())
+  userId        String
+  malId         Int
+  userRating    Int?     @db.SmallInt
+  animationRating Int?   @db.SmallInt
+  userDescription String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime Anime @relation(fields: [malId], references: [malId], onDelete: Cascade)
+
+  @@unique([userId, malId])
+  @@map("user_animes")
+}
+
+model Friendship {
+  id          String   @id @default(uuid())
+  requesterId String
+  addresseeId String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+
+  requester User @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("FriendshipAddressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@map("friendships")
+}
+
+// Add these relations to User model
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  username    String?
+  displayName String?
+  avatar      String?
+  bio         String?
+  phoneNumber String?  @unique
+  emailVerified DateTime?
+  password    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  // Relations
+  ratings     UserAnime[]
+  sentRequests     Friendship[] @relation("FriendshipRequester")
+  receivedRequests Friendship[] @relation("FriendshipAddressee")
+
+  @@map("users")
+}

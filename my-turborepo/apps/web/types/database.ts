@@ -1,9 +1,8 @@
 /**
- * Database Types for Supabase
+ * Database Types for Prisma
  * 
- * These types are based on the database schema.
- * In production, generate these automatically with:
- * npx supabase gen types typescript --project-id YOUR_PROJECT_ID > types/database.ts
+ * These types should be generated from Prisma schema with:
+ * npx prisma generate
  * 
  * @module types/database
  */
@@ -16,234 +15,65 @@ export type Json =
     | { [key: string]: Json | undefined }
     | Json[];
 
-export interface Database {
-    public: {
-        Tables: {
-            users: {
-                Row: {
-                    id: string;
-                    email: string;
-                    display_name: string | null;
-                    avatar_url: string | null;
-                    created_at: string;
-                    updated_at: string;
-                };
-                Insert: {
-                    id: string;
-                    email: string;
-                    display_name?: string | null;
-                    avatar_url?: string | null;
-                    created_at?: string;
-                    updated_at?: string;
-                };
-                Update: {
-                    id?: string;
-                    email?: string;
-                    display_name?: string | null;
-                    avatar_url?: string | null;
-                    created_at?: string;
-                    updated_at?: string;
-                };
-            };
-            animes: {
-                Row: {
-                    mal_id: number;
-                    title: string;
-                    title_english: string | null;
-                    title_japanese: string | null;
-                    synopsis: string | null;
-                    type: string | null;
-                    status: string | null;
-                    episodes: number | null;
-                    duration: string | null;
-                    score: number | null;
-                    rank: number | null;
-                    popularity: number | null;
-                    season: string | null;
-                    year: number | null;
-                    source: string | null;
-                    rating: string | null;
-                    images: Json | null;
-                    genres: Json;
-                    themes: Json;
-                    demographics: Json;
-                    studios: Json;
-                    aired: Json | null;
-                    cached_at: string;
-                };
-                Insert: {
-                    mal_id: number;
-                    title: string;
-                    title_english?: string | null;
-                    title_japanese?: string | null;
-                    synopsis?: string | null;
-                    type?: string | null;
-                    status?: string | null;
-                    episodes?: number | null;
-                    duration?: string | null;
-                    score?: number | null;
-                    rank?: number | null;
-                    popularity?: number | null;
-                    season?: string | null;
-                    year?: number | null;
-                    source?: string | null;
-                    rating?: string | null;
-                    images?: Json | null;
-                    genres?: Json;
-                    themes?: Json;
-                    demographics?: Json;
-                    studios?: Json;
-                    aired?: Json | null;
-                    cached_at?: string;
-                };
-                Update: {
-                    mal_id?: number;
-                    title?: string;
-                    title_english?: string | null;
-                    title_japanese?: string | null;
-                    synopsis?: string | null;
-                    type?: string | null;
-                    status?: string | null;
-                    episodes?: number | null;
-                    duration?: string | null;
-                    score?: number | null;
-                    rank?: number | null;
-                    popularity?: number | null;
-                    season?: string | null;
-                    year?: number | null;
-                    source?: string | null;
-                    rating?: string | null;
-                    images?: Json | null;
-                    genres?: Json;
-                    themes?: Json;
-                    demographics?: Json;
-                    studios?: Json;
-                    aired?: Json | null;
-                    cached_at?: string;
-                };
-            };
-            user_animes: {
-                Row: {
-                    id: string;
-                    user_id: string;
-                    mal_id: number;
-                    user_rating: number | null;
-                    animation_rating: number | null;
-                    user_description: string | null;
-                    created_at: string;
-                    updated_at: string;
-                };
-                Insert: {
-                    id?: string;
-                    user_id: string;
-                    mal_id: number;
-                    user_rating?: number | null;
-                    animation_rating?: number | null;
-                    user_description?: string | null;
-                    created_at?: string;
-                    updated_at?: string;
-                };
-                Update: {
-                    id?: string;
-                    user_id?: string;
-                    mal_id?: number;
-                    user_rating?: number | null;
-                    animation_rating?: number | null;
-                    user_description?: string | null;
-                    created_at?: string;
-                    updated_at?: string;
-                };
-            };
-            friendships: {
-                Row: {
-                    id: string;
-                    requester_id: string;
-                    addressee_id: string;
-                    status: 'pending' | 'accepted' | 'rejected';
-                    created_at: string;
-                };
-                Insert: {
-                    id?: string;
-                    requester_id: string;
-                    addressee_id: string;
-                    status?: 'pending' | 'accepted' | 'rejected';
-                    created_at?: string;
-                };
-                Update: {
-                    id?: string;
-                    requester_id?: string;
-                    addressee_id?: string;
-                    status?: 'pending' | 'accepted' | 'rejected';
-                    created_at?: string;
-                };
-            };
-        };
-        Views: {
-            user_anime_details: {
-                Row: {
-                    id: string;
-                    user_id: string;
-                    user_rating: number | null;
-                    animation_rating: number | null;
-                    user_description: string | null;
-                    added_at: string;
-                    mal_id: number;
-                    title: string;
-                    title_english: string | null;
-                    title_japanese: string | null;
-                    synopsis: string | null;
-                    type: string | null;
-                    status: string | null;
-                    episodes: number | null;
-                    duration: string | null;
-                    score: number | null;
-                    rank: number | null;
-                    popularity: number | null;
-                    season: string | null;
-                    year: number | null;
-                    source: string | null;
-                    rating: string | null;
-                    images: Json | null;
-                    genres: Json;
-                    themes: Json;
-                    demographics: Json;
-                    studios: Json;
-                    aired: Json | null;
-                };
-            };
-            friend_list: {
-                Row: {
-                    friendship_id: string;
-                    status: string;
-                    friendship_created_at: string;
-                    friend_id: string;
-                    friend_name: string | null;
-                    friend_avatar: string | null;
-                    friend_email: string;
-                };
-            };
-        };
-        Functions: Record<string, never>;
-        Enums: Record<string, never>;
-    };
+// TODO: Generate types from Prisma schema
+// For now, using basic types
+export interface User {
+    id: string;
+    email: string;
+    displayName?: string | null;
+    avatarUrl?: string | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-// Convenience type aliases
-export type User = Database['public']['Tables']['users']['Row'];
-export type UserInsert = Database['public']['Tables']['users']['Insert'];
-export type UserUpdate = Database['public']['Tables']['users']['Update'];
+export interface Anime {
+    malId: number;
+    title: string;
+    // TODO: Add other anime fields based on Prisma schema
+}
 
-export type Anime = Database['public']['Tables']['animes']['Row'];
-export type AnimeInsert = Database['public']['Tables']['animes']['Insert'];
-export type AnimeUpdate = Database['public']['Tables']['animes']['Update'];
+export interface UserAnimeRating {
+    id: string;
+    userId: string;
+    animeId: string;
+    malId?: number; // For compatibility
+    animTier: 'S' | 'A' | 'B' | 'C' | 'D';
+    scenTier: 'S' | 'A' | 'B' | 'C' | 'D';
+    musicTier: 'S' | 'A' | 'B' | 'C' | 'D';
+    globalScore: number;
+    globalTier: 'S' | 'A' | 'B' | 'C' | 'D';
+    createdAt: Date;
+    updatedAt: Date;
+}
 
-export type UserAnime = Database['public']['Tables']['user_animes']['Row'];
-export type UserAnimeInsert = Database['public']['Tables']['user_animes']['Insert'];
-export type UserAnimeUpdate = Database['public']['Tables']['user_animes']['Update'];
+export interface UserAnimeDetails extends UserAnimeRating {
+    anime: Anime;
+}
 
-export type Friendship = Database['public']['Tables']['friendships']['Row'];
-export type FriendshipInsert = Database['public']['Tables']['friendships']['Insert'];
-export type FriendshipUpdate = Database['public']['Tables']['friendships']['Update'];
+export interface FriendRequest {
+    id: string;
+    requesterId: string;
+    addresseeId: string;
+    status: 'pending' | 'accepted' | 'rejected';
+    createdAt: Date;
+}
 
-export type UserAnimeDetails = Database['public']['Views']['user_anime_details']['Row'];
-export type FriendListItem = Database['public']['Views']['friend_list']['Row'];
+export interface Friendship {
+    id: string;
+    user1Id: string;
+    user2Id: string;
+    createdAt: Date;
+}
+
+export interface FriendListItem extends User {
+    friendshipStatus?: 'pending' | 'accepted' | 'none';
+    friendshipId?: string;
+}
+
+export type Database = {
+    users: User;
+    animes: Anime;
+    user_anime_ratings: UserAnimeRating;
+    friend_requests: FriendRequest;
+    friendships: Friendship;
+};

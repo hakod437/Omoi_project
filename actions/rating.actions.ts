@@ -17,7 +17,30 @@ type RatingInput = {
 
 export async function submitRatingAction(data: RatingInput) {
     try {
-        // 1. Submit rating
+        console.log('[🎯 RATING] 📝 Soumission de rating pour userId:', data.userId, 'animeId:', data.animeId)
+        
+        // 1. S'assurer que l'anime est dans la userList de l'utilisateur
+        console.log('[🎯 RATING] 📋 Ajout à userList si nécessaire...')
+        await prisma.userList.upsert({
+            where: {
+                userId_animeId: {
+                    userId: data.userId,
+                    animeId: data.animeId
+                }
+            },
+            update: {
+                status: 'WATCHING' // Met à jour le statut si déjà présent
+            },
+            create: {
+                userId: data.userId,
+                animeId: data.animeId,
+                status: 'WATCHING' // Statut par défaut quand on note
+            }
+        })
+        console.log('[🎯 RATING] ✅ userList mis à jour')
+
+        // 2. Submit rating
+        console.log('[🎯 RATING] ⭐ Création/Mise à jour du rating...')
         const rating = await prisma.rating.upsert({
             where: {
                 userId_animeId: {
@@ -42,9 +65,11 @@ export async function submitRatingAction(data: RatingInput) {
                 globalTier: data.globalTier,
             }
         })
+        console.log('[🎯 RATING] ✅ Rating enregistré:', rating.id)
 
-        // 2. Create review if content provided
+        // 3. Create review if content provided
         if (data.review) {
+            console.log('[🎯 RATING] 📝 Création de la review...')
             await prisma.review.upsert({
                 where: { ratingId: rating.id },
                 update: { content: data.review },
@@ -55,9 +80,11 @@ export async function submitRatingAction(data: RatingInput) {
                     ratingId: rating.id
                 }
             })
+            console.log('[🎯 RATING] ✅ Review enregistrée')
         }
 
-        // 3. Log activity
+        // 4. Log activity
+        console.log('[🎯 RATING] 📊 Création de lactivité...')
         await prisma.activity.create({
             data: {
                 userId: data.userId,
@@ -66,14 +93,16 @@ export async function submitRatingAction(data: RatingInput) {
                 content: `Rated this anime ${data.globalTier}`
             }
         })
+        console.log('[🎯 RATING] ✅ Activité enregistrée')
 
-        // 4. (Optional) Update Anime averages - Simplified for now
-        // Usually handled by a background worker or middleware to avoid blocking
-
+        // 5. Revalidation des pages
+        revalidatePath('/dashboard')
         revalidatePath('/')
+        
+        console.log('[🎯 RATING] 🎉 Rating complet terminé avec succès')
         return { success: true, data: rating }
     } catch (error) {
-        console.error("Rating submission error:", error)
+        console.error("[🎯 RATING] ❌ Rating submission error:", error)
         return { success: false, error: "Failed to submit rating" }
     }
 }

@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Résoudre le problème d'origine des Server Actions
+  allowedDevOrigins: [
+    'localhost:3000',
+    '127.0.0.1:3000',
+    '127.0.0.1:45305',
+    'localhost:45305'
+  ]
 };
 
 export default nextConfig;

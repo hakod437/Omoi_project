@@ -4,10 +4,16 @@ import { getTierFromScore } from '@/lib/scoring'
 import prisma from '@/lib/prisma'
 
 import { auth } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
 export default async function AnimeDetail({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const session = await auth()
+
+    // Protection server-side : redirige vers /login si non connecté
+    if (!session?.user) {
+        redirect('/login')
+    }
 
     const res = await fetch(`https://api.jikan.moe/v4/anime/${encodeURIComponent(id)}`, {
         cache: 'no-store'

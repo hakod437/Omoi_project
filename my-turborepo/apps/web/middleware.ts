@@ -2,36 +2,19 @@
  * Next.js Middleware
  * 
  * Handles authentication and route protection.
- * Refreshes Supabase sessions on each request.
  * 
  * @module middleware
  */
 
 import { NextResponse, type NextRequest } from 'next/server';
-import { updateSession, protectedRoutes, authRoutes } from '@/lib/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
-    const { supabaseResponse, user } = await updateSession(request);
-
     const pathname = request.nextUrl.pathname;
 
-    // Check if route requires authentication
-    const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-    const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
-
-    // Redirect unauthenticated users from protected routes to login
-    if (isProtectedRoute && !user) {
-        const loginUrl = new URL('/auth/login', request.url);
-        loginUrl.searchParams.set('redirect', pathname);
-        return NextResponse.redirect(loginUrl);
-    }
-
-    // Redirect authenticated users from auth routes to dashboard
-    if (isAuthRoute && user) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
-
-    return supabaseResponse;
+    // TODO: Implement authentication logic with Prisma
+    // For now, allow all routes
+    
+    return NextResponse.next();
 }
 
 export const config = {

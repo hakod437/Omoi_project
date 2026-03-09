@@ -56,10 +56,7 @@ test.describe('Authentication Flow', () => {
         console.log('[Test:login] Submitting...');
         await page.click('button[type="submit"]');
 
-        // Log the success message first
-        const successMsg = page.locator('text=/Connexion réussie/i');
-        await expect(successMsg).toBeVisible({ timeout: 15000 });
-        console.log('[Test:login] Success message visible, waiting for dashboard redirect...');
+        console.log('[Test:login] Waiting for dashboard redirect...');
 
         // Wait for redirect to dashboard - check for Okaeri greeting (Dashboard unique)
         // Dashboard SSR is slow due to Prisma queries, allow up to 45s

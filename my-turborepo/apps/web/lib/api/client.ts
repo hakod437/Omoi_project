@@ -9,7 +9,6 @@
 
 import type { ApiResponse, PaginationParams } from '@/types/api';
 import type { UserAnimeDetails, User, FriendListItem } from '@/types/database';
-import type { UserStats, FriendWithStats } from '@/lib/services';
 import type { JikanAnime } from '@/types';
 
 const API_BASE = '/api';
@@ -127,7 +126,8 @@ export const animeApi = {
 // ============================================
 
 export interface UserWithStats extends User {
-    stats?: UserStats;
+    // TODO: Add stats when implemented with Prisma
+    // stats?: UserStats;
 }
 
 export const userApi = {
@@ -167,8 +167,9 @@ export const friendsApi = {
     /**
      * Get friends list
      */
-    async getList(includeStats = false): Promise<ApiResponse<FriendListItem[] | FriendWithStats[]>> {
-        return apiFetch<FriendListItem[] | FriendWithStats[]>(
+    async getList(includeStats = false): Promise<ApiResponse<FriendListItem[]>> {
+        // TODO: Add FriendWithStats when implemented with Prisma
+        return apiFetch<FriendListItem[]>(
             `/friends${includeStats ? '?includeStats=true' : ''}`
         );
     },

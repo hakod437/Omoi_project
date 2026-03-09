@@ -11,10 +11,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import type { FriendListItem } from '@/types/database';
-import type { FriendWithStats } from '@/lib/services';
+// TODO: Implement FriendWithStats with Prisma
+// import type { FriendWithStats } from '@/lib/services';
 
 interface UseFriendsReturn {
-    friends: FriendWithStats[];
+    friends: FriendListItem[];
     pendingRequests: FriendListItem[];
     sentRequests: FriendListItem[];
     loading: boolean;
@@ -27,7 +28,7 @@ interface UseFriendsReturn {
 }
 
 export function useFriends(): UseFriendsReturn {
-    const [friends, setFriends] = useState<FriendWithStats[]>([]);
+    const [friends, setFriends] = useState<FriendListItem[]>([]);
     const [pendingRequests, setPendingRequests] = useState<FriendListItem[]>([]);
     const [sentRequests, setSentRequests] = useState<FriendListItem[]>([]);
     const [loading, setLoading] = useState(true);
@@ -39,13 +40,13 @@ export function useFriends(): UseFriendsReturn {
 
         try {
             const [friendsRes, pendingRes, sentRes] = await Promise.all([
-                api.friends.getList(true),
+                api.friends.getList(false), // TODO: Change to true when FriendWithStats implemented
                 api.friends.getPending(),
                 api.friends.getSent(),
             ]);
 
             if (friendsRes.success && friendsRes.data) {
-                setFriends(friendsRes.data as FriendWithStats[]);
+                setFriends(friendsRes.data);
             }
             if (pendingRes.success && pendingRes.data) {
                 setPendingRequests(pendingRes.data);
@@ -98,7 +99,7 @@ export function useFriends(): UseFriendsReturn {
         try {
             const response = await api.friends.reject(friendshipId);
             if (response.success) {
-                setPendingRequests(prev => prev.filter(r => r.friendship_id !== friendshipId));
+                setPendingRequests(prev => prev.filter(r => r.friendshipId !== friendshipId));
                 return true;
             }
             setError(response.error?.message || 'Failed to reject request');
@@ -113,7 +114,7 @@ export function useFriends(): UseFriendsReturn {
         try {
             const response = await api.friends.remove(friendshipId);
             if (response.success) {
-                setFriends(prev => prev.filter(f => f.friendship_id !== friendshipId));
+                setFriends(prev => prev.filter(f => f.friendshipId !== friendshipId));
                 return true;
             }
             setError(response.error?.message || 'Failed to remove friend');

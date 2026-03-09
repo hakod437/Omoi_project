@@ -1,9 +1,24 @@
-// Services barrel export
-export { AnimeService, createAnimeService } from './anime.service';
-export { UserService, createUserService } from './user.service';
-export { FriendService, createFriendService } from './friend.service';
+/**
+ * Services Index
+ * 
+ * Exports all services and their types
+ * 
+ * @module lib/services/index
+ */
 
-// Re-export types
-export type { AddAnimeInput, UpdateAnimeInput, AnimeListOptions } from './anime.service';
-export type { UpdateProfileInput, UserStats } from './user.service';
-export type { FriendshipStatus, FriendWithStats } from './friend.service';
+// Service exports
+export * from './anime.service';
+export * from './user.service';
+export * from './friend.service';
+
+// Type exports
+export type { 
+    AddAnimeInput, 
+    UpdateAnimeInput, 
+    AnimeListOptions 
+} from './anime.service';
+
+export type { 
+    CreateUserData, 
+    UpdateUserData 
+} from './user.service';

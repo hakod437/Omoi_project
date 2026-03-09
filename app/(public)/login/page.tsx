@@ -7,7 +7,7 @@ import { Button } from '@/components/atoms/Base'
 import { Phone, User, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function LoginPage() {
     return (
@@ -30,6 +30,13 @@ function LoginForm() {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState<{ type: 'error' | 'success', text: string } | null>(null)
     const router = useRouter()
+    const { data: session } = useSession()
+
+    useEffect(() => {
+        if (session) {
+            router.push('/dashboard')
+        }
+    }, [session, router])
 
     useEffect(() => {
         if (mode === 'register') {

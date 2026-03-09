@@ -22,11 +22,12 @@ export const Navbar = () => {
     const { data: session } = useSession()
     const pathname = usePathname()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const isCompareRoute = pathname === '/compare' || pathname === '/sync'
 
     // Liens de navigation (visibles uniquement si connecté)
     const navLinks = [
         { href: '/explorer', icon: <Compass size={16} />, label: 'Explorer' },
-        { href: '/compare', icon: <BarChart3 size={16} />, label: 'Sync' },
+        { href: '/compare', icon: <BarChart3 size={16} />, label: 'Compare' },
         { href: '/dashboard', icon: <LayoutDashboard size={16} />, label: 'Dashboard' },
     ]
 
@@ -55,7 +56,7 @@ export const Navbar = () => {
                                 href={link.href}
                                 icon={link.icon}
                                 label={link.label}
-                                isActive={pathname === link.href}
+                                isActive={link.href === '/compare' ? isCompareRoute : pathname === link.href}
                             />
                         ))}
                     </div>
@@ -144,7 +145,7 @@ export const Navbar = () => {
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all ${pathname === link.href
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all ${(link.href === '/compare' ? isCompareRoute : pathname === link.href)
                                             ? 'bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20'
                                             : 'text-white/50 hover:text-white hover:bg-white/5'
                                         }`}

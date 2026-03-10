@@ -9,8 +9,14 @@ if (typeof window === "undefined" && process.env.NODE_ENV !== "production") {
 
 const connectionString = process.env.DATABASE_URL;
 console.log("[Prisma] Initializing pool with DATABASE_URL:", connectionString?.substring(0, 30) + "...");
+const isSupabaseHost =
+    connectionString?.includes("supabase.com") ||
+    connectionString?.includes("supabase.co");
 const pool = new Pool({
     connectionString,
+    // Some runtimes fail CA chain validation with Supabase managed certificates.
+    // Keep TLS enabled but relax CA validation for Supabase hosts to avoid auth failures.
+    ...(isSupabaseHost ? { ssl: { rejectUnauthorized: false } } : {}),
     // Prevent "Connection terminated unexpectedly" during long SSR renders
     max: 10,
     idleTimeoutMillis: 30000,

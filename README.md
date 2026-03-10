@@ -1,39 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Omoi
 
-## Lancement du Projet
+Application Next.js 15 + Prisma + NextAuth.
 
-Ce projet utilise **Prisma Dev** pour la base de données locale. Pour lancer l'application, vous devez ouvrir deux terminaux :
+## Demo
 
-### 1. Lancer le serveur de base de données (Proxy Prisma)
-Dans le premier terminal, exécutez :
+- Production: https://hachan.vercel.app
+
+## Prérequis
+
+- Node.js 20+
+- npm 10+
+- Une base PostgreSQL (Supabase recommandé)
+
+## Installation rapide
+
+1. Installer les dépendances
+
 ```bash
-npx prisma dev
+npm install
 ```
-*Laissez ce terminal ouvert.*
 
-### 2. Lancer le serveur de développement Next.js
-Dans le second terminal, exécutez :
+2. Configurer les variables d'environnement dans `.env`
+
+```env
+# App
+AUTH_SECRET=your_random_secret
+AUTH_URL=http://localhost:3000
+AUTH_TRUST_HOST=true
+
+# Supabase / Postgres
+# Runtime app (pooler)
+DATABASE_URL="postgresql://postgres.<PROJECT_REF>:<PASSWORD>@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?uselibpqcompat=true&sslmode=require&pgbouncer=true"
+
+# Prisma schema ops (db push / migrate)
+DIRECT_URL="postgresql://postgres.<PROJECT_REF>:<PASSWORD>@aws-1-eu-west-1.pooler.supabase.com:5432/postgres?uselibpqcompat=true&sslmode=require&connect_timeout=15"
+
+# (si utilisés dans l'app)
+NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+```
+
+3. Synchroniser le schéma Prisma
+
 ```bash
-npm run dev -- -p 3001
+npx prisma db push --accept-data-loss
 ```
 
-Une fois les deux serveurs lancés, ouvrez [http://localhost:3001](http://localhost:3001) dans votre navigateur.
+4. Lancer le projet
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Ouvrir l'application
 
-## Learn More
+```text
+http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts utiles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev          # développement
+npm run build        # build production
+npm run start        # lancer la build
+npm run lint         # lint
+npm run test         # tests Playwright
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Déploiement Vercel
 
-## Deploy on Vercel
+Le projet utilise `vercel.json` avec:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+{
+  "framework": "nextjs"
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Variables à définir dans Vercel (`Production`, `Preview`, `Development`):
+
+- `AUTH_SECRET`
+- `AUTH_URL` (ex: `https://hachan.vercel.app`)
+- `AUTH_TRUST_HOST=true`
+- `DATABASE_URL` (pooler `:6543`, voir format ci-dessus)
+- `DIRECT_URL` (pooler session `:5432`, voir format ci-dessus)
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+Déployer:
+
+```bash
+npx vercel --prod --yes
+```
+
+## Dépannage
+
+- Erreur Prisma `P1011` / `self-signed certificate in certificate chain`:
+  - Vérifier `DATABASE_URL`/`DIRECT_URL` et garder `uselibpqcompat=true&sslmode=require`.
+  - Vérifier qu'il n'y a pas de retour ligne caché dans les variables Vercel.
+- Erreur Prisma `P1001`:
+  - Vérifier host/port/credentials.
+  - En WSL, préférer les URLs pooler Supabase (`aws-...pooler...`) si l'IPv6 direct pose problème.
+
+## Sécurité
+
+- Ne jamais commit `.env`.
+- Si un secret a été exposé, faire une rotation immédiate (DB password, clés Supabase, etc.).

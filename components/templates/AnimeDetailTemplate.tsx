@@ -108,7 +108,7 @@ export const AnimeDetailTemplate = ({
           </div>
 
           <div className="lg:sticky lg:top-8 h-fit space-y-6">
-            <ReviewForm animeId={animeId} />
+            <ReviewForm animeId={animeId} userId={userId} />
           </div>
         </div>
       </div>

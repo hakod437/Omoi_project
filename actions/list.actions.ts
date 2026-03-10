@@ -80,6 +80,7 @@ export async function updateListStatusAction(userId: string, animeId: string, st
         })
 
         revalidatePath('/')
+        revalidatePath('/dashboard')
         return { success: true, data: updated }
     } catch (error) {
         console.error("Update status error:", error)

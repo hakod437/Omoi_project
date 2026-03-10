@@ -5,9 +5,13 @@ import { Button } from '@/components/atoms/Base'
 import { TierSelector } from '@/components/molecules/TierSelector'
 import type { Tier } from '@/types/anime'
 import { calculateGlobalScore, getTierFromScore } from '@/lib/scoring'
+import { submitRatingAction } from '@/actions/rating.actions'
+import { useRouter } from 'next/navigation'
+import { Tier as PrismaTier } from '@prisma/client'
 
 interface ReviewFormProps {
   animeId: string
+  userId?: string
   onSubmit?: (data: ReviewFormData) => void
 }
 
@@ -18,13 +22,14 @@ interface ReviewFormData {
   review: string
 }
 
-export const ReviewForm = ({ animeId, onSubmit }: ReviewFormProps) => {
+export const ReviewForm = ({ animeId, userId, onSubmit }: ReviewFormProps) => {
   const [animationTier, setAnimationTier] = useState<Tier | null>(null)
   const [scenarioTier, setScenarioTier] = useState<Tier | null>(null)
   const [musicTier, setMusicTier] = useState<Tier | null>(null)
   const [review, setReview] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [globalScore, setGlobalScore] = useState<number | null>(null)
+  const router = useRouter()
 
   const isComplete = animationTier && scenarioTier && musicTier
 
@@ -38,7 +43,12 @@ export const ReviewForm = ({ animeId, onSubmit }: ReviewFormProps) => {
   }, [animationTier, scenarioTier, musicTier])
 
   const handleSubmit = async () => {
-    if (!isComplete) return
+    if (!isComplete || !globalScore) return
+    if (!userId) {
+      alert('Veuillez vous connecter pour noter cet anime.')
+      router.push('/login')
+      return
+    }
 
     setIsSubmitting(true)
     try {
@@ -50,6 +60,21 @@ export const ReviewForm = ({ animeId, onSubmit }: ReviewFormProps) => {
       }
       
       await onSubmit?.(formData)
+
+      const result = await submitRatingAction({
+        userId,
+        animeId,
+        animTier: animationTier as PrismaTier,
+        scenTier: scenarioTier as PrismaTier,
+        musicTier: musicTier as PrismaTier,
+        globalScore,
+        globalTier: getTierFromScore(globalScore) as PrismaTier,
+        review
+      })
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit rating')
+      }
       
       // Reset form
       setAnimationTier(null)
@@ -57,8 +82,11 @@ export const ReviewForm = ({ animeId, onSubmit }: ReviewFormProps) => {
       setMusicTier(null)
       setReview('')
       setGlobalScore(null)
+      alert('Avis enregistré. Le dashboard a été mis à jour.')
+      router.refresh()
     } catch (error) {
       console.error('Error submitting review:', error)
+      alert("Impossible d'enregistrer votre avis.")
     } finally {
       setIsSubmitting(false)
     }

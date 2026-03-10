@@ -25,13 +25,42 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
 
     if (!anime) return <div>Anime not found</div>
 
+    const genres = (anime.genres?.map((g: any) => g.name) || []) as string[]
+
+    const animeRecord = await prisma.anime.upsert({
+        where: { malId: Number(id) },
+        update: {
+            title: anime.title,
+            titleEnglish: anime.titleEnglish || anime.title_english || null,
+            imageUrl: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url || null,
+            episodes: anime.episodes || null,
+            status: anime.status || null,
+            year: anime.year || null,
+            season: anime.season || null,
+            studio: anime.studios?.[0]?.name || null,
+            genres: JSON.stringify(genres)
+        },
+        create: {
+            malId: Number(id),
+            title: anime.title,
+            titleEnglish: anime.titleEnglish || anime.title_english || null,
+            imageUrl: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url || null,
+            episodes: anime.episodes || null,
+            status: anime.status || null,
+            year: anime.year || null,
+            season: anime.season || null,
+            studio: anime.studios?.[0]?.name || null,
+            genres: JSON.stringify(genres)
+        }
+    })
+
     let userStatus = undefined
     if (session?.user?.id) {
         const userList = await prisma.userList.findUnique({
             where: {
                 userId_animeId: {
                     userId: session.user.id,
-                    animeId: id
+                    animeId: animeRecord.id
                 }
             }
         })
@@ -59,7 +88,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
 
     return (
         <AnimeDetailTemplate
-            animeId={id}
+            animeId={animeRecord.id}
             breadcrumbItems={[
                 { label: 'Accueil', href: '/' },
                 { label: 'Explorer', href: '/explorer' },
@@ -69,7 +98,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
                 title: anime.title,
                 subtitle: anime.titleEnglish || '',
                 imageUrl: anime.images.webp.large_image_url,
-                genres: anime.genres?.map((g: any) => g.name) || [],
+                genres,
                 studio,
                 episodes,
                 communityRating: communityGlobal,

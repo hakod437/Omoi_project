@@ -126,8 +126,12 @@ export const animeApi = {
 // ============================================
 
 export interface UserWithStats extends User {
-    // TODO: Add stats when implemented with Prisma
-    // stats?: UserStats;
+    stats?: {
+        totalWatched: number;
+        totalRated: number;
+        averageRating: number | null;
+        lastActivityAt: string | null;
+    };
 }
 
 export const userApi = {
@@ -156,6 +160,62 @@ export const userApi = {
             return { success: true, data: [] };
         }
         return apiFetch<User[]>(`/users/search?q=${encodeURIComponent(query)}`);
+    },
+
+    /**
+     * Get authenticated user dashboard statistics
+     */
+    async getStats(): Promise<
+        ApiResponse<{
+            totalWatched: number;
+            totalRated: number;
+            averageRating: number | null;
+            lastActivityAt: string | null;
+        }>
+    > {
+        return apiFetch('/users/stats');
+    },
+};
+
+export const userAnimeApi = {
+    /**
+     * Mark anime as watched and/or update ratings
+     */
+    async upsert(data: {
+        malId: number;
+        watched?: boolean;
+        userRating?: number | null;
+        animationRating?: number | null;
+        userDescription?: string | null;
+        title?: string;
+    }): Promise<
+        ApiResponse<{
+            anime: {
+                id: string;
+                malId: number;
+                title: string;
+            };
+            watched: {
+                id: string;
+                status: string;
+            } | null;
+            rating: {
+                id: string;
+                globalScore: number;
+                globalTier: string;
+            };
+            stats: {
+                totalWatched: number;
+                totalRated: number;
+                averageRating: number | null;
+                lastActivityAt: string | null;
+            };
+        }>
+    > {
+        return apiFetch('/user-animes', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
     },
 };
 
@@ -236,6 +296,7 @@ export const api = {
     anime: animeApi,
     user: userApi,
     friends: friendsApi,
+    userAnime: userAnimeApi,
 };
 
 export default api;

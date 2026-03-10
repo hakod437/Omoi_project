@@ -1,118 +1,104 @@
-/**
- * Dashboard Page
- * 
- * Main dashboard after user authentication
- * 
- * @module app/dashboard/page
- */
-
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { signOut, useSession } from 'next-auth/react';
 import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 
-interface User {
-    id: string;
-    email: string;
-    username: string;
-    displayName: string;
-    bio?: string;
-    createdAt: string;
+interface DashboardStats {
+    totalWatched: number;
+    totalRated: number;
+    averageRating: number | null;
+    lastActivityAt: string | null;
 }
+
+const INITIAL_STATS: DashboardStats = {
+    totalWatched: 0,
+    totalRated: 0,
+    averageRating: null,
+    lastActivityAt: null,
+};
 
 export default function DashboardPage() {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { data: session, status } = useSession();
+    const [stats, setStats] = useState<DashboardStats>(INITIAL_STATS);
+    const [isRefreshingStats, setIsRefreshingStats] = useState(false);
 
-    useEffect(() => {
-        console.log('🏠 [DASHBOARD] Dashboard component mounted');
-        
-        // Check authentication
-        const token = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('user');
-        
-        console.log('🔍 [DASHBOARD] Authentication check:', {
-            hasToken: !!token,
-            tokenLength: token?.length || 0,
-            hasUserData: !!userData,
-            userDataLength: userData?.length || 0
-        });
-        
-        if (!token || !userData) {
-            console.log('❌ [DASHBOARD] No auth data found, redirecting to login');
-            toast.error('Veuillez vous connecter pour accéder à cette page');
-            router.push('/test-layout');
-            return;
-        }
+    const displayName = session?.user?.name || 'Utilisateur';
+    const isLoading = status === 'loading';
 
+    const fetchUserStats = useCallback(async () => {
+        setIsRefreshingStats(true);
         try {
-            const parsedUser = JSON.parse(userData);
-            console.log('✅ [DASHBOARD] User data parsed successfully:', {
-                id: parsedUser.id,
-                email: parsedUser.email,
-                displayName: parsedUser.displayName
-            });
-            setUser(parsedUser);
-        } catch (error) {
-            console.error('💥 [DASHBOARD] Error parsing user data:', error);
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('user');
-            router.push('/test-layout');
-        } finally {
-            console.log('⏹️ [DASHBOARD] Loading completed');
-            setIsLoading(false);
-        }
-    }, [router]);
+            const response = await fetch('/api/users/stats', { method: 'GET' });
+            const data = await response.json();
 
-    const handleLogout = () => {
-        console.log('🚪 [DASHBOARD] Logout initiated');
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        console.log('🗑️ [DASHBOARD] Auth data cleared from localStorage');
-        toast.success('Déconnexion réussie');
-        console.log('🔄 [DASHBOARD] Redirecting to login page');
-        router.push('/test-layout');
-    };
-
-    const fetchUserStats = async () => {
-        try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch('/api/users/stats', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                console.log('User stats:', data);
+            if (!response.ok || !data?.success) {
+                throw new Error(data?.error?.message || 'Impossible de charger les statistiques');
             }
+
+            setStats({
+                totalWatched: Number(data.data?.totalWatched ?? 0),
+                totalRated: Number(data.data?.totalRated ?? 0),
+                averageRating:
+                    data.data?.averageRating === null || data.data?.averageRating === undefined
+                        ? null
+                        : Number(data.data.averageRating),
+                lastActivityAt: data.data?.lastActivityAt ?? null,
+            });
         } catch (error) {
             console.error('Error fetching user stats:', error);
+            toast.error('Impossible de charger les statistiques');
+        } finally {
+            setIsRefreshingStats(false);
         }
+    }, []);
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            toast.error('Veuillez vous connecter pour accéder à cette page');
+            router.push('/test-layout');
+        }
+    }, [router, status]);
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            void fetchUserStats();
+        }
+    }, [fetchUserStats, status]);
+
+    const lastActivityLabel = useMemo(() => {
+        if (!stats.lastActivityAt) return 'Aucune activité';
+        return new Date(stats.lastActivityAt).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        });
+    }, [stats.lastActivityAt]);
+
+    const handleLogout = async () => {
+        await signOut({ callbackUrl: '/test-layout' });
     };
 
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
             </div>
         );
     }
 
-    if (!user) {
-        return null; // Will redirect
+    if (status !== 'authenticated') {
+        return null;
     }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
             <div className="container mx-auto px-4 py-8">
-                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -120,7 +106,7 @@ export default function DashboardPage() {
                 >
                     <div>
                         <h1 className="text-4xl font-bold text-foreground mb-2">
-                            Bienvenue, {user.displayName} ! 👋
+                            Bienvenue, {displayName} ! 👋
                         </h1>
                         <p className="text-muted-foreground">
                             Voici votre tableau de bord personnel
@@ -131,7 +117,6 @@ export default function DashboardPage() {
                     </Button>
                 </motion.div>
 
-                {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -141,13 +126,13 @@ export default function DashboardPage() {
                         <Card>
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                                    Animes Notés
+                                    Animes vus
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">0</div>
+                                <div className="text-2xl font-bold">{stats.totalWatched}</div>
                                 <p className="text-xs text-muted-foreground">
-                                    Total des animes évalués
+                                    Total des animes marqués comme vus
                                 </p>
                             </CardContent>
                         </Card>
@@ -161,13 +146,13 @@ export default function DashboardPage() {
                         <Card>
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                                    Amis
+                                    Animes notés
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">0</div>
+                                <div className="text-2xl font-bold">{stats.totalRated}</div>
                                 <p className="text-xs text-muted-foreground">
-                                    Amis connectés
+                                    Nombre d&apos;animes avec une note
                                 </p>
                             </CardContent>
                         </Card>
@@ -181,13 +166,15 @@ export default function DashboardPage() {
                         <Card>
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                                    Score Moyen
+                                    Score moyen
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">-</div>
+                                <div className="text-2xl font-bold">
+                                    {stats.averageRating === null ? '-' : stats.averageRating.toFixed(2)}
+                                </div>
                                 <p className="text-xs text-muted-foreground">
-                                    Votre note moyenne
+                                    Moyenne de vos notes utilisateur
                                 </p>
                             </CardContent>
                         </Card>
@@ -201,22 +188,20 @@ export default function DashboardPage() {
                         <Card>
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                                    Membre depuis
+                                    Dernière activité
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">Aujourd'hui</div>
+                                <div className="text-2xl font-bold">{lastActivityLabel}</div>
                                 <p className="text-xs text-muted-foreground">
-                                    Date d'inscription
+                                    Mise à jour des animes vus/notés
                                 </p>
                             </CardContent>
                         </Card>
                     </motion.div>
                 </div>
 
-                {/* Main Content */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Recent Activity */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -229,16 +214,15 @@ export default function DashboardPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="text-center py-8 text-muted-foreground">
-                                    <p>Aucune activité récente</p>
+                                    <p>Aucune activité récente détaillée</p>
                                     <p className="text-sm mt-2">
-                                        Commencez à noter des animes pour voir votre activité ici !
+                                        Les compteurs se mettent déjà à jour en temps réel via les stats.
                                     </p>
                                 </div>
                             </CardContent>
                         </Card>
                     </motion.div>
 
-                    {/* Quick Actions */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -249,25 +233,19 @@ export default function DashboardPage() {
                                 <CardTitle>Actions Rapides</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
-                                <Button 
-                                    className="w-full" 
-                                    onClick={() => router.push('/animes')}
-                                >
+                                <Button className="w-full" onClick={() => router.push('/animes')}>
                                     Explorer les Animes
                                 </Button>
-                                <Button 
-                                    variant="outline" 
-                                    className="w-full"
-                                    onClick={() => router.push('/profile')}
-                                >
+                                <Button variant="outline" className="w-full" onClick={() => router.push('/profile')}>
                                     Mon Profil
                                 </Button>
-                                <Button 
-                                    variant="outline" 
+                                <Button
+                                    variant="outline"
                                     className="w-full"
                                     onClick={fetchUserStats}
+                                    disabled={isRefreshingStats}
                                 >
-                                    Rafraîchir les Stats
+                                    {isRefreshingStats ? 'Rafraîchissement...' : 'Rafraîchir les Stats'}
                                 </Button>
                             </CardContent>
                         </Card>

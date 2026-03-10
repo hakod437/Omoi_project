@@ -180,7 +180,7 @@ function LoginForm() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] hover:opacity-90 shadow-[var(--glow)] border-none flex items-center justify-center gap-2 group"
+                            className="w-full py-4 rounded-2xl bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] hover:bg-[var(--btn-primary-hover)] shadow-[var(--glow)] border-none flex items-center justify-center gap-2 group transition-colors"
                         >
                             {loading ? 'Traitement...' : isLogin ? 'Se connecter' : "S'inscrire"}
                             {!loading && <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />}

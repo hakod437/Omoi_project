@@ -120,7 +120,7 @@ interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
     variant?: 'default' | 'glass' | 'neumorphic'
 }
 
-export const MagneticButton = ({ 
+export const MagneticButton = ({
     children, 
     strength = 0.3,
     variant = 'default',
@@ -128,7 +128,6 @@ export const MagneticButton = ({
     ...props 
 }: MagneticButtonProps) => {
     const [position, setPosition] = useState({ x: 0, y: 0 })
-    const [isHovering, setIsHovering] = useState(false)
     const buttonRef = React.useRef<HTMLButtonElement>(null)
 
     const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -144,14 +143,12 @@ export const MagneticButton = ({
         setPosition({ x: deltaX, y: deltaY })
     }
 
-    const handleMouseEnter = () => setIsHovering(true)
     const handleMouseLeave = () => {
-        setIsHovering(false)
         setPosition({ x: 0, y: 0 })
     }
 
     const variants = {
-        default: 'bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white rounded-2xl font-bold transition-all duration-300',
+        default: 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] hover:bg-[var(--btn-primary-hover)] rounded-2xl font-bold transition-all duration-300',
         glass: 'bg-white/10 backdrop-blur-md border border-white/20 text-[var(--foreground)] rounded-2xl font-bold transition-all duration-300',
         neumorphic: 'bg-[var(--background)] shadow-[8px_8px_16px_rgba(0,0,0,0.1),_-8px_-8px_16px_rgba(255,255,255,0.1)] text-[var(--foreground)] rounded-2xl font-bold transition-all duration-300'
     }
@@ -168,13 +165,9 @@ export const MagneticButton = ({
                 transform: `translate(${position.x}px, ${position.y}px)`,
             }}
             onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             {...props}
         >
-            {/* Effet de brillance */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            
             {/* Contenu */}
             <span className="relative z-10">{children}</span>
         </button>

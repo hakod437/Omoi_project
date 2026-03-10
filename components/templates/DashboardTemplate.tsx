@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import { Plus, ChevronDown, ChevronUp, Film, Music2, BookText } from 'lucide-react'
 import { Button } from '@/components/atoms/Base'
-import { motion } from 'framer-motion'
 
 import { Panel } from '@/components/molecules/Panel'
 import { StatCard } from '@/components/molecules/StatCard'
@@ -69,7 +68,7 @@ export function DashboardTemplate({
 
           <Link
             href={addAnimeHref}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] px-6 py-3 font-ui text-sm font-bold text-white shadow-xl transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--btn-outline-border)] bg-[var(--btn-primary-bg)] px-6 py-3 font-ui text-sm font-bold text-[var(--btn-primary-text)] shadow-xl transition-colors hover:bg-[var(--btn-primary-hover)]"
           >
             <Plus size={18} />
             AJOUTER UN ANIME

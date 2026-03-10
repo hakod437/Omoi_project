@@ -1207,6 +1207,7 @@ footer {
   --background: #0c1a18;
   --foreground: #e8f5f0;
   --card: #112f2c;
+  --card-hover: #163830;
   --primary: #00b49b;
   --secondary: #00978d;
   --accent: #ebd3a2;
@@ -1226,12 +1227,28 @@ footer {
   --blob-1: #00978d;
   --blob-2: #ebd3a2;
   --blob-3: #004f46;
+
+  /* Flat surfaces for buttons/cards */
+  --btn-primary-bg: #00b49b;
+  --btn-primary-hover: #00c1a7;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #ebd3a2;
+  --btn-secondary-hover: #f2dfbb;
+  --btn-secondary-text: #1f2a28;
+  --btn-outline-border: #00b49b;
+  --btn-outline-text: #00b49b;
+  --btn-outline-hover-bg: #00b49b;
+  --btn-outline-hover-text: #ffffff;
+  --card-surface: #112f2c;
+  --card-surface-hover: #163830;
+  --card-border: rgba(0, 180, 155, 0.2);
 }
 
 [data-theme="pastel"] {
   --background: #fdf6fc;
   --foreground: #2d1b3d;
   --card: #ffffff;
+  --card-hover: #fef5ff;
   --primary: #c77dff;
   --secondary: #ffd6ff;
   --accent: #ff6b9d;
@@ -1251,12 +1268,28 @@ footer {
   --blob-1: #c77dff;
   --blob-2: #ffd6ff;
   --blob-3: #bde0fe;
+
+  /* Flat surfaces for buttons/cards */
+  --btn-primary-bg: #c77dff;
+  --btn-primary-hover: #b86cff;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #ff6b9d;
+  --btn-secondary-hover: #ff5b92;
+  --btn-secondary-text: #ffffff;
+  --btn-outline-border: #c77dff;
+  --btn-outline-text: #9d4edd;
+  --btn-outline-hover-bg: #c77dff;
+  --btn-outline-hover-text: #ffffff;
+  --card-surface: #ffffff;
+  --card-surface-hover: #fef5ff;
+  --card-border: rgba(199, 125, 255, 0.2);
 }
 
 [data-theme="shonen"] {
   --background: #080f18;
   --foreground: #d6e8f2;
   --card: #12354e;
+  --card-hover: #163d58;
   --primary: #5a82b3;
   --secondary: #007190;
   --accent: #78cdd0;
@@ -1276,6 +1309,21 @@ footer {
   --blob-1: #5a82b3;
   --blob-2: #78cdd0;
   --blob-3: #1c4286;
+
+  /* Flat surfaces for buttons/cards */
+  --btn-primary-bg: #5a82b3;
+  --btn-primary-hover: #6a96b5;
+  --btn-primary-text: #f5fbff;
+  --btn-secondary-bg: #78cdd0;
+  --btn-secondary-hover: #8ad8da;
+  --btn-secondary-text: #0b1c28;
+  --btn-outline-border: #5a82b3;
+  --btn-outline-text: #78cdd0;
+  --btn-outline-hover-bg: #5a82b3;
+  --btn-outline-hover-text: #f5fbff;
+  --card-surface: #12354e;
+  --card-surface-hover: #163d58;
+  --card-border: rgba(90, 130, 179, 0.2);
 }
 
 body {

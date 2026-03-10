@@ -18,11 +18,11 @@ export const Card = ({
     ...props
 }: CardProps) => {
     const variants = {
-        default: 'bg-[var(--card)]/40 backdrop-blur-xl border border-[var(--border)]/20 shadow-xl',
+        default: 'bg-[var(--card-surface)] border border-[var(--card-border)] shadow-xl',
         glass: 'bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl shadow-white/10',
         neumorphic: 'bg-[var(--background)] shadow-[12px_12px_24px_rgba(0,0,0,0.1),_-12px_-12px_24px_rgba(255,255,255,0.05)] border border-[var(--border)]/20',
-        gradient: 'bg-gradient-to-br from-[var(--card)]/40 to-transparent backdrop-blur-xl border border-[var(--border)]/30 shadow-xl',
-        elevated: 'bg-[var(--card)]/60 backdrop-blur-2xl border border-[var(--border)]/30 shadow-2xl'
+        gradient: 'bg-[var(--card-surface)] border border-[var(--card-border)] shadow-xl',
+        elevated: 'bg-[var(--card-surface)] border border-[var(--card-border)] shadow-2xl'
     }
 
     const paddings = {
@@ -32,7 +32,7 @@ export const Card = ({
         xl: 'p-10'
     }
 
-    const hoverEffects = hover ? 'hover:shadow-2xl hover:scale-102' : ''
+    const hoverEffects = hover ? 'hover:bg-[var(--card-surface-hover)] hover:shadow-2xl hover:scale-102' : ''
     const interactiveEffects = interactive ? 'cursor-pointer active:scale-98' : ''
 
     return (

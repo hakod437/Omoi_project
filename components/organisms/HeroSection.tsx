@@ -53,7 +53,7 @@ export const HeroSection = ({
 
     setLoading(true)
     const newStatus = status === ListStatus.COMPLETED ? ListStatus.PLANNING : ListStatus.COMPLETED
-    const res = await updateListStatusAction(userId, animeId, newStatus)
+    const res = await updateListStatusAction(animeId, newStatus)
 
     if (res.success) {
       setStatus(newStatus)

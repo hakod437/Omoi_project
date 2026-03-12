@@ -38,6 +38,7 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   username      String    @unique
+  role          UserRole  @default(USER)
   displayName   String?
   avatar        String?
   bio           String?
@@ -187,4 +188,9 @@ enum ActivityType {
   RATING_POST
   REVIEW_POST
   STATUS_CHANGE
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

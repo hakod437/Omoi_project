@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import type { Tier } from '@/types/anime'
 import { cn } from './Base'
 
@@ -175,9 +176,11 @@ export const TierCard = ({
                                 className="group relative rounded-xl overflow-hidden bg-[var(--muted)]/30 backdrop-blur-sm transform transition-all duration-300 hover:scale-105 cursor-pointer"
                             >
                                 {anime.imageUrl && (
-                                    <img
+                                    <Image
                                         src={anime.imageUrl}
                                         alt={anime.title}
+                                        width={320}
+                                        height={96}
                                         className="w-full h-24 object-cover"
                                     />
                                 )}

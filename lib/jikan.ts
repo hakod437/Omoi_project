@@ -12,6 +12,7 @@ async function fetchJsonWithTimeout(url: string, init?: RequestInit & { timeoutM
     try {
         const res = await fetch(url, {
             ...init,
+            next: { revalidate: 600 },
             signal: controller.signal,
             headers: {
                 'User-Agent': 'AnimeVault/1.0',
@@ -67,12 +68,10 @@ export async function getTopAnime() {
     const cached = cache.get(cacheKey)
     
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-        console.log('[📡 JIKAN] ✅ Cache hit pour top_anime')
         return cached.data
     }
 
     try {
-        console.log('[📡 JIKAN] 🔄 Fetch fresh top_anime')
         const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/top/anime`)
         if (!res.ok) throw new Error("Failed to fetch top anime from Jikan")
 
@@ -83,7 +82,6 @@ export async function getTopAnime() {
         console.error('[📡 JIKAN] ❌ Erreur getTopAnime:', error)
         // Retourner les données en cache si disponibles, même expirées
         if (cached) {
-            console.log('[📡 JIKAN] 🔄 Fallback vers cache expiré')
             return cached.data
         }
         // Fallback vide
@@ -96,12 +94,10 @@ export async function getSeasonalAnime() {
     const cached = cache.get(cacheKey)
     
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-        console.log('[📡 JIKAN] ✅ Cache hit pour seasonal_anime')
         return cached.data
     }
 
     try {
-        console.log('[📡 JIKAN] 🔄 Fetch fresh seasonal_anime')
         const res = await fetchJsonWithRetry(`${JIKAN_BASE_URL}/seasons/now`)
         if (!res.ok) throw new Error("Failed to fetch seasonal anime from Jikan")
 
@@ -112,7 +108,6 @@ export async function getSeasonalAnime() {
         console.error('[📡 JIKAN] ❌ Erreur getSeasonalAnime:', error)
         // Retourner les données en cache si disponibles, même expirées
         if (cached) {
-            console.log('[📡 JIKAN] 🔄 Fallback vers cache expiré')
             return cached.data
         }
         // Fallback vide

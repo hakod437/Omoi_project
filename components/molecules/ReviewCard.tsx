@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { Heart, Clock } from 'lucide-react'
 import { TierBadge } from '@/components/atoms/Tier'
 
@@ -36,14 +37,16 @@ export const ReviewCard = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {avatar ? (
-            <img 
-              src={avatar} 
+            <Image
+              src={avatar}
               alt={username}
-              className="w-10 h-10 rounded-full"
+              width={40}
+              height={40}
+              className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
             <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{
-              background: 'linear-gradient(to bottom right, var(--primary), var(--accent))'
+              backgroundColor: 'var(--btn-primary-bg)'
             }}>
               <span className="text-white font-bold">
                 {username.charAt(0).toUpperCase()}

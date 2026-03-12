@@ -1,10 +1,11 @@
 'use server'
 
 import prisma from "@/lib/prisma"
+import { requireUserId } from "@/lib/require-user"
 import { ListStatus, ActivityType } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
-export async function addAnimeToListAction(userId: string, animeData: {
+export async function addAnimeToListAction(animeData: {
     malId: number
     title: string
     titleEnglish?: string
@@ -13,6 +14,8 @@ export async function addAnimeToListAction(userId: string, animeData: {
     genres: string
 }) {
     try {
+        const userId = await requireUserId()
+
         // 1. Ensure anime exists in our DB
         const anime = await prisma.anime.upsert({
             where: { malId: animeData.malId },
@@ -58,8 +61,10 @@ export async function addAnimeToListAction(userId: string, animeData: {
     }
 }
 
-export async function updateListStatusAction(userId: string, animeId: string, status: ListStatus) {
+export async function updateListStatusAction(animeId: string, status: ListStatus) {
     try {
+        const userId = await requireUserId()
+
         const updated = await prisma.userList.update({
             where: {
                 userId_animeId: {

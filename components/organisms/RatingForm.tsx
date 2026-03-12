@@ -7,8 +7,12 @@ import { Button } from '../atoms/Base'
 import { calculateGlobalScore, getTierFromScore } from '@/lib/scoring'
 import { Loader2 } from 'lucide-react'
 import { submitRatingAction } from '@/actions/rating.actions'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export const RatingForm = ({ animeId }: { animeId: string }) => {
+    const { data: session } = useSession()
+    const router = useRouter()
     const [animTier, setAnimTier] = useState<Tier | null>(null)
     const [scenTier, setScenTier] = useState<Tier | null>(null)
     const [musicTier, setMusicTier] = useState<Tier | null>(null)
@@ -28,10 +32,14 @@ export const RatingForm = ({ animeId }: { animeId: string }) => {
     const handleSubmit = async () => {
         if (!isComplete || !globalScore) return
 
+        if (!session?.user?.id) {
+            router.push('/login')
+            return
+        }
+
         setIsSubmitting(true)
         try {
             const result = await submitRatingAction({
-                userId: "temp-user-id", // Will be replaced by session
                 animeId,
                 animTier: animTier as Tier,
                 scenTier: scenTier as Tier,

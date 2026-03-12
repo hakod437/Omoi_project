@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { cn } from './Base'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -74,12 +75,6 @@ export const StatCard = ({
     trend,
     loading = false
 }: StatCardProps) => {
-    const sizes = {
-        sm: 'p-4',
-        md: 'p-6',
-        lg: 'p-8'
-    }
-
     const iconSizes = {
         sm: 'w-4 h-4',
         md: 'w-6 h-6',
@@ -182,15 +177,16 @@ export const Avatar = ({
     return (
         <div className="relative inline-block">
             <div className={cn(
-                'flex items-center justify-center font-bold text-[var(--foreground)] overflow-hidden',
+                'relative flex items-center justify-center font-bold text-[var(--foreground)] overflow-hidden',
                 sizes[size],
                 variants[variant]
             )}>
                 {src ? (
-                    <img
+                    <Image
                         src={src}
-                        alt={alt}
-                        className="w-full h-full object-cover"
+                        alt={alt || 'avatar'}
+                        fill
+                        className="object-cover"
                     />
                 ) : (
                     fallback

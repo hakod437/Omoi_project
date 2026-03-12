@@ -1,9 +1,0 @@
-/**
- * MESH GRADIENT & GLOBAL STYLES
- * 
- * This file handles the sophisticated visual layering of the application.
- * It combines Tailwind's utility classes with custom "Fluid" background logic.
- */
-
-@import './theme.css';
-@import './tailwind.css';

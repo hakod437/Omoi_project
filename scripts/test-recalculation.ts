@@ -1,7 +1,6 @@
 import "dotenv/config"
-import { recalculateAllAnimeScoresAction } from "../actions/admin.actions"
 import prisma from "../lib/prisma"
-import { Tier } from "@prisma/client"
+import { recalculateAllAnimeScores } from "../lib/recalculate-anime-scores"
 
 async function testRecalculation() {
     console.log("📊 Starting Score Recalculation Testing...")
@@ -60,8 +59,8 @@ async function testRecalculation() {
         console.log("✅ Ratings Added")
 
         // 2. Run Recalculation
-        const res = await recalculateAllAnimeScoresAction()
-        if (res.success) {
+        const res = await recalculateAllAnimeScores()
+        if (res.updatedCount > 0) {
             const updatedAnime = await prisma.anime.findUnique({ where: { id: testAnimeId } })
             console.log("✅ Recalculation Action: Success")
             console.log("Updated Stats:", {
@@ -78,7 +77,7 @@ async function testRecalculation() {
                 console.error("❌ Math Verification: Failed")
             }
         } else {
-            console.error("❌ Recalculation Action: Failed", res.error)
+            console.error("❌ Recalculation Action: Failed")
         }
 
         console.log("\n✨ Recalculation Testing Complete!")

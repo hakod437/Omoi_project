@@ -14,8 +14,6 @@ interface TierDistributionProps {
 }
 
 export const TierDistribution = ({ data }: TierDistributionProps) => {
-  const totalPercentage = data.reduce((sum, item) => sum + item.percentage, 0)
-  
   return (
     <div className="rounded-2xl border p-6 space-y-4" style={{
       backgroundColor: 'var(--card)',

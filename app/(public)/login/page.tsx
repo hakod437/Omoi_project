@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { registerWithPhoneAction, loginWithPhoneAction } from '@/actions/auth.actions'
+import { registerWithPhoneAction } from '@/actions/auth.actions'
 import { Button } from '@/components/atoms/Base'
 import { Phone, User, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -48,46 +48,33 @@ function LoginForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('[🔐 LOGIN] 🚀 Début du handleSubmit - isLogin:', isLogin)
         setLoading(true)
         setMessage(null)
 
         const formData = new FormData(e.currentTarget)
         const phoneNumber = formData.get('phoneNumber') as string
         const password = formData.get('password') as string
-        const username = formData.get('username') as string
-
-        console.log('[🔐 LOGIN] 📝 Données du formulaire:', { phoneNumber: phoneNumber?.substring(0, 8) + '...', password: password ? '***' : 'null', username })
 
         if (!isLogin) {
             // S'il s'agit d'une inscription, on crée d'abord le compte
-            console.log('[🔐 LOGIN] 📝 Mode inscription - Création du compte...')
             const res = await registerWithPhoneAction(formData)
-            console.log('[🔐 LOGIN] 📝 Résultat inscription:', res)
             if (!res.success) {
-                console.log('[🔐 LOGIN] ❌ Erreur inscription:', res.error)
                 setMessage({ type: 'error', text: res.error || "Erreur lors de l'inscription" })
                 setLoading(false)
                 return
             }
-            console.log('[🔐 LOGIN] ✅ Compte créé avec succès')
         }
 
         // Connexion via NextAuth signIn
-        console.log('[🔐 LOGIN] 🔑 Tentative de connexion...')
         const result = await signIn('credentials', { phoneNumber, password, callbackUrl, redirect: false })
-        console.log('[🔐 LOGIN] 🔑 Résultat connexion:', result)
 
         if (!result?.ok) {
-            console.log('[🔐 LOGIN] ❌ Connexion échouée:', result?.error)
             setMessage({ type: 'error', text: "Identifiants invalides" })
         } else {
-            console.log('[🔐 LOGIN] ✅ Connexion réussie!')
             // Redirect to intended page
             router.push(callbackUrl)
         }
         setLoading(false)
-        console.log('[🔐 LOGIN] 🏁 Fin du handleSubmit')
     }
 
     return (

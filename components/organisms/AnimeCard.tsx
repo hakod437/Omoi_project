@@ -9,6 +9,8 @@ import { Badge } from '../atoms/Base'
 import { TierDot } from '../atoms/Tier'
 import { Plus, Check, Loader2 } from 'lucide-react'
 import { addAnimeToListAction } from '@/actions/list.actions'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -28,18 +30,24 @@ interface AnimeCardProps {
 }
 
 const QuickAddButton = ({ id, title, imageUrl, genres }: { id: string, title: string, imageUrl: string, genres: string[] }) => {
+    const { data: session } = useSession()
+    const router = useRouter()
     const [isPending, setIsPending] = React.useState(false)
     const [isAdded, setIsAdded] = React.useState(false)
 
     const handleAdd = async (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
+
+        if (!session?.user?.id) {
+            router.push('/login')
+            return
+        }
+
         setIsPending(true)
 
         try {
-            // userId would normally come from session
-            const userId = "temp-user-id"
-            const result = await addAnimeToListAction(userId, {
+            const result = await addAnimeToListAction({
                 malId: parseInt(id),
                 title,
                 imageUrl,

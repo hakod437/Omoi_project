@@ -1,8 +1,7 @@
 import prisma from "../lib/prisma"
 import { registerWithPhoneAction } from "../actions/auth.actions"
-import { addAnimeToListAction } from "../actions/list.actions"
-import { ListStatus } from "@prisma/client"
-import { recalculateAllAnimeScoresAction } from "../actions/admin.actions"
+import { ActivityType, ListStatus } from "@prisma/client"
+import { recalculateAllAnimeScores } from "../lib/recalculate-anime-scores"
 
 async function runExhaustiveSimulation() {
     console.log("🚀 Starting Exhaustive Backend Simulation...")
@@ -47,8 +46,37 @@ async function runExhaustiveSimulation() {
 
     console.log("📊 Simulating list additions and ratings...")
     for (const userId of usersInDb) {
-        // Add to list
-        await addAnimeToListAction(userId, testAnime)
+        const anime = await prisma.anime.upsert({
+            where: { malId: testAnime.malId },
+            update: {},
+            create: testAnime
+        })
+
+        await prisma.userList.upsert({
+            where: {
+                userId_animeId: {
+                    userId,
+                    animeId: anime.id
+                }
+            },
+            update: {
+                status: ListStatus.PLANNING
+            },
+            create: {
+                userId,
+                animeId: anime.id,
+                status: ListStatus.PLANNING
+            }
+        })
+
+        await prisma.activity.create({
+            data: {
+                userId,
+                type: ActivityType.LIST_UPDATE,
+                animeId: anime.id,
+                content: `Added ${anime.title} to planning list`
+            }
+        })
 
         // Add rating (simulated)
         const score = Math.floor(Math.random() * 3) + 7 // 7, 8, 9
@@ -57,7 +85,7 @@ async function runExhaustiveSimulation() {
         await prisma.rating.create({
             data: {
                 userId,
-                animeId: (await prisma.anime.findUnique({ where: { malId: 1 } }))!.id,
+                animeId: anime.id,
                 animTier: tier as any,
                 scenTier: tier as any,
                 musicTier: tier as any,
@@ -68,8 +96,8 @@ async function runExhaustiveSimulation() {
     }
 
     console.log("🔄 Recalculating all anime scores...")
-    const recRes = await recalculateAllAnimeScoresAction()
-    console.log("Admin Recalculation Result:", recRes.success ? 'Success' : 'Failed')
+    const recRes = await recalculateAllAnimeScores()
+    console.log("Admin Recalculation Result:", recRes.updatedCount > 0 ? 'Success' : 'No updates')
 
     console.log("🧐 Verifying data consistency...")
     const anime = await prisma.anime.findUnique({

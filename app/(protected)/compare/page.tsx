@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Search, Users, Zap, Loader2, Heart, ArrowLeft, Info } from 'lucide-react'
-import { Button, Badge } from '@/components/atoms/Base'
+import { Users, Zap, Loader2, Heart, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/atoms/Base'
 import { searchUsersAction, compareUsersAction } from '@/actions/social.actions'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
@@ -34,11 +34,14 @@ export default function Compare() {
     const { data: session } = useSession()
 
     const handleCompare = async (user: any) => {
+        if (!session?.user?.id) {
+            return
+        }
+
         setIsComparing(true)
         setSelectedUser(user)
         try {
-            const currentUserId = session?.user?.id || "temp-user-id"
-            const res = await compareUsersAction(currentUserId, user.id)
+            const res = await compareUsersAction(user.id)
             if (res.success) {
                 setComparison(res.data)
             }
@@ -257,4 +260,3 @@ export default function Compare() {
         </div>
     )
 }
-

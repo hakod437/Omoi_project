@@ -8,7 +8,6 @@ if (typeof window === "undefined" && process.env.NODE_ENV !== "production") {
 }
 
 const connectionString = process.env.DATABASE_URL;
-console.log("[Prisma] Initializing pool with DATABASE_URL:", connectionString?.substring(0, 30) + "...");
 const isSupabaseHost =
     connectionString?.includes("supabase.com") ||
     connectionString?.includes("supabase.co");

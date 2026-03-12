@@ -23,8 +23,7 @@ const eslintConfig = [
       ".next/**",
       "out/**",
       "build/**",
-      "next-env.d.ts",
-      "my-turborepo/**",
+      "next-env.d.ts"
     ],
   },
 ];

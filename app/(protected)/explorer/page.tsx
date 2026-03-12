@@ -5,8 +5,6 @@ import { Compass, TrendingUp, Calendar, RefreshCw, AlertTriangle } from 'lucide-
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
-export const dynamic = 'force-dynamic'
-
 export default async function ExplorerPage() {
     // Protection server-side : redirige vers /login si non connecté
     const session = await auth()
@@ -14,7 +12,6 @@ export default async function ExplorerPage() {
         redirect('/login')
     }
 
-    console.log('[🔍 EXPLORER] 🚀 Début chargement des données')
     const startTime = Date.now()
 
     // Récupération avec timeout et fallback
@@ -30,7 +27,6 @@ export default async function ExplorerPage() {
         
         if (results[0].status === 'fulfilled') {
             topAnime = results[0].value
-            console.log('[🔍 EXPLORER] ✅ Top anime chargés:', topAnime.length)
         } else {
             console.error('[🔍 EXPLORER] ❌ Erreur top anime:', results[0].reason)
             hasErrors = true
@@ -38,7 +34,6 @@ export default async function ExplorerPage() {
 
         if (results[1].status === 'fulfilled') {
             seasonalAnime = results[1].value
-            console.log('[🔍 EXPLORER] ✅ Seasonal anime chargés:', seasonalAnime.length)
         } else {
             console.error('[🔍 EXPLORER] ❌ Erreur seasonal anime:', results[1].reason)
             hasErrors = true
@@ -49,7 +44,6 @@ export default async function ExplorerPage() {
     }
 
     const loadTime = Date.now() - startTime
-    console.log(`[🔍 EXPLORER] ⏱️ Chargement terminé en ${loadTime}ms`)
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">

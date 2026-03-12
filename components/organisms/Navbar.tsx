@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { Search, User, BarChart3, LayoutDashboard, Compass, Menu, X, LogOut } from 'lucide-react'
+import { User, BarChart3, LayoutDashboard, Compass, Menu, X, LogOut } from 'lucide-react'
 import { Button } from '../atoms/Base'
 
 import { ThemeSwitcher } from '../molecules/ThemeSwitcher'

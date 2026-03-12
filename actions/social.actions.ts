@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from "@/lib/prisma"
+import { requireUserId } from "@/lib/require-user"
 
 export async function getActivityFeedAction(limit = 20) {
     try {
@@ -48,8 +49,10 @@ export async function searchUsersAction(query: string) {
     }
 }
 
-export async function compareUsersAction(userAId: string, userBId: string) {
+export async function compareUsersAction(userBId: string) {
     try {
+        const userAId = await requireUserId()
+
         // 1. Get both users' lists
         const [listA, listB] = await Promise.all([
             prisma.userList.findMany({

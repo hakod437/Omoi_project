@@ -119,7 +119,7 @@ export const SearchBar = () => {
                                             return
                                         }
                                         setAddingId(anime.mal_id)
-                                        await addAnimeToListAction(session.user.id, {
+                                        await addAnimeToListAction({
                                             malId: anime.mal_id,
                                             title: anime.title,
                                             imageUrl: anime.images.jpg.image_url,

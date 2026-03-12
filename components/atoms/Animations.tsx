@@ -20,9 +20,6 @@ export const useOptimizedAnimation = (duration: number = 300) => {
             
             const elapsed = currentTime - startTimeRef.current
             const progress = Math.min(elapsed / duration, 1)
-
-            // Easing function pour des animations fluides
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3)
             
             callback()
 
@@ -329,12 +326,17 @@ export const AnimatedNumber = ({
     className
 }: AnimatedNumberProps) => {
     const [displayValue, setDisplayValue] = useState(0)
+    const displayValueRef = useRef(0)
     const startTimeRef = useRef<number | null>(null)
     const animationRef = useRef<number | null>(null)
 
     useEffect(() => {
+        displayValueRef.current = displayValue
+    }, [displayValue])
+
+    useEffect(() => {
         startTimeRef.current = performance.now()
-        const startValue = displayValue
+        const startValue = displayValueRef.current
         const endValue = value
 
         const animate = (currentTime: number) => {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useTheme } from '../providers/ThemeProvider'
-import { Sun, Moon, Sparkles, Check } from 'lucide-react'
+import { Sun, Moon, Sparkles } from 'lucide-react'
 
 export const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme()

@@ -16,7 +16,7 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
     }
 
     const res = await fetch(`https://api.jikan.moe/v4/anime/${encodeURIComponent(id)}`, {
-        cache: 'no-store'
+        next: { revalidate: 3600 }
     })
 
     if (!res.ok) return <div>Anime not found</div>
@@ -27,32 +27,28 @@ export default async function AnimeDetail({ params }: { params: Promise<{ id: st
 
     const genres = (anime.genres?.map((g: any) => g.name) || []) as string[]
 
-    const animeRecord = await prisma.anime.upsert({
+    let animeRecord = await prisma.anime.findUnique({
         where: { malId: Number(id) },
-        update: {
-            title: anime.title,
-            titleEnglish: anime.titleEnglish || anime.title_english || null,
-            imageUrl: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url || null,
-            episodes: anime.episodes || null,
-            status: anime.status || null,
-            year: anime.year || null,
-            season: anime.season || null,
-            studio: anime.studios?.[0]?.name || null,
-            genres: JSON.stringify(genres)
-        },
-        create: {
-            malId: Number(id),
-            title: anime.title,
-            titleEnglish: anime.titleEnglish || anime.title_english || null,
-            imageUrl: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url || null,
-            episodes: anime.episodes || null,
-            status: anime.status || null,
-            year: anime.year || null,
-            season: anime.season || null,
-            studio: anime.studios?.[0]?.name || null,
-            genres: JSON.stringify(genres)
-        }
+        select: { id: true, malId: true }
     })
+
+    if (!animeRecord) {
+        animeRecord = await prisma.anime.create({
+            data: {
+                malId: Number(id),
+                title: anime.title,
+                titleEnglish: anime.titleEnglish || anime.title_english || null,
+                imageUrl: anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url || null,
+                episodes: anime.episodes || null,
+                status: anime.status || null,
+                year: anime.year || null,
+                season: anime.season || null,
+                studio: anime.studios?.[0]?.name || null,
+                genres: JSON.stringify(genres)
+            },
+            select: { id: true, malId: true }
+        })
+    }
 
     let userStatus = undefined
     if (session?.user?.id) {

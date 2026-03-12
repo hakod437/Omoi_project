@@ -1,6 +1,5 @@
 import "dotenv/config"
 import { getTopAnime, getSeasonalAnime } from "../lib/jikan"
-import { getUserStatsAction } from "../actions/user.actions"
 import prisma from "../lib/prisma"
 
 async function runVerification() {
@@ -16,9 +15,9 @@ async function runVerification() {
         const seasonal = await getSeasonalAnime()
         console.log(`✅ Seasonal Anime: ${seasonal.length} items found. First: ${seasonal[0]?.title}`)
 
-        // 2. Verify Dashboard Logic
+        // 2. Verify Dashboard data plumbing
         console.log("\n--- Dashboard Actions ---")
-        const userId = "temp-user-id"
+        const userId = "verify-user-id"
 
         // Ensure user exists
         await prisma.user.upsert({
@@ -32,13 +31,14 @@ async function runVerification() {
             }
         })
 
-        const stats = await getUserStatsAction(userId)
-        if (stats.success) {
-            console.log("✅ getUserStatsAction: Success")
-            console.log("Stats Data:", JSON.stringify(stats.data, null, 2))
-        } else {
-            console.error("❌ getUserStatsAction: Failed", stats.error)
-        }
+        const [listCount, ratingCount, activityCount] = await Promise.all([
+            prisma.userList.count({ where: { userId } }),
+            prisma.rating.count({ where: { userId } }),
+            prisma.activity.count({ where: { userId } })
+        ])
+
+        console.log("✅ User-scoped queries: Success")
+        console.log("Stats Data:", JSON.stringify({ listCount, ratingCount, activityCount }, null, 2))
 
         console.log("\n✨ Verification Complete!")
     } catch (err) {

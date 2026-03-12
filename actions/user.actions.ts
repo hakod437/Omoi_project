@@ -1,44 +1,37 @@
 "use server"
 
 import prisma from "@/lib/prisma"
+import { requireUserId } from "@/lib/require-user"
 import { ServiceResponse } from "@/types/service"
 
-export async function getUserStatsAction(userId: string): Promise<ServiceResponse<any>> {
+export async function getUserStatsAction(): Promise<ServiceResponse<any>> {
     try {
-        console.log("[UserStats] Starting for userId:", userId)
-        const t0 = Date.now()
+        const userId = await requireUserId()
 
         const [userList, ratings, activities] = await Promise.all([
             prisma.userList.findMany({
                 where: { userId },
                 include: {
-                    anime: {
-                        include: {
-                            ratings: {
-                                where: { userId }
-                            }
-                        }
-                    }
+                    anime: true
                 }
-            }).then(r => { console.log("[UserStats] userList query done in", Date.now() - t0, "ms, count:", r.length); return r }),
+            }),
             prisma.rating.findMany({
                 where: { userId }
-            }).then(r => { console.log("[UserStats] ratings query done in", Date.now() - t0, "ms, count:", r.length); return r }),
+            }),
             prisma.activity.findMany({
                 where: { userId },
                 orderBy: { createdAt: 'desc' },
                 take: 5
-            }).then(r => { console.log("[UserStats] activities query done in", Date.now() - t0, "ms, count:", r.length); return r })
+            })
         ])
-
-        console.log("[UserStats] All queries done in", Date.now() - t0, "ms")
 
         const totalAnimes = userList.length
         const completedCount = userList.filter(item => item.status === 'COMPLETED').length
 
         // Last 5 ratings with anime titles
+        const animeById = new Map(userList.map((item) => [item.animeId, item.anime]))
         const lastFiveRatings = ratings.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 5).map(r => {
-            const anime = userList.find(ul => ul.animeId === r.animeId)?.anime
+            const anime = animeById.get(r.animeId)
             return {
                 id: r.id,
                 animeId: r.animeId,

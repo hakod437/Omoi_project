@@ -62,7 +62,6 @@ export const ReviewForm = ({ animeId, userId, onSubmit }: ReviewFormProps) => {
       await onSubmit?.(formData)
 
       const result = await submitRatingAction({
-        userId,
         animeId,
         animTier: animationTier as PrismaTier,
         scenTier: scenarioTier as PrismaTier,

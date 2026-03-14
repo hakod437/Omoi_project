@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { User, BarChart3, LayoutDashboard, Compass, Menu, X, LogOut } from 'lucide-react'
+import { User, BarChart3, LayoutDashboard, Compass, Menu, X, LogOut, ListChecks } from 'lucide-react'
 import { Button } from '../atoms/Base'
 
 import { ThemeSwitcher } from '../molecules/ThemeSwitcher'
@@ -28,7 +28,9 @@ export const Navbar = () => {
     const navLinks = [
         { href: '/explorer', icon: <Compass size={16} />, label: 'Explorer' },
         { href: '/compare', icon: <BarChart3 size={16} />, label: 'Compare' },
+        { href: '/me/list', icon: <ListChecks size={16} />, label: 'My List' },
         { href: '/dashboard', icon: <LayoutDashboard size={16} />, label: 'Dashboard' },
+        { href: '/me', icon: <User size={16} />, label: 'Me' },
     ]
 
     return (

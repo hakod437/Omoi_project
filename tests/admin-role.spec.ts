@@ -12,6 +12,7 @@ const pool = new Pool({
 
 const testPhone = '0123456789'
 const testPassword = 'password123'
+let originalRole: string | null = null
 
 test.describe('Admin Role Session', () => {
     test.describe.configure({ mode: 'serial' })
@@ -26,6 +27,8 @@ test.describe('Admin Role Session', () => {
             throw new Error('Test user not found for admin role test')
         }
 
+        originalRole = rows[0].role
+
         await pool.query(
             'update "User" set role = $1 where "phoneNumber" = $2',
             ['ADMIN', testPhone]
@@ -33,6 +36,13 @@ test.describe('Admin Role Session', () => {
     })
 
     test.afterAll(async () => {
+        if (originalRole) {
+            await pool.query(
+                'update "User" set role = $1 where "phoneNumber" = $2',
+                [originalRole, testPhone]
+            )
+        }
+
         await pool.end()
     })
 

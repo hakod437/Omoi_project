@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.myanimelist.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 's4.anilist.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.anili.st',
+        pathname: '/**',
+      },
     ],
   },
   // Résoudre le problème d'origine des Server Actions

@@ -8,6 +8,7 @@ import { Phone, User, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { signIn, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function LoginPage() {
     return (
@@ -77,6 +78,13 @@ function LoginForm() {
         setLoading(false)
     }
 
+    const handleAniListLogin = async () => {
+        setLoading(true)
+        setMessage(null)
+        await signIn('anilist', { callbackUrl })
+        setLoading(false)
+    }
+
     return (
         <div className="flex min-h-screen items-center justify-center p-6 bg-transparent relative overflow-hidden">
             {/* Background decorative elements */}
@@ -103,6 +111,11 @@ function LoginForm() {
                         <p className="text-white/40 font-medium text-sm">
                             {isLogin ? 'Connectez-vous pour voir vos tiers' : 'Créez votre profil Omoi'}
                         </p>
+
+                        <div className="mx-auto mt-3 max-w-xs rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-left text-[11px] text-white/60">
+                            <p className="font-black uppercase tracking-widest text-[var(--primary)]">Flow B</p>
+                            <p className="mt-1 leading-relaxed">Authorization Code flow is recommended for AniList server integration.</p>
+                        </div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -174,6 +187,23 @@ function LoginForm() {
                         </Button>
                     </form>
 
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3 text-white/30 text-xs uppercase tracking-widest">
+                            <span className="h-px flex-1 bg-white/10" />
+                            <span>ou</span>
+                            <span className="h-px flex-1 bg-white/10" />
+                        </div>
+
+                        <Button
+                            type="button"
+                            disabled={loading}
+                            onClick={handleAniListLogin}
+                            className="w-full py-4 rounded-2xl border border-white/15 bg-white/5 text-white hover:bg-white/10 transition-colors"
+                        >
+                            Continuer avec AniList
+                        </Button>
+                    </div>
+
                     <div className="pt-4 border-t border-white/5 text-center">
                         <button
                             onClick={() => setIsLogin(!isLogin)}
@@ -181,6 +211,13 @@ function LoginForm() {
                         >
                             {isLogin ? "Vous n'avez pas de compte ? S'inscrire" : "Déjà inscrit ? Se connecter"}
                         </button>
+
+                        <div className="mt-4 text-xs text-white/45">
+                            <span>Besoin d'une connexion provider ? </span>
+                            <Link href="/sync" className="font-bold text-[var(--primary)] hover:underline">
+                                Voir le flux AniList
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </motion.div>

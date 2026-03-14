@@ -27,6 +27,8 @@ npm install
 AUTH_SECRET=your_random_secret
 AUTH_URL=http://localhost:3000
 AUTH_TRUST_HOST=true
+ANILIST_CLIENT_ID=your_anilist_client_id
+ANILIST_CLIENT_SECRET=your_anilist_client_secret
 
 # Optional transition fallback for admin protection
 ADMIN_USER_IDS="cuid_1,cuid_2"
@@ -96,6 +98,8 @@ Variables à définir dans Vercel (`Production`, `Preview`, `Development`):
 - `AUTH_SECRET`
 - `AUTH_URL` (ex: `https://hachan.vercel.app`)
 - `AUTH_TRUST_HOST=true`
+- `ANILIST_CLIENT_ID`
+- `ANILIST_CLIENT_SECRET`
 - optionnel en transition: `ADMIN_USER_IDS` ou `ADMIN_USER_EMAILS`
 - `DATABASE_URL` (pooler `:6543`, voir format ci-dessus)
 - `DIRECT_URL` (pooler session `:5432`, voir format ci-dessus)
@@ -108,6 +112,35 @@ Déployer:
 ```bash
 npx vercel --prod --yes
 ```
+
+### Checklist de mise à jour deployment (sync AniList)
+
+1. Mettre à jour les variables Vercel sur les 3 environnements (`Production`, `Preview`, `Development`):
+  - `AUTH_SECRET`
+  - `AUTH_URL`
+  - `AUTH_TRUST_HOST=true`
+  - `ANILIST_CLIENT_ID`
+  - `ANILIST_CLIENT_SECRET`
+  - `DATABASE_URL`
+  - `DIRECT_URL`
+2. Vérifier que `AUTH_URL` pointe bien vers le domaine cible:
+  - Production: `https://hachan.vercel.app`
+  - Preview: URL preview Vercel du déploiement
+3. Dans AniList Developer Settings, configurer l'URL de callback OAuth:
+  - `https://hachan.vercel.app/api/auth/callback/anilist`
+4. Si un secret a été exposé, faire une rotation avant release:
+  - `ANILIST_CLIENT_SECRET`
+  - mots de passe/URLs DB si exposés
+5. Re-déployer après mise à jour des variables:
+
+```bash
+npx vercel --prod --yes
+```
+
+6. Smoke test post-déploiement:
+  - `GET /api/auth/providers` retourne `credentials` et `anilist`
+  - le bouton `Continuer avec AniList` redirige vers AniList
+  - `GET /api/me` retourne un état cohérent (`success`, `auth_required`, `partial`, `rate_limited`)
 
 ## Dépannage
 

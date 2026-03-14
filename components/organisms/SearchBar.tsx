@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, Loader2, Plus, Star } from 'lucide-react'
-import { searchAnime } from '@/lib/jikan'
 import { useDebounce } from '@/hooks/useDebounce'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,11 +9,25 @@ import { useRouter } from 'next/navigation'
 import { addAnimeToListAction } from '@/actions/list.actions'
 import { useSession } from 'next-auth/react'
 
+type SearchItem = {
+    mal_id: number
+    title: string
+    images: {
+        jpg: {
+            image_url: string
+        }
+    }
+    score: number | null
+    type: string | null
+    year: number | null
+    genres: Array<{ name: string }>
+}
+
 export const SearchBar = () => {
     const { data: session } = useSession()
     const router = useRouter()
     const [query, setQuery] = useState('')
-    const [results, setResults] = useState<any[]>([])
+    const [results, setResults] = useState<SearchItem[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const [addingId, setAddingId] = useState<number | null>(null)
@@ -41,8 +54,33 @@ export const SearchBar = () => {
         const fetchResults = async () => {
             setIsLoading(true)
             try {
-                const data = await searchAnime(debouncedQuery, 5)
-                setResults(data)
+                const response = await fetch(`/api/anime/search?q=${encodeURIComponent(debouncedQuery)}&perPage=5`, {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                })
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch AniList search results')
+                }
+
+                const payload = await response.json()
+                const mapped: SearchItem[] = (payload?.data?.media || []).map((media: any) => ({
+                    mal_id: media.id,
+                    title: media.title?.romaji || media.title?.english || media.title?.native || 'Unknown title',
+                    images: {
+                        jpg: {
+                            image_url: media.coverImage?.medium || media.coverImage?.large || '/walkthrough/step1.png',
+                        },
+                    },
+                    score: media.averageScore ?? null,
+                    type: media.format ?? null,
+                    year: media.seasonYear ?? null,
+                    genres: (media.genres || []).map((genre: string) => ({ name: genre })),
+                }))
+
+                setResults(mapped)
                 setIsOpen(true)
             } catch (error) {
                 console.error("Search error:", error)

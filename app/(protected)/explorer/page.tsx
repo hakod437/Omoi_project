@@ -1,7 +1,7 @@
 import React from 'react'
 import { getTopAnime, getSeasonalAnime } from '@/lib/jikan'
 import { AnimeCard } from '@/components/organisms/AnimeCard'
-import { Compass, TrendingUp, Calendar, RefreshCw, AlertTriangle } from 'lucide-react'
+import { Compass, TrendingUp, Calendar, RefreshCw, AlertTriangle, ShieldCheck, TimerReset } from 'lucide-react'
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
@@ -53,14 +53,29 @@ export default async function ExplorerPage() {
                     Explorer Vault
                 </h1>
                 <p className="text-muted-foreground font-medium text-lg max-w-2xl">
-                    Discover your next obsession. Browse through highest rated masterpieces and hottest shows of current season.
+                    Flow A and D in action: discover titles, browse paged content, and keep going even if upstream is temporarily unstable.
                 </p>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] text-white/70">
+                        <ShieldCheck size={12} className="text-emerald-300" />
+                        success
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] text-white/70">
+                        <AlertTriangle size={12} className="text-amber-300" />
+                        partial
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em] text-white/70">
+                        <TimerReset size={12} className="text-orange-300" />
+                        retry aware
+                    </span>
+                </div>
                 
                 {hasErrors && (
                     <div className="flex items-center gap-2 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                         <AlertTriangle className="size-5 text-amber-600 dark:text-amber-400" />
                         <span className="text-sm text-amber-800 dark:text-amber-200">
-                            Certaines données sont temporaires. L'API externe est lente. Chargé en {loadTime}ms.
+                            Some sections are degraded. Partial data loaded in {loadTime}ms. Retry/backoff remains active.
                         </span>
                     </div>
                 )}

@@ -1,7 +1,7 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
+# ══════════════════════════════════════════════
+# Dependencies
+# ══════════════════════════════════════════════
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,37 +10,50 @@
 !.yarn/releases
 !.yarn/versions
 
-# build outputs
-/dist
-/build
-/.next/
-/out/
+# ══════════════════════════════════════════════
+# Build outputs
+# ══════════════════════════════════════════════
+dist/
+build/
+.next/
+out/
+.turbo/
 
-# testing
-/coverage
-/playwright-report
-/test-results
+# ══════════════════════════════════════════════
+# Testing
+# ══════════════════════════════════════════════
+coverage/
+playwright-report/
+test-results/
 
-# database / prisma local
-/prisma/dev.db
+# ══════════════════════════════════════════════
+# Database / Prisma
+# ══════════════════════════════════════════════
+prisma/dev.db
+apps/api/src/generated/prisma/
 
-# env files (security)
+# ══════════════════════════════════════════════
+# Environment (security)
+# ══════════════════════════════════════════════
 .env
 .env.*
+!.env.example
 
-# logs
+# ══════════════════════════════════════════════
+# Logs
+# ══════════════════════════════════════════════
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# misc
+# ══════════════════════════════════════════════
+# OS / IDE
+# ══════════════════════════════════════════════
 .DS_Store
 *.pem
 *.so
 *.exe
-
-# IDE
 .vscode/
 .idea/
 *.suo
@@ -48,11 +61,13 @@ yarn-error.log*
 *.njsproj
 *.sln
 
-# vercel
+# ══════════════════════════════════════════════
+# Vercel
+# ══════════════════════════════════════════════
 .vercel
 
-# typescript
+# ══════════════════════════════════════════════
+# TypeScript
+# ══════════════════════════════════════════════
 *.tsbuildinfo
 next-env.d.ts
-
-/src/generated/prisma

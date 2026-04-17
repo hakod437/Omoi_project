@@ -4,24 +4,181 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  APPLE
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum Rank {
+  APPRENTI
+  EXPERT
+  MAITRE
+}
+
+enum PreferredRegionScope {
+  CITY
+  COUNTRY
+  AFRICA
+  GLOBAL
+}
+
+enum ReputationSourceType {
+  ANALYSIS_PUBLISHED
+  ANALYSIS_VALIDATED
+  ADMIN_ADJUSTMENT
+  CHALLENGE_COMPLETED
 }
 
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  password      String
-  role          Role      @default(USER)
-  firstName     String?
-  lastName      String?
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
+  id              String    @id @default(uuid()) @db.Uuid
+  email           String?   @unique
+  passwordHash    String?   @map("password_hash")
+  authProvider    AuthProvider @default(EMAIL) @map("auth_provider")
+  status          UserStatus @default(ACTIVE)
+  emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz(6)
+  lastLoginAt     DateTime? @map("last_login_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  profile            UserProfile?
+  preferences        UserPreference?
+  devices            UserDevice[]
+  refreshTokens      RefreshToken[]
+  reputationLedger   UserReputationLedger[]
+  reputationSnapshot UserReputationSnapshot?
 
   @@map("users")
+}
+
+model UserProfile {
+  userId         String   @id @map("user_id") @db.Uuid
+  pseudo         String   @unique
+  displayName    String?  @map("display_name")
+  cityId         String?  @map("city_id") @db.Uuid
+  countryCode    String?  @map("country_code")
+  avatarUrl      String?  @map("avatar_url")
+  coverImageUrl  String?  @map("cover_image_url")
+  bio            String?
+  rank           Rank     @default(APPRENTI)
+  influencePoints Int     @default(0) @map("influence_points")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+  city GeoCity? @relation(fields: [cityId], references: [id])
+
+  @@map("user_profiles")
+}
+
+model UserPreference {
+  userId                      String               @id @map("user_id") @db.Uuid
+  lowConnectionMode           Boolean              @default(false) @map("low_connection_mode")
+  trendingAlertsEnabled       Boolean              @default(true) @map("trending_alerts_enabled")
+  peerValidationAlertsEnabled Boolean              @default(true) @map("peer_validation_alerts_enabled")
+  preferredRegionScope        PreferredRegionScope? @map("preferred_region_scope")
+  languageCode                String               @default("fr") @map("language_code")
+  createdAt                   DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                   DateTime             @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_preferences")
+}
+
+model GeoCountry {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  isoCode   String   @unique @map("iso_code")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  cities GeoCity[]
+
+  @@map("geo_countries")
+}
+
+model GeoCity {
+  id             String   @id @default(uuid()) @db.Uuid
+  countryId      String   @map("country_id") @db.Uuid
+  name           String
+  normalizedName String   @map("normalized_name")
+  isMajorCity    Boolean  @default(false) @map("is_major_city")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  country  GeoCountry @relation(fields: [countryId], references: [id])
+  profiles UserProfile[]
+
+  @@index([countryId, normalizedName])
+  @@map("geo_cities")
+}
+
+model UserReputationLedger {
+  id           String               @id @default(uuid()) @db.Uuid
+  userId       String               @map("user_id") @db.Uuid
+  sourceType   ReputationSourceType @map("source_type")
+  sourceId     String?              @map("source_id") @db.Uuid
+  deltaPoints  Int                  @map("delta_points")
+  balanceAfter Int                  @map("balance_after")
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("user_reputation_ledger")
+}
+
+model UserReputationSnapshot {
+  userId        String   @id @map("user_id") @db.Uuid
+  currentPoints Int      @default(0) @map("current_points")
+  currentRank   Rank     @default(APPRENTI) @map("current_rank")
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_reputation_snapshot")
+}
+
+model UserDevice {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @map("user_id") @db.Uuid
+  deviceFingerprint String   @unique @map("device_fingerprint")
+  platform          String
+  appVersion        String?  @map("app_version")
+  lastSeenAt        DateTime @map("last_seen_at") @db.Timestamptz(6)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user         User           @relation(fields: [userId], references: [id])
+  refreshTokens RefreshToken[]
+
+  @@index([userId])
+  @@map("user_devices")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @map("token_hash")
+  deviceId  String?   @map("device_id") @db.Uuid
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user   User @relation(fields: [userId], references: [id])
+  device UserDevice? @relation(fields: [deviceId], references: [id])
+
+  @@map("users")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
 }

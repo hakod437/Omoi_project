@@ -6,7 +6,9 @@ export class HealthController {
     check() {
         return {
             status: 'ok',
+            service: 'omoi-api',
             timestamp: new Date().toISOString(),
+            uptimeSeconds: Math.floor(process.uptime()),
         };
     }
 }

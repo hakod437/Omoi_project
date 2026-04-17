@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum AuthProvider {
@@ -175,8 +174,6 @@ model RefreshToken {
 
   user   User @relation(fields: [userId], references: [id])
   device UserDevice? @relation(fields: [deviceId], references: [id])
-
-  @@map("users")
 
   @@index([userId])
   @@index([expiresAt])

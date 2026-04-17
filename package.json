@@ -7,7 +7,11 @@
         "packages/*"
     ],
     "scripts": {
-        "dev": "turbo run dev",
+        "dev": "npm run dev:web",
+        "dev:web": "npm run dev --workspace=apps/web",
+        "dev:cool": "npm run dev:cool --workspace=apps/web",
+        "dev:api": "npm run dev --workspace=apps/api",
+        "dev:full": "turbo run dev --filter=web --filter=@omoi/api --concurrency=2",
         "build": "turbo run build",
         "lint": "turbo run lint",
         "test": "turbo run test",

@@ -2,8 +2,10 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
+    "dev:cool": "next dev --webpack --disable-source-maps",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

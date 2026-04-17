@@ -74,7 +74,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       return {
         code,
         message,
-        details,
+        details: details as Record<string, unknown>,
       };
     }
 

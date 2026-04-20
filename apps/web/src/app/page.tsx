@@ -1,6 +1,11 @@
 "use client";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/glass-card";
+import { VibeBadge } from "@/components/ui/vibe-badge";
+import { SectionHeader } from "@/components/ui/section-header";
+import { THEME_TOKENS } from "@/theme/tokens";
 import { useTheme } from "./providers";
 
 export default function Home() {
@@ -50,6 +55,98 @@ export default function Home() {
           <Button variant="outline" size="lg">Outline</Button>
           <Button variant="ghost" size="lg">Ghost</Button>
           <Button variant="destructive" size="lg">Destructive</Button>
+        </section>
+
+        <section className="mt-12 space-y-4">
+          <SectionHeader
+            title="Component Showcase"
+            action={<VibeBadge score={98} />}
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <GlassCard lowConnection={false} className="p-6">
+              <h3 className="mb-2 font-medium">Standard Connection</h3>
+              <p className="text-sm text-white/60">
+                This card uses the full `backdrop-filter` and glass background.
+              </p>
+            </GlassCard>
+
+            <GlassCard lowConnection={true} className="p-6">
+              <h3 className="mb-2 font-medium">Low Connection Mode</h3>
+              <p className="text-sm text-white/60">
+                This version disables expensive blurs to improve performance.
+              </p>
+            </GlassCard>
+          </div>
+        </section>
+
+        <section className="mt-12 space-y-6">
+          <SectionHeader title="Design Tokens" />
+
+          <div className="space-y-8">
+            {/* Colors */}
+            <div>
+              <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/40">Colors</h3>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {Object.entries(THEME_TOKENS.colors).map(([name, value]) => (
+                  <div key={name} className="space-y-2">
+                    <div
+                      className="h-16 w-full rounded-lg border border-white/10"
+                      style={{ backgroundColor: value }}
+                    />
+                    <div className="px-1">
+                      <p className="text-xs font-medium text-white">{name}</p>
+                      <p className="text-[10px] text-white/40 uppercase">{value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Effects */}
+            <div>
+              <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/40">Effects & Variables</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div
+                  className="oi-surface-glass p-8 shadow-[var(--oi-shadow-card)]"
+                  style={{ borderRadius: 16 }}
+                >
+                  <p className="text-center text-sm font-medium">Card Shadow (var)</p>
+                </div>
+                <div
+                  className="oi-surface-glass p-8 shadow-[var(--oi-shadow-gold-glow)]"
+                  style={{ borderRadius: 16 }}
+                >
+                  <p className="text-center text-sm font-medium text-[#c8a96b]">Gold Glow (var)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Radius */}
+            <div>
+              <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/40">Corner Radius</h3>
+              <div className="flex flex-wrap gap-4">
+                <div
+                  className="bg-white/10 p-6 text-xs text-white"
+                  style={{ borderRadius: THEME_TOKENS.radius.card, border: "1px solid white" }}
+                >
+                  Card ({THEME_TOKENS.radius.card})
+                </div>
+                <div
+                  className="bg-white/10 p-6 text-xs text-white"
+                  style={{ borderRadius: THEME_TOKENS.radius.panel, border: "1px solid white" }}
+                >
+                  Panel ({THEME_TOKENS.radius.panel})
+                </div>
+                <div
+                  className="bg-white/10 p-6 text-xs text-white"
+                  style={{ borderRadius: THEME_TOKENS.radius.button, border: "1px solid white" }}
+                >
+                  Button ({THEME_TOKENS.radius.button})
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
     </div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { VibeBadge } from "@/components/ui/vibe-badge";
 import { SectionHeader } from "@/components/ui/section-header";
+import { Surface } from "@/components/ui/mini_layout";
 import { THEME_TOKENS } from "@/theme/tokens";
 import { useTheme } from "./providers";
 
@@ -77,6 +78,33 @@ export default function Home() {
                 This version disables expensive blurs to improve performance.
               </p>
             </GlassCard>
+          </div>
+        </section>
+
+        <section className="mt-12 space-y-6">
+          <SectionHeader title="Surface Architecture" />
+
+          <div className="grid gap-6">
+            <Surface level="base" className="p-8">
+              <h3 className="mb-4 text-sm font-medium text-white/40 uppercase">Base Surface</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <Surface level="elevated" className="p-6">
+                  <p className="text-xs text-white/60">Elevated nested in Base</p>
+                  <Button variant="outline" size="sm" className="mt-3">Action</Button>
+                </Surface>
+                <Surface level="deep" className="p-6">
+                  <p className="text-xs text-white/60">Deep nested in Base</p>
+                  <VibeBadge score={42} className="mt-3" />
+                </Surface>
+              </div>
+            </Surface>
+
+            <Surface level="deep" className="p-8">
+              <h3 className="mb-4 text-sm font-medium text-white/40 uppercase">Deep Shell (Sidebar Style)</h3>
+              <Surface level="elevated" className="p-6">
+                <p className="text-sm">Content hovering on deep background</p>
+              </Surface>
+            </Surface>
           </div>
         </section>
 

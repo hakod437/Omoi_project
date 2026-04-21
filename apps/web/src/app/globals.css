@@ -84,6 +84,11 @@ body {
   border-radius: var(--oi-radius-card);
 }
 
+.oi-card-base {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Base Components */
 .oi-btn-base {
   display: inline-flex;
@@ -115,6 +120,47 @@ body {
   background: var(--oi-primary-hover);
 }
 
+² .ui-button--secondary {
+  background: var(--oi-jade);
+  color: white;
+  border: none;
+}
+
+.ui-button--secondary:hover {
+  background: var(--oi-jade-bright);
+}
+
+.ui-button--outline {
+  background: transparent;
+  border: 1px solid var(--oi-gold);
+  color: var(--oi-gold);
+}
+
+.ui-button--outline:hover {
+  background: rgba(200, 169, 107, 0.1);
+}
+
+.ui-button--ghost {
+  background: transparent;
+  border: none;
+  color: var(--oi-text-soft);
+}
+
+.ui-button--ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.ui-button--destructive {
+  background: var(--oi-danger);
+  color: white;
+  border: none;
+}
+
+.ui-button--destructive:hover {
+  opacity: 0.9;
+}
+
 .oi-badge-gold {
   border: 1px solid rgba(217, 195, 154, 0.25);
   background: rgba(200, 169, 107, 0.18);
@@ -124,4 +170,18 @@ body {
 .oi-badge-jade {
   background: rgba(79, 124, 120, 0.85);
   color: white;
+}
+
+/* Surface Levels */
+.oi-surface-base {
+  background: var(--oi-bg-base);
+}
+
+.oi-surface-elevated {
+  background: var(--oi-bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.oi-surface-deep {
+  background: var(--oi-bg-deep);
 }

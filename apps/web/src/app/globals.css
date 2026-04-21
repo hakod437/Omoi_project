@@ -89,6 +89,30 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.oi-container-base {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.oi-container--sm {
+  max-width: 640px;
+}
+
+.oi-container--md {
+  max-width: 768px;
+}
+
+.oi-container--lg {
+  max-width: 1024px;
+}
+
+.oi-container--xl {
+  max-width: 1280px;
+}
+
 /* Base Components */
 .oi-btn-base {
   display: inline-flex;

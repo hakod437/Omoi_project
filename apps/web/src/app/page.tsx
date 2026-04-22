@@ -14,7 +14,9 @@ export default function Home() {
   const { themeMode, resolvedTheme, setThemeMode } = useTheme();
 
   return (
-    
-    
+    <PageContainer>
+      <h1 className="text-3xl font-bold text-white">Welcome to Omoi</h1>
+      <p className="mt-4 text-white/80">Your anime tracking companion</p>
+    </PageContainer>
   );
 }

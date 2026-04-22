@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 
-import { Button } from "@/components/ui/button";
-import { GlassCard } from "@/components/ui/glass-card";
-import { VibeBadge } from "@/components/ui/vibe-badge";
-import { SectionHeader } from "@/components/ui/section-header";
-import { Surface } from "@/components/ui/surface";
-import { PageContainer } from "@/components/ui/page-container";
+import { Button } from "@/components/atoms/button";
+import { GlassCard } from "@/components/molecules/glass-card";
+import { VibeBadge } from "@/components/molecules/vibe-badge";
+import { SectionHeader } from "@/components/molecules/section-header";
+import { Surface } from "@/components/atoms/surface";
+import { PageContainer } from "@/components/atoms/page-container";
 import { THEME_TOKENS } from "@/theme/tokens";
 import { useTheme } from "./providers";
 

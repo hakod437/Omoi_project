@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
-  --color-primary: var(--oi-primary);
-  --color-gold: var(--oi-gold);
-  --color-jade: var(--oi-jade);
-  --radius-card: var(--oi-radius-card);
-  --radius-panel: var(--oi-radius-panel);
-  --radius-button: var(--oi-radius-button);
-}
-
 :root {
   --oi-bg-deep: #09070c;
   --oi-bg-base: #120f17;
@@ -70,31 +61,47 @@ body {
   color: var(--oi-text-main);
 }
 
-.oi-surface-glass {
-  background: rgba(23, 20, 29, 0.78);
-  border: 1px solid rgba(58, 47, 65, 0.7);
-  box-shadow: var(--oi-shadow-card);
-  backdrop-filter: blur(var(--oi-blur-glass));
-  border-radius: var(--oi-radius-card);
-}
+@layer components {
+  .oi-surface-glass {
+    background: rgba(23, 20, 29, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--oi-shadow-card);
+    backdrop-filter: blur(var(--oi-blur-glass));
+    border-radius: var(--oi-radius-card);
+  }
 
-.oi-surface-solid {
-  background: rgba(18, 18, 20, 0.95);
-  border: 1px solid #2a2330;
-  border-radius: var(--oi-radius-card);
-}
+  .oi-surface-solid {
+    background: rgba(18, 18, 20, 0.95);
+    border: 1px solid #2a2330;
+    border-radius: var(--oi-radius-card);
+  }
 
-.oi-card-base {
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+  /* Level Mappings for Surface.tsx */
+  .oi-surface-base {
+    background-color: var(--oi-bg-base);
+  }
+  .oi-surface-elevated {
+    background-color: var(--oi-bg-elevated);
+  }
+  .oi-surface-deep {
+    background-color: var(--oi-bg-deep);
+  }
 
-.oi-container-base {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  .oi-card-base {
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(18, 15, 23, 0.4);
+    backdrop-filter: blur(12px);
+  }
+
+  .oi-container-base {
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
 .oi-container--sm {
@@ -140,14 +147,16 @@ body {
   border: none;
 }
 
-.oi-btn-primary:hover {
-  background: var(--oi-primary-hover);
+.oi-badge-gold {
+  background: var(--oi-gold-soft);
+  color: var(--oi-gold-bright);
+  border: 1px solid var(--oi-border-gold);
 }
 
-² .ui-button--secondary {
-  background: var(--oi-jade);
-  color: white;
-  border: none;
+.oi-badge-jade {
+  background: var(--oi-jade-soft);
+  color: var(--oi-jade-bright);
+  border: 1px solid rgba(79, 124, 120, 0.3);
 }
 
 .ui-button--secondary:hover {
@@ -200,27 +209,4 @@ body {
   font-size: 1rem;
 }
 
-.oi-badge-gold {
-  border: 1px solid rgba(217, 195, 154, 0.25);
-  background: rgba(200, 169, 107, 0.18);
-  color: #f4ead5;
-}
-
-.oi-badge-jade {
-  background: rgba(79, 124, 120, 0.85);
-  color: white;
-}
-
-/* Surface Levels */
-.oi-surface-base {
-  background: var(--oi-bg-base);
-}
-
-.oi-surface-elevated {
-  background: var(--oi-bg-surface);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.oi-surface-deep {
-  background: var(--oi-bg-deep);
-}
+/* Surface Levels (already defined in @layer) */

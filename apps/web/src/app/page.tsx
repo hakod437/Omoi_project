@@ -1,16 +1,11 @@
 "use client";
 import React from "react";
 
-import { Button } from "@/components/atoms/button";
-import { GlassCard } from "@/components/molecules/glass-card";
-import { VibeBadge } from "@/components/molecules/vibe-badge";
-import { SectionHeader } from "@/components/molecules/section-header";
-import { Surface } from "@/components/atoms/surface";
 import { PageContainer } from "@/components/atoms/page-container";
-import { THEME_TOKENS } from "@/theme/tokens";
 import { useTheme } from "./providers";
 import { Icon } from "@/components/atoms/icon";
 import { AnimeCard } from "@/components/organisms/anime-card";
+import { SearchBar } from "@/components/organisms/search-bar";
 
 const MOCK_ANIME = [
   {
@@ -50,10 +45,7 @@ export default function Home() {
 
   return (
     <PageContainer>
-      <Surface className="p-6 flex flex-col gap-4 mb-8">
-       <Icon icon="lucide:search" size={24} className="text-brand-primary" />
-       <input type="text" placeholder="Rechercher un anime, studio ou genre" className="bg-transparent border-none outline-none text-white w-full" />
-      </Surface>
+      <SearchBar />
 
       <header className="mb-6 flex justify-between items-end">
         <div>

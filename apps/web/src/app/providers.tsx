@@ -1,3 +1,7 @@
+/**
+ * "use client" tells Next.js that this file uses React Hooks (useState, useEffect).
+ * Without this, this file would be a "Server Component" which cannot handle user interaction.
+ */
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,6 +14,7 @@ import {
     type ReactNode,
 } from "react";
 
+// Types help us avoid bugs by defining exactly what kind of values are allowed.
 type ThemeMode = "system" | "light" | "dark";
 type ResolvedTheme = "light" | "dark";
 
@@ -21,6 +26,11 @@ type ThemeContextValue = {
 
 const THEME_STORAGE_KEY = "omoi-theme-mode";
 
+/**
+ * Context is like a "Radio Station". 
+ * ThemeContext.Provider "broadcasts" the theme state.
+ * useTheme() is like a "Radio Receiver" that any component can use to tune in.
+ */
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getSystemTheme(): ResolvedTheme {
@@ -37,6 +47,9 @@ function isThemeMode(value: string): value is ThemeMode {
     return value === "system" || value === "light" || value === "dark";
 }
 
+/**
+ * Custom Hook: A reusable function that components use to access the Theme.
+ */
 export function useTheme() {
     const context = useContext(ThemeContext);
 
@@ -48,6 +61,10 @@ export function useTheme() {
 }
 
 export function Providers({ children }: { children: ReactNode }) {
+    /**
+     * useState: React's way of "remembering" things across renders.
+     * queryClient handles all your API data fetching and caching.
+     */
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -59,6 +76,8 @@ export function Providers({ children }: { children: ReactNode }) {
                 },
             })
     );
+    
+    // themeMode stores what the user picked (Light, Dark, or System)
     const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
         if (typeof window === "undefined") {
             return "system";
@@ -67,8 +86,14 @@ export function Providers({ children }: { children: ReactNode }) {
         const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
         return stored && isThemeMode(stored) ? stored : "system";
     });
+
+    // resolvedTheme is the ACTUAL color being shown (can only be light or dark)
     const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("light");
 
+    /**
+     * useEffect: Runs "Side Effects". 
+     * Here, it updates the actual HTML document whenever themeMode changes.
+     */
     useEffect(() => {
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -92,6 +117,10 @@ export function Providers({ children }: { children: ReactNode }) {
         return;
     }, [themeMode]);
 
+    /**
+     * useMemo: Performance optimization. 
+     * It prevents the context from "re-broadcasting" unless the theme actually changes.
+     */
     const themeContextValue = useMemo(
         () => ({ themeMode, resolvedTheme, setThemeMode }),
         [themeMode, resolvedTheme]

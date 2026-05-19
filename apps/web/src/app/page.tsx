@@ -42,13 +42,22 @@ const MOCK_ANIME = [
   }
 ];
 
+/**
+ * Home component: This represents the "/" route of your application.
+ * In Next.js, every file in the /app folder acts as a "Route".
+ */
 export default function Home() {
+  // We use the useTheme hook to know if we are in Light or Dark mode.
   const { themeMode, resolvedTheme, setThemeMode } = useTheme();
 
   return (
+    // PageContainer ensures consistent margins and padding on every page.
     <PageContainer>
       <SearchBar />
 
+      {/* 
+        This section displays anime that are popular in the user's current city.
+      */}
       <header className="mb-6 flex justify-between items-end">
         <div>
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -59,6 +68,10 @@ export default function Home() {
         </div>
       </header>
 
+      {/* 
+        The .map() loop transforms our MOCK_ANIME array into a grid of AnimeCard components.
+        The 'grid-cols-2' class makes them sit side-by-side in two columns.
+      */}
       <div className="grid grid-cols-2 gap-4">
         {MOCK_ANIME.map((anime) => (
           <AnimeCard key={anime.id} {...anime} />
@@ -70,6 +83,10 @@ export default function Home() {
           <Icon icon="lucide:compass" size={20} className="text-brand-primary" />
           Découverte rapide
         </h2>
+        {/* 
+          Variant Property: Here we pass variant="horizontal" to the AnimeCard.
+          This tells the card to change its layout while using the same logic.
+        */}
         <div className="flex flex-col gap-4">
           {MOCK_ANIME.map((anime) => (
             <AnimeCard key={`${anime.id}-horiz`} {...anime} variant="horizontal" />

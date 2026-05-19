@@ -11,7 +11,7 @@ const MOCK_ANIME = [
   {
     id: 1,
     title: "Demon Slayer",
-    imageUrl: "https://placehold.co/400x600/120f17/ffffff?text=Demon+Slayer",
+    imageUrl: "https://placehold.co/300x600/120f17/ffffff?text=Tall+Image",
     score: 91,
     genres: ["Action", "Fantasy", "Shonen"],
     studio: "ufotable",
@@ -27,7 +27,7 @@ const MOCK_ANIME = [
   {
     id: 2,
     title: "Jujutsu Kaisen",
-    imageUrl: "https://placehold.co/400x600/120f17/ffffff?text=Jujutsu+Kaisen",
+    imageUrl: "https://placehold.co/800x400/120f17/ffffff?text=Wide+Image",
     score: 89,
     genres: ["Action", "Surnaturel"],
     studio: "MAPPA",

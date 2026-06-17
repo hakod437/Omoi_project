@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import { Navbar } from "../components/organisms/navbar";
+import { DevMobileFrame } from "../components/atoms/dev-mobile-frame";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -45,16 +46,15 @@ export default function RootLayout({
           with every single component inside it.
         */}
         <Providers>
-          <div className="flex min-h-full flex-1 flex-col px-4 pt-4">
-            {/* 
-               <main>: The heart of your page. 
-               The {children} here will be replaced by your Page or Template content.
-            */}
-            <main className="flex-1 pb-20">{children}</main>
-            
-            {/* The Navbar stays here so it's always visible on every page. */}
+          <DevMobileFrame>
+            {/* Screen container */}
+            <main className="flex-1 px-4 pt-6 pb-24 overflow-y-auto">
+              {children}
+            </main>
+
+            {/* Floating Navbar */}
             <Navbar />
-          </div>
+          </DevMobileFrame>
         </Providers>
       </body>
     </html>

@@ -39,6 +39,46 @@ const MOCK_ANIME = [
       initials: "KM",
       vibeLocale: 88
     }
+  },
+  {
+    id: 3,
+    title: "One Piece",
+    imageUrl: "https://placehold.co/300x600/120f17/ffffff?text=One+Piece",
+    description: "Monkey D. Luffy explore Grand Line à la recherche du trésor légendaire, le One Piece.",
+    score: 95,
+    genres: ["Action", "Aventure", "Shonen"],
+    studio: "Toei Animation",
+    year: 1999,
+  },
+  {
+    id: 4,
+    title: "Attack on Titan",
+    imageUrl: "https://placehold.co/300x600/120f17/ffffff?text=AOT",
+    description: "L'humanité lutte pour sa survie contre de gigantesques créatures mangeuses d'hommes appelées Titans.",
+    score: 93,
+    genres: ["Action", "Drame", "Mystère"],
+    studio: "WIT Studio",
+    year: 2013,
+  },
+  {
+    id: 5,
+    title: "My Hero Academia",
+    imageUrl: "https://placehold.co/300x600/120f17/ffffff?text=MHA",
+    description: "Dans un monde où la plupart des gens ont des super-pouvoirs, Izuku Midoriya rêve de devenir le plus grand héros.",
+    score: 84,
+    genres: ["Action", "Super-héros", "Shonen"],
+    studio: "BONES",
+    year: 2016,
+  },
+  {
+    id: 6,
+    title: "Chainsaw Man",
+    imageUrl: "https://placehold.co/300x600/120f17/ffffff?text=Chainsaw+Man",
+    description: "Denji fusionne avec son chien-démon tronçonneuse Pochita pour devenir Chainsaw Man.",
+    score: 87,
+    genres: ["Action", "Gore", "Sensationnel"],
+    studio: "MAPPA",
+    year: 2022,
   }
 ];
 
@@ -72,9 +112,11 @@ export default function Home() {
         The .map() loop transforms our MOCK_ANIME array into a grid of AnimeCard components.
         The 'grid-cols-2' class makes them sit side-by-side in two columns.
       */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory">
         {MOCK_ANIME.map((anime) => (
-          <AnimeCard key={anime.id} {...anime} />
+          <div key={anime.id} className="w-48 flex-shrink-0 snap-start">
+            <AnimeCard {...anime} />
+          </div>
         ))}
       </div>
 
@@ -87,13 +129,15 @@ export default function Home() {
           Variant Property: Here we pass variant="horizontal" to the AnimeCard.
           This tells the card to change its layout while using the same logic.
         */}
-        <div className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4 list-none p-0 m-0">
           {MOCK_ANIME.map((anime) => (
-            <AnimeCard key={`${anime.id}-horiz`} {...anime} variant="horizontal" />
+            <li key={`${anime.id}-horiz`}>
+              <AnimeCard {...anime} variant="horizontal" />
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
-      
+
     </PageContainer>
   );
 }

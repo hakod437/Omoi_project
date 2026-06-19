@@ -48,7 +48,7 @@ export default function RootLayout({
         <Providers>
           <DevMobileFrame>
             {/* Screen container */}
-            <main className="flex-1 px-4 pt-6 pb-24 overflow-y-auto">
+            <main className="flex-1 px-0 pt-2 pb-16 overflow-y-auto">
               {children}
             </main>
 

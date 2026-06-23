@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import { Navbar } from "../components/organisms/navbar";
+import { Header } from "../components/organisms/header";
 import { DevMobileFrame } from "../components/atoms/dev-mobile-frame";
 import "./globals.css";
 
@@ -48,11 +49,8 @@ export default function RootLayout({
         <Providers>
           <DevMobileFrame>
             {/* Screen container */}
-            <main className="flex-1 overflow-y-auto">
-              {/* Sticky header */}
-              <header className="sticky top-0 z-10 w-full bg-zinc-950/80 backdrop-blur-sm border-b border-zinc-800 px-4 py-3">
-                <span className="text-lg font-semibold tracking-tight text-white">omoi</span>
-              </header>
+            <main className="flex-1 overflow-y-auto pb-16">
+              <Header />
 
               {children}
             </main>
